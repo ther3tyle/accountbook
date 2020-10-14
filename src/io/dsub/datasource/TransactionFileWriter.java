@@ -1,7 +1,7 @@
-package io.dsub.data;
+package io.dsub.datasource;
 
 import io.dsub.model.Transaction;
-import io.dsub.util.DataType;
+import io.dsub.util.LocalDataType;
 import io.dsub.util.FileHandler;
 
 import java.io.BufferedWriter;
@@ -16,7 +16,7 @@ public class TransactionFileWriter implements TransactionWriter {
     @Override
     public void write(URI uri, Transaction transaction) {
 
-        Path path = Path.of(uri + "/" + DataType.TRANSACTION_FILE.getValue());
+        Path path = Path.of(uri + "/" + LocalDataType.TRANSACTION.getFileName());
 
         if (Files.notExists(path)) {
             FileHandler.makeFile(path);
@@ -34,4 +34,6 @@ public class TransactionFileWriter implements TransactionWriter {
             System.out.println(e.getMessage());
         }
     }
+
+
 }

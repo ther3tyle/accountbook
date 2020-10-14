@@ -1,4 +1,4 @@
-package io.dsub.data;
+package io.dsub.datasource;
 
 import io.dsub.model.Transaction;
 

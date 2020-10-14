@@ -1,12 +1,14 @@
 package io.dsub;
 
-import io.dsub.data.TransactionFileReader;
-import io.dsub.data.TransactionFileWriter;
-import io.dsub.data.TransactionReader;
-import io.dsub.data.TransactionWriter;
+import io.dsub.datasource.TransactionFileReader;
+import io.dsub.datasource.TransactionFileWriter;
+import io.dsub.datasource.TransactionReader;
+import io.dsub.datasource.TransactionWriter;
 import io.dsub.model.Transaction;
 
+import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 /**
  * Application entry point
@@ -33,6 +35,15 @@ public class Application {
         writer.write(uri, t4);
         writer.write(uri, t5);
         writer.write(uri, t6);
-        reader.readAll(uri);
+
+        try {
+            List<Transaction> transList = reader.readAll(uri);
+            for (Transaction transaction : transList) {
+                System.out.println(transaction.getUuid());
+            }
+
+        } catch (IOException e) {
+            e.getStackTrace();
+        }
     }
 }
