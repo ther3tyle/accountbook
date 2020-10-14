@@ -19,19 +19,6 @@ public class AppConfig {
     };
 
     private static String getBaseDir() {
-        Optional<Map.Entry<Object, Object>> optionalEntry = System.getProperties()
-                .entrySet()
-                .stream()
-                .filter(e -> e.getKey().equals("java.class.path"))
-                .findFirst();
-
-        if (optionalEntry.isPresent()) {
-            Map.Entry<Object, Object> entry = optionalEntry.get();
-            String val = (String) entry.getValue();
-            val = val.split(":")[0];
-            return val;
-        }
-
-        return "";
+        return System.getProperty("user.dir");
     }
 }

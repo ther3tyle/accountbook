@@ -1,7 +1,6 @@
 package io.dsub.datasource;
 
 import io.dsub.model.Transaction;
-import io.dsub.util.LocalDataType;
 import io.dsub.util.FileHandler;
 
 import java.io.BufferedWriter;
@@ -16,20 +15,14 @@ public class TransactionFileWriter implements TransactionWriter {
     @Override
     public void write(URI uri, Transaction transaction) {
 
-        Path path = Path.of(uri + "/" + LocalDataType.TRANSACTION.getFileName());
+        Path path = Path.of(uri);
 
         if (Files.notExists(path)) {
             FileHandler.makeFile(path);
         }
 
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path.toFile(), true))) {
-            String data = String.format("%s,%s,%s,%s\n",
-                    transaction.getAmount(),
-                    transaction.getVendorId(),
-                    transaction.getTime(),
-                    transaction.getUuid()
-            );
-            bufferedWriter.write(data);
+            bufferedWriter.write(transaction.toString());
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
