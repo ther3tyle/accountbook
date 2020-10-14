@@ -7,6 +7,7 @@ import io.dsub.datasource.TransactionWriter;
 import io.dsub.model.Transaction;
 import io.dsub.util.LocalDataType;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Path;
@@ -30,8 +31,10 @@ public class Application {
         Transaction t5 = new Transaction(842, 1);
         Transaction t6 = new Transaction(554, 2);
 
-        URI uri = URI.create("file://" + config.BASE_DIR + "/" + LocalDataType.TRANSACTION.getFileName());
-        System.out.println(uri);
+        Path path = Path.of(AppConfig.getInstance().BASE_DIR, LocalDataType.TRANSACTION.getFileName());
+        System.out.println(path.toString());
+
+        URI uri = path.toUri();
 
         writer.write(uri, t1);
         writer.write(uri, t2);
