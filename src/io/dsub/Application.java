@@ -5,6 +5,7 @@ import io.dsub.datasource.TransactionFileWriter;
 import io.dsub.datasource.TransactionReader;
 import io.dsub.datasource.TransactionWriter;
 import io.dsub.model.Transaction;
+import io.dsub.util.FileHandler;
 import io.dsub.util.LocalDataType;
 
 import java.io.File;
@@ -31,7 +32,7 @@ public class Application {
         Transaction t5 = new Transaction(842, 1);
         Transaction t6 = new Transaction(554, 2);
 
-        Path path = Path.of(AppConfig.getInstance().BASE_DIR, LocalDataType.TRANSACTION.getFileName());
+        Path path = FileHandler.getPath(LocalDataType.TRANSACTION);
         System.out.println(path.toString());
 
         URI uri = path.toUri();

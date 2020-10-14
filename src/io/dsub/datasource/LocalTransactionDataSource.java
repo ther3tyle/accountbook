@@ -7,8 +7,8 @@ public class LocalTransactionDataSource<UUID, Transaction> implements DataSource
     }
 
     @Override
-    public void get(UUID key) {
-
+    public Transaction get(UUID key) {
+        return null;
     }
 
     @Override
