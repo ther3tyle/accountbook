@@ -80,4 +80,15 @@ public class Transaction implements Serializable {
     public boolean isCancelled() {
         return isCancelled;
     }
+
+
+    @Override
+    public String toString() {
+        return String.format("%s,%s,%s,%s\n",
+                this.getAmount(),
+                this.getVendorId(),
+                this.getTime(),
+                this.getUuid()
+        );
+    }
 }

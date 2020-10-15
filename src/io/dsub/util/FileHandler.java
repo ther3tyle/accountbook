@@ -11,6 +11,13 @@ import java.util.logging.Logger;
 public class FileHandler {
 
     private static final Logger logger = Logger.getLogger(FileHandler.class.getName());
+
+    public static Path getPath(LocalDataType type) {
+        return Path.of(System.getProperty("user.dir")
+                .concat(File.separator)
+                .concat(type.getFileName()));
+    }
+
     public static void makeFile(Path path) {
         try {
             Files.createFile(path);

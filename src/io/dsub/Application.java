@@ -5,11 +5,18 @@ import io.dsub.datasource.TransactionFileWriter;
 import io.dsub.datasource.TransactionReader;
 import io.dsub.datasource.TransactionWriter;
 import io.dsub.model.Transaction;
+<<<<<<< HEAD
+=======
+import io.dsub.util.FileHandler;
+>>>>>>> 9e3a0756713e47f31349c46871efd8e6cccb7664
 import io.dsub.util.LocalDataType;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Application entry point
@@ -28,8 +35,15 @@ public class Application {
         Transaction t5 = new Transaction(842, 1);
         Transaction t6 = new Transaction(554, 2);
 
+<<<<<<< HEAD
         URI uri = URI.create(config.BASE_DIR + "/" + LocalDataType.TRANSACTION.getFileName());
         System.out.println(uri.toString());
+=======
+        Path path = FileHandler.getPath(LocalDataType.TRANSACTION);
+        System.out.println(path.toString());
+
+        URI uri = path.toUri();
+>>>>>>> 9e3a0756713e47f31349c46871efd8e6cccb7664
 
         writer.write(uri, t1);
         writer.write(uri, t2);
