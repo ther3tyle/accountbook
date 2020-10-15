@@ -1,49 +1,41 @@
 package io.dsub.cui;
 
-import io.dsub.cui.menu.*;
-
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 
 public class MenuHandler {
 
-    List<Menu> sampleMenu(String... keywords) {
+    List<MenuType> menuList() {
 
-        List<Menu> list = new ArrayList<>();
-
-        for (String keyword : keywords) {
-            list.add(MenuFactory.getMenu(keyword));
-        }
-
+        MenuType[] menus = MenuType.values();
+        List<MenuType> list = Arrays.asList(menus);
         return list;
     }
 
     void callMainMenu() {
-        List<Menu> menuList = sampleMenu("수입", "지출", "조회", "카테고리", "초기화");
-        printMenu(menuList);
-        executeMenu(checkMenuNum(menuList));
+
+        printMenu(menuList());
+        executeMenu(checkMenuNum(menuList()));
+
     }
 
     public void executeMenu(int checkMenuNum) {
-        for (Menu menu : sampleMenu()) {
-            if (menu.getNumber() == checkMenuNum) {
-                menu.execute();
-                break;
-            }
-        }
+        MenuType selectedMenu = menuList().get(checkMenuNum-1);
+        MenuMethods.selectMenu(selectedMenu);
+        callMainMenu();
     }
 
-    public int checkMenuNum(List<Menu> list) {
+    public int checkMenuNum(List<MenuType> list) { //기능 분리 필요
         int input = 0;
         outer:
         while (true) {
             System.out.println("");
             System.out.println("이용하실 메뉴의 번호를 입력해 주세요");
-            input = Integer.parseInt(getKeyboardInput());
-            for (Menu menu : list) {
-                if (menu.getNumber() == input) {
+            input = getKeyboardInput();
+            for (int i = 0; i < list.size(); i++) {
+                if (input > 0 && input <= list.size()) {
                     break outer;
                 }
             }
@@ -53,16 +45,17 @@ public class MenuHandler {
     }
 
 
-    private String getKeyboardInput() {
+     int getKeyboardInput() {
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
-        return input;
+        return Character.getNumericValue(input.charAt(0)); // String or Character 입력시 에러가 안나게
     }
 
 
-    private void printMenu(List<Menu> list) {
-        for (Menu menu : list) {
-            System.out.printf("%d. %s\n", menu.getNumber(), menu.getTitle());
+    private void printMenu(List<MenuType> list) {
+        System.out.println("메인 메뉴");
+        for (int i = 0; i < list.size(); i++) {
+            System.out.printf("%d. %s\n",(i + 1), list.get(i).getTitle());
         }
     }
 
