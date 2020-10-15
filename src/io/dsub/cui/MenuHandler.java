@@ -9,36 +9,30 @@ import java.util.Scanner;
 
 public class MenuHandler {
 
-    List<Menu> sampleMenu() {
+    List<Menu> sampleMenu(String... keywords) {
 
         List<Menu> list = new ArrayList<>();
 
-        list.add(MenuFactory.getMenu("수입"));
-        list.add(MenuFactory.getMenu("지출"));
-        list.add(MenuFactory.getMenu("조회"));
-        list.add(MenuFactory.getMenu("카테고리"));
-        list.add(MenuFactory.getMenu("초기화"));
+        for (String keyword : keywords) {
+            list.add(MenuFactory.getMenu(keyword));
+        }
+
         return list;
     }
 
     void callMainMenu() {
-
-        printMenu(sampleMenu());
-        executeMenu(checkMenuNum(sampleMenu()));
-
-
+        List<Menu> menuList = sampleMenu("수입", "지출", "조회", "카테고리", "초기화");
+        printMenu(menuList);
+        executeMenu(checkMenuNum(menuList));
     }
 
     public void executeMenu(int checkMenuNum) {
-
         for (Menu menu : sampleMenu()) {
             if (menu.getNumber() == checkMenuNum) {
                 menu.execute();
                 break;
             }
-
         }
-
     }
 
     public int checkMenuNum(List<Menu> list) {
@@ -56,7 +50,6 @@ public class MenuHandler {
             System.out.println("번호를 잘못 입력하셨습니다");
         }
         return input;
-
     }
 
 
@@ -68,7 +61,6 @@ public class MenuHandler {
 
 
     private void printMenu(List<Menu> list) {
-
         for (Menu menu : list) {
             System.out.printf("%d. %s\n", menu.getNumber(), menu.getTitle());
         }

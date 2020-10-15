@@ -1,8 +1,6 @@
 package io.dsub.cui.menu;
 
-
 public class CheckAccount implements Menu {
-
     int number = 3;
     String title = "조회";
 

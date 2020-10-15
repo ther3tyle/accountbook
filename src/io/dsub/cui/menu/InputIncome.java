@@ -1,7 +1,6 @@
 package io.dsub.cui.menu;
 
 public class InputIncome implements Menu {
-
     int number = 1;
     String title = "수입 입력";
 
