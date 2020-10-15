@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MenuMethods {
-
-
     public static void  selectMenu(MenuType menu){
 
         if(menu == MenuType.INCOME){
@@ -24,9 +22,6 @@ public class MenuMethods {
         }
     }
 
-
-
-
     public static List<String> inputIncome() {
         Scanner scanner = new Scanner(System.in);
         List<String> list = new ArrayList<>();
@@ -34,22 +29,10 @@ public class MenuMethods {
         System.out.println("수입 입력");
         while (list.size() < 4) {
 
-            if(list.size()!=0) {
-                System.out.println("입력하신 내용");
-                System.out.println(list.toString());
-            }
-
-            if (list.size() == 0) {
-                System.out.println("거래날짜를 입력해주세요(이전단계: p 메인메뉴: q)");
-            } else if (list.size() == 1) {
-                System.out.println("금액을 입력해주세요(이전단계: p 메인메뉴: q)");
-            } else if (list.size() == 2) {
-                System.out.println("사용처를 입력해주세요(이전단계: p 메인메뉴: q)");
-            } else {
-                System.out.println("카테고리를 입력해주세요(이전단계: p 메인메뉴: q)");
-            }
+            printStatementMenuInfo(list);
 
             String input = scanner.nextLine();
+
             if(input.equals("p")||input.equals("P")) {
                 if(list.size()!=0){
                     list.remove(list.size()-1);
@@ -61,8 +44,6 @@ public class MenuMethods {
                 list.add(input);
             }
         }
-
-
         System.out.println(list.toString());
         System.out.println("입력이 끝났습니다");
         return list;
@@ -87,5 +68,21 @@ public class MenuMethods {
     public static void exitAccountBook(){
         System.out.println("가계부를 종료합니다");
         System.exit(0);
+    }
+
+    private static void printStatementMenuInfo(List<String> list) {
+        if(list.size() != 0) {
+            System.out.println("입력하신 내용");
+            System.out.println(list.toString());
+        }
+        if (list.size() == 0) {
+            System.out.println("거래날짜를 입력해주세요(이전단계: p 메인메뉴: q)");
+        } else if (list.size() == 1) {
+            System.out.println("금액을 입력해주세요(이전단계: p 메인메뉴: q)");
+        } else if (list.size() == 2) {
+            System.out.println("사용처를 입력해주세요(이전단계: p 메인메뉴: q)");
+        } else {
+            System.out.println("카테고리를 입력해주세요(이전단계: p 메인메뉴: q)");
+        }
     }
 }
