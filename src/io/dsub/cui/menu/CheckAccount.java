@@ -16,5 +16,4 @@ public class CheckAccount implements Menu {
     public void execute() {
         System.out.println("3번 메소드");
     }
-
 }
