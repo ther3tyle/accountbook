@@ -1,9 +1,9 @@
 package io.dsub.datasource;
 
-import io.dsub.model.Transaction;
+import java.io.IOException;
 
-import java.net.URI;
-
-public interface ModelWriter {
-    void write(URI url, Transaction transaction);
+public interface ModelWriter<T> {
+    void write(T item) throws IOException;
+    void writeAll(T[] items) throws IOException;
+    void reset() throws IOException;
 }

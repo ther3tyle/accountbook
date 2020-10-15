@@ -1,7 +1,10 @@
 package io.dsub.model;
 
+import io.dsub.util.LocalDataType;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -43,19 +46,19 @@ public class Transaction implements Serializable {
     // Withers
     ///////////////////////////////////////////////////////////////////////////
     public Transaction withAmount(int amount) {
-        return new Transaction(amount, this.vendorId, this.time, this.uuid, this.isCancelled);
+        return new Transaction(amount, this.vendorId, LocalDateTime.parse(this.time.toString()), UUID.fromString(this.uuid.toString()), this.isCancelled);
     }
 
     public Transaction withVendorId(int vendorId) {
-        return new Transaction(this.amount, vendorId, this.time, this.uuid, this.isCancelled);
+        return new Transaction(this.amount, vendorId, LocalDateTime.parse(this.time.toString()), UUID.fromString(this.uuid.toString()), this.isCancelled);
     }
 
     public Transaction withTime(LocalDateTime time) {
-        return new Transaction(this.amount, this.vendorId, time, this.uuid, this.isCancelled);
+        return new Transaction(this.amount, this.vendorId, time, UUID.fromString(this.uuid.toString()), this.isCancelled);
     }
 
     public Transaction withCancelled(boolean isCancelled) {
-        return new Transaction(this.amount, this.vendorId, this.time, this.uuid, isCancelled);
+        return new Transaction(this.amount, this.vendorId, LocalDateTime.parse(this.time.toString()), UUID.fromString(this.uuid.toString()), isCancelled);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -90,5 +93,19 @@ public class Transaction implements Serializable {
                 this.getTime(),
                 this.getUuid()
         );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Transaction that = (Transaction) o;
+
+        if (this.amount != that.amount) return false;
+        if (this.vendorId != that.vendorId) return false;
+        if (this.isCancelled != that.isCancelled) return false;
+        if (!this.time.equals(that.time)) return false;
+        return this.uuid.equals(that.uuid);
     }
 }
