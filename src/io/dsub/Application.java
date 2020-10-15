@@ -5,6 +5,7 @@ import io.dsub.datasource.TransactionFileWriter;
 import io.dsub.datasource.TransactionReader;
 import io.dsub.datasource.TransactionWriter;
 import io.dsub.model.Transaction;
+import io.dsub.util.LocalDataType;
 
 import java.io.IOException;
 import java.net.URI;
@@ -27,7 +28,8 @@ public class Application {
         Transaction t5 = new Transaction(842, 1);
         Transaction t6 = new Transaction(554, 2);
 
-        URI uri = URI.create(config.BASE_DIR);
+        URI uri = URI.create(config.BASE_DIR + "/" + LocalDataType.TRANSACTION.getFileName());
+        System.out.println(uri.toString());
 
         writer.write(uri, t1);
         writer.write(uri, t2);
