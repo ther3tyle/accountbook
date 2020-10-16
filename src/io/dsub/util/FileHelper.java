@@ -8,11 +8,11 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
-public class FileHandler {
+public class FileHelper {
 
-    private static final Logger logger = Logger.getLogger(FileHandler.class.getName());
+    private static final Logger logger = Logger.getLogger(FileHelper.class.getName());
 
-    public static Path getPath(LocalDataType type) {
+    public static Path getPath(DataType type) {
         return Path.of(System.getProperty("user.dir")
                 .concat(File.separator)
                 .concat(type.getFileName()));
