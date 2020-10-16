@@ -2,12 +2,14 @@ package io.dsub.model;
 
 import io.dsub.util.DataType;
 
+import java.io.Serializable;
 import java.util.function.Function;
 
 /**
  * An immutable category model
  */
-public class Category extends Model {
+public class Category extends Model implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final int id;
     private final String name;
 

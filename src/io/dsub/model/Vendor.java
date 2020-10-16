@@ -2,16 +2,18 @@ package io.dsub.model;
 
 import io.dsub.util.DataType;
 
+import java.io.Serializable;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
 /**
  * An immutable vendor model
  */
-public class Vendor extends Model {
+public class Vendor extends Model implements Serializable {
     private final int id;
     private final String name;
     private final int catId;
+    private static final long serialVersionUID = 1L;
 
     public Vendor(int id, String name, int catId) {
         this.id = id;
@@ -56,5 +58,18 @@ public class Vendor extends Model {
                 return null;
             }
         };
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Vendor vendor = (Vendor) o;
+
+        if (id != vendor.id) return false;
+        if (catId != vendor.catId) return false;
+        return name.equals(vendor.name);
     }
 }

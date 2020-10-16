@@ -2,6 +2,7 @@ package io.dsub.model;
 
 import io.dsub.util.DataType;
 
+import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
@@ -13,35 +14,33 @@ import java.util.logging.Logger;
 /**
  * An immutable transaction model
  */
-public class Transaction extends Model {
+public class Transaction extends Model implements Serializable {
 
     ///////////////////////////////////////////////////////////////////////////
     // Fields
     ///////////////////////////////////////////////////////////////////////////
-    private final int amount;
+    private final long amount;
     private final int vendorId;
     private final LocalDateTime time;
     private final UUID id;
-    private final boolean isCancelled;
     private static final long serialVersionUID = 1L;
 
     ///////////////////////////////////////////////////////////////////////////
     // Constructors
     ///////////////////////////////////////////////////////////////////////////
-    public Transaction(int amount, int vendorId) {
+    public Transaction(long amount, int vendorId) {
         this(amount, vendorId, LocalDateTime.now());
     }
 
-    public Transaction(int amount, int vendorId, LocalDateTime time) {
-        this(amount, vendorId, time, UUID.randomUUID(), false);
+    public Transaction(long amount, int vendorId, LocalDateTime time) {
+        this(amount, vendorId, time, UUID.randomUUID());
     }
 
-    public Transaction(int amount, int vendorId, LocalDateTime time, UUID id, boolean isCancelled) {
+    public Transaction(long amount, int vendorId, LocalDateTime time, UUID id) {
         this.amount = amount;
         this.vendorId = vendorId;
         this.time = time;
         this.id = id;
-        this.isCancelled = isCancelled;
     }
 
     public static Function<String, Model> getParser() {
@@ -49,10 +48,10 @@ public class Transaction extends Model {
             String[] data = s.split(",");
             if (data.length != 4) throw new InvalidParameterException("input size must be 4");
 
-            int amount;
+            long amount;
             int vendorId;
             try {
-                amount = Integer.parseInt(data[0]);
+                amount = Long.parseLong(data[0]);
                 vendorId = Integer.parseInt(data[1]);
             } catch (NumberFormatException e) {
                 Logger.getLogger(Transaction.class.getName()).severe(e.getMessage());
@@ -70,39 +69,35 @@ public class Transaction extends Model {
 
             UUID id;
             try {
-                id = UUID.fromString(data[3]);
+                id = UUID.fromString(data[3].trim());
             } catch (IllegalArgumentException e) {
                 Logger.getLogger(Transaction.class.getName()).severe(e.getMessage());
                 return null;
             }
 
-            return new Transaction(amount, vendorId, time, id, false);
+            return new Transaction(amount, vendorId, time, id);
         };
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // Withers
     ///////////////////////////////////////////////////////////////////////////
-    public Transaction withAmount(int amount) {
-        return new Transaction(amount, this.vendorId, LocalDateTime.parse(this.time.toString()), UUID.fromString(this.id.toString()), this.isCancelled);
+    public Transaction withAmount(long amount) {
+        return new Transaction(amount, this.vendorId, LocalDateTime.parse(this.time.toString()), UUID.fromString(this.id.toString()));
     }
 
     public Transaction withVendorId(int vendorId) {
-        return new Transaction(this.amount, vendorId, LocalDateTime.parse(this.time.toString()), UUID.fromString(this.id.toString()), this.isCancelled);
+        return new Transaction(this.amount, vendorId, LocalDateTime.parse(this.time.toString()), UUID.fromString(this.id.toString()));
     }
 
     public Transaction withTime(LocalDateTime time) {
-        return new Transaction(this.amount, this.vendorId, time, UUID.fromString(this.id.toString()), this.isCancelled);
-    }
-
-    public Transaction withCancelled(boolean isCancelled) {
-        return new Transaction(this.amount, this.vendorId, LocalDateTime.parse(this.time.toString()), UUID.fromString(this.id.toString()), isCancelled);
+        return new Transaction(this.amount, this.vendorId, time, UUID.fromString(this.id.toString()));
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // Getters
     ///////////////////////////////////////////////////////////////////////////
-    public int getAmount() {
+    public long getAmount() {
         return amount;
     }
 
@@ -119,8 +114,8 @@ public class Transaction extends Model {
         return id.toString();
     }
 
-    public boolean isCancelled() {
-        return isCancelled;
+    public static DataType getDataType() {
+        return DataType.TRANSACTION;
     }
 
     @Override
@@ -142,7 +137,6 @@ public class Transaction extends Model {
 
         if (this.amount != that.amount) return false;
         if (this.vendorId != that.vendorId) return false;
-        if (this.isCancelled != that.isCancelled) return false;
         if (!this.time.equals(that.time)) return false;
         return this.id.equals(that.id);
     }
