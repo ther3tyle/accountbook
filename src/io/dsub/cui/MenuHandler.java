@@ -26,7 +26,7 @@ public class MenuHandler {
         callMainMenu();
     }
 
-    public int checkMenuNum(List<MenuType> list) { //기능 분리 필요
+    public int checkMenuNum(List<MenuType> list) {
         return getKeyboardInput("\n이용하실 메뉴의 번호를 입력해 주세요", (Integer n) -> n < list.size());
     }
 
@@ -41,7 +41,7 @@ public class MenuHandler {
             System.out.println("잘못된 입력입니다.");
             System.out.println(promptMsg);
             input = scanner.nextLine();
-            valid = Validator.isValidNumInput(input);
+            valid = Validator.isValidNumInput(input); // && validator.apply(Integer.parseInt(input)) 안한이유?
         }
 
         return Integer.parseInt(input); // String or Character 입력시 에러가 안나게
@@ -54,7 +54,6 @@ public class MenuHandler {
             System.out.printf("%d. %s\n", (i + 1), list.get(i).getTitle());
         }
     }
-
 
 }
 

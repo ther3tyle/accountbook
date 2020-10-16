@@ -17,10 +17,15 @@ public enum MenuType {
 
     }
 
-
-
     public String getTitle() {
         return title;
     }
 
+}
+
+class TestEnum {
+
+    public static void main(String[] args) {
+        System.out.println(MenuType.EXPENSE.toString());
+    }
 }
