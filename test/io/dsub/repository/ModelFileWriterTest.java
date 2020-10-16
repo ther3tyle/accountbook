@@ -1,8 +1,9 @@
 package io.dsub.repository;
 
+import io.dsub.datasource.ModelFileWriter;
 import io.dsub.datasource.ModelWriter;
-import io.dsub.datasource.TransactionFileWriter;
 import io.dsub.model.Transaction;
+import io.dsub.util.DataType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,22 +15,22 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TransactionFileWriterTest {
+class ModelFileWriterTest {
 
     private static ModelWriter<Transaction> writer;
-    private static File file;
+    private static File testFile;
 
     @BeforeAll
     static void setup() throws IOException {
-        file = File.createTempFile("tFileWriter", "_Test");
-        file.deleteOnExit();
-        writer = new TransactionFileWriter(file);
+        testFile = File.createTempFile("tFileWriter", "_Test");
+        testFile.deleteOnExit();
+        writer = new ModelFileWriter<>(DataType.TRANSACTION, testFile);
     }
 
     @AfterEach
     void cleanFile() throws IOException {
-        file.delete();
-        file.createNewFile();
+        testFile.delete();
+        testFile.createNewFile();
     }
 
     @Test
@@ -38,7 +39,7 @@ class TransactionFileWriterTest {
         var ref = new Object() {
             BufferedReader reader;
         };
-        assertDoesNotThrow(() -> ref.reader = new BufferedReader(new InputStreamReader(new FileInputStream(file))));
+        assertDoesNotThrow(() -> ref.reader = new BufferedReader(new InputStreamReader(new FileInputStream(testFile))));
 
         assertDoesNotThrow(() -> populateData(writer, 100));
         assertEquals(100, ref.reader.lines().count());
@@ -53,20 +54,20 @@ class TransactionFileWriterTest {
         var ref = new Object() {
             BufferedReader reader;
         };
-        assertDoesNotThrow(() -> ref.reader = new BufferedReader(new InputStreamReader(new FileInputStream(file))));
+        assertDoesNotThrow(() -> ref.reader = new BufferedReader(new InputStreamReader(new FileInputStream(testFile))));
 
         assertEquals(50, ref.reader.lines().count());
 
-        assertDoesNotThrow(() -> ((TransactionFileWriter) writer).overwrite(file, new Transaction(1,1)));
+        assertDoesNotThrow(() -> writer.overwrite(testFile, new Transaction(1,1)));
 
-        assertDoesNotThrow(() -> ref.reader = new BufferedReader(new InputStreamReader(new FileInputStream(file))));
+        assertDoesNotThrow(() -> ref.reader = new BufferedReader(new InputStreamReader(new FileInputStream(testFile))));
         assertEquals(1, ref.reader.lines().count());
     }
 
     @Test
     void reset() throws IOException {
         writer.reset();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(testFile)));
         populateData(writer, 85);
 
         assertEquals(85, reader.lines().count());
@@ -77,7 +78,7 @@ class TransactionFileWriterTest {
 
     @Test
     void writeAll() throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(testFile)));
         List<Transaction> transactions = new ArrayList<>();
         Random random = new Random();
         int count = random.nextInt(100);
@@ -90,11 +91,11 @@ class TransactionFileWriterTest {
 
     @Test
     void testEmptyFile() throws IOException {
-        file.delete();
+        testFile.delete();
         assertDoesNotThrow(() -> writer.write(new Transaction(1, 1)));
-        assertTrue(file.exists());
+        assertTrue(testFile.exists());
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(testFile)));
         assertEquals(1, reader.lines().count());
     }
 

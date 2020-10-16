@@ -26,7 +26,7 @@ public interface ModelRepository<T, K>  {
      *
      * @return list of entities
      */
-    List<T> readAll() throws FileNotFoundException;
+    List<T> readAll() throws IOException;
 
     /**
      * writes single item to target source
@@ -41,4 +41,18 @@ public interface ModelRepository<T, K>  {
      * @param items to be written
      */
     void writeAll(T[] items) throws IOException;
+
+    /**
+     * removes given item from the repository
+     *
+     * @param item to be removed
+     */
+    void delete(T item) throws IOException;
+
+    /**
+     * removes item with given key or id
+     *
+     * @param id to be removed
+     */
+    void deleteById(String id);
 }

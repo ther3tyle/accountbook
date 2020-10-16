@@ -1,9 +1,9 @@
 package io.dsub.util;
 
-public enum LocalDataType {
+public enum DataType {
     TRANSACTION("trans_db"), VENDOR("vend_db"), CATEGORY("cat_db");
 
-    LocalDataType(String fileName) {
+    DataType(String fileName) {
         this.fileName = fileName;
     }
 
