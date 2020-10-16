@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -56,10 +57,14 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
     /**
      * Reads first instance of target entity from the source
      *
-     * @return single instance
+     * @return single instance or null if not present
      */
     public T read() throws IOException {
-        return reader.read();
+        try {
+            return reader.read();
+        } catch (NoSuchElementException ignored) {
+            return null;
+        }
     }
 
     /**
