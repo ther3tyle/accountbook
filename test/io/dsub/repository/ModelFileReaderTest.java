@@ -6,31 +6,30 @@ import io.dsub.datasource.ModelReader;
 import io.dsub.datasource.ModelWriter;
 import io.dsub.model.Transaction;
 import io.dsub.util.DataType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
-import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ModelFileReaderTest {
 
-    private static final Logger logger = Logger.getLogger(ModelFileReaderTest.class.getName());
     private static ModelReader<Transaction> reader;
     private static List<Transaction> randomTransactions;
     private static File testFile;
 
-    private static File populateFile() throws IOException {
-        File file = File.createTempFile("_test", "");
+    private static File getPopulatedFile(File file) throws IOException {
         FileWriter writer = new FileWriter(file);
-        file.deleteOnExit();
         for (Transaction t : randomTransactions) {
             writer.append(t.toString());
         }
@@ -56,24 +55,27 @@ class ModelFileReaderTest {
     @BeforeEach
     void prepTest() throws IOException {
         randomTransactions = getRandomData();
-        testFile = populateFile();
+        Path path = Files.createTempFile("_test", "");
+        testFile = path.toFile();
+        testFile.createNewFile();
+
+        testFile = getPopulatedFile(testFile);
         reader = new ModelFileReader<>(DataType.TRANSACTION, testFile);
     }
 
-    @Test
-    void readAll() {
-        try {
-            List<Transaction> list = reader.readAll();
-            assertEquals(100, list.size());
-        } catch (IOException e) {
-            logger.severe(e.getMessage());
+    @AfterEach
+    void cleanUp() {
+        if (testFile.exists()) {
+            testFile.delete();
         }
     }
 
     @Test
-    void testEmptyConstructor() {
-        reader = new ModelFileReader<>(DataType.TRANSACTION, testFile);
-        assertNotNull(((ModelFileReader<Transaction>) reader).getSourcePath());
+    void readAll() {
+        assertDoesNotThrow(() -> {
+            List<Transaction> list = reader.readAll();
+            assertEquals(100, list.size());
+        });
     }
 
     @Test

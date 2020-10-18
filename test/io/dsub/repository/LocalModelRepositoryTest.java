@@ -22,28 +22,19 @@ class LocalModelRepositoryTest {
     ModelRepository<Transaction, String> repository;
     static File testFile;
 
-    @BeforeAll
-    static void prepareTest() {
-        assertDoesNotThrow(() -> testFile = File.createTempFile("_test", ""));
-    }
-
-    @AfterAll
-    static void removeFile() {
-        boolean res = FileHelper.getPath(DataType.TRANSACTION).toFile().delete();
-        if (!res) {
-            Logger.getLogger(LocalModelRepositoryTest.class.getName())
-                    .warning("failed to delete testFile");
-        }
-    }
-
     @BeforeEach
     void setUp() {
+        assertDoesNotThrow(() -> testFile = File.createTempFile("_test", ""));
         repository = new LocalModelRepository<>(DataType.TRANSACTION, testFile);
     }
 
     @AfterEach
     void cleanUp() {
-        assertDoesNotThrow(() -> ((LocalModelRepository<Transaction>) repository).prune());
+        boolean res = testFile.delete();
+        if (!res) {
+            Logger.getLogger(LocalModelRepositoryTest.class.getName())
+                    .warning("failed to delete testFile");
+        }
     }
 
     @Test

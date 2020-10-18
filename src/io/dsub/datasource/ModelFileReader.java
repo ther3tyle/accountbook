@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 public class ModelFileReader<T extends Model> implements LocalModelReader<T> {
 
-    private static final Logger logger = Logger.getLogger(ModelFileReader.class.getName());
     private Path sourcePath;
     private Function<String, Model> parser;
 

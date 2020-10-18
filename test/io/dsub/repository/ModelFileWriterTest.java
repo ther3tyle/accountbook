@@ -6,6 +6,7 @@ import io.dsub.model.Transaction;
 import io.dsub.util.DataType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -20,17 +21,17 @@ class ModelFileWriterTest {
     private static ModelWriter<Transaction> writer;
     private static File testFile;
 
-    @BeforeAll
-    static void setup() throws IOException {
-        testFile = File.createTempFile("tFileWriter", "_Test");
-        testFile.deleteOnExit();
+    @BeforeEach
+    void prepTest() throws IOException {
+        testFile = File.createTempFile("_test", "");
         writer = new ModelFileWriter<>(DataType.TRANSACTION, testFile);
     }
 
     @AfterEach
-    void cleanFile() throws IOException {
-        testFile.delete();
-        testFile.createNewFile();
+    void cleanUp() {
+        if (testFile.exists()) {
+            testFile.delete();
+        }
     }
 
     @Test
