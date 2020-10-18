@@ -6,7 +6,6 @@ import io.dsub.datasource.ModelReader;
 import io.dsub.datasource.ModelWriter;
 import io.dsub.model.Transaction;
 import io.dsub.util.DataType;
-import io.dsub.util.FileHelper;
 import org.junit.jupiter.api.*;
 
 import java.io.File;

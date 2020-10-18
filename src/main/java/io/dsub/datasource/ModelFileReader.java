@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class ModelFileReader<T extends Model> implements LocalModelReader<T> {
