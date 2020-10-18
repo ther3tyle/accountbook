@@ -1,4 +1,4 @@
-package io.dsub.repository;
+package io.dsub.datasource;
 
 import io.dsub.datasource.ModelFileWriter;
 import io.dsub.datasource.ModelWriter;

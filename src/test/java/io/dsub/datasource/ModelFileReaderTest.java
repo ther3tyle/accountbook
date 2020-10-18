@@ -1,4 +1,4 @@
-package io.dsub.repository;
+package io.dsub.datasource;
 
 import io.dsub.datasource.ModelReader;
 import io.dsub.model.Transaction;

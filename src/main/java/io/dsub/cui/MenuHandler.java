@@ -10,7 +10,6 @@ import java.util.function.Function;
 public class MenuHandler {
 
     List<MenuType> menuList() {
-
         MenuType[] menus = MenuType.values();
         return Arrays.asList(menus);
     }
