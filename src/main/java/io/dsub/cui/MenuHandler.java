@@ -55,13 +55,3 @@ public class MenuHandler {
     }
 
 }
-
-class Test {
-    public static void main(String[] args) {
-
-        MenuHandler menuHandler = new MenuHandler();
-
-        menuHandler.callMainMenu();
-
-    }
-}

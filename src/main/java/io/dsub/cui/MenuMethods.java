@@ -1,16 +1,22 @@
 package io.dsub.cui;
 
+import io.dsub.util.Validator;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class MenuMethods {
+    enum statementElements{
+        DATE,AMOUNT,VENDOR,CATEGORY
+    }
+
     public static void selectMenu(MenuType menu) {
 
         // INCOME 과 EXPENSE 는 같은 메서드 공유
         if (menu == MenuType.INCOME || menu == MenuType.EXPENSE ) {
-            inputStatementMenu(menu);
+            transactionOperate(inputStatementMenu(menu));
         } else if (menu == MenuType.CHECK) {
             checkAccount();
         } else if (menu == MenuType.CATEGORY) {
@@ -20,6 +26,12 @@ public class MenuMethods {
         } else if (menu == MenuType.EXIT) {
             exitAccountBook();
         }
+    }
+
+    public static void transactionOperate(List<String> inputStatement) {
+
+
+
     }
 
 
@@ -49,16 +61,21 @@ public class MenuMethods {
             } else if (input.equals("q") || input.equals("Q")) {
                 return null;
             } else {
-                if (list.size() == inputParams.indexOf("Amount") && menu == MenuType.EXPENSE) { // Expense면 금액에 '-'추가
-                    String minus = "-";
-                    list.add(minus + input);
+                if(!isInputStatementValid(list, inputParams, input)) {
+                    System.out.println("잘못된 입력입니다");
                 } else {
-                    list.add(input);
+                    if (list.size() == inputParams.indexOf("Amount") && menu == MenuType.EXPENSE) {
+                        String minus = "-";
+                        list.add(minus + input);
+                    } else {
+                        list.add(input);
+                    }
                 }
+
             }
         }
         // 입력값 확인하고 return
-        return checkInputStatement(list, menu); // 입력값 확인할 수 있는 메서드 추가
+        return checkInputStatement(list, menu);
     }
 
     public static void inputExpense() {
@@ -96,6 +113,21 @@ public class MenuMethods {
             inputStatementMenu(menu);
         }
         return null;
+    }
+
+    private static boolean isInputStatementValid(List<String> list, List<String> inputParams, String input) {
+
+
+        if (list.size() == inputParams.indexOf("Date") ) {
+            return Validator.isValidDateInput(input);
+        } else if (list.size() == inputParams.indexOf("Amount")) {
+            return Validator.isValidAmountInput(input);
+        } else if (list.size() == inputParams.indexOf("Vendor")) {
+            return Validator.isValidVendorInput(input);
+        } else if (list.size() == inputParams.indexOf("Category")) {
+            return Validator.isValidCategoryInput(input);
+        }
+        return true;
     }
 
     private static void printStatementMenuInfo(List<String> list, List<String> inputParams) {
