@@ -1,11 +1,11 @@
 package io.dsub.repository;
 
-import io.dsub.datasource.ModelFileReader;
-import io.dsub.datasource.ModelFileWriter;
-import io.dsub.datasource.ModelReader;
-import io.dsub.datasource.ModelWriter;
+import io.dsub.datasource.reader.LocalFlatFileReader;
+import io.dsub.datasource.writer.LocalFlatFileWriter;
+import io.dsub.datasource.reader.ModelReader;
+import io.dsub.datasource.writer.ModelWriter;
 import io.dsub.model.Model;
-import io.dsub.util.DataType;
+import io.dsub.constants.DataType;
 import io.dsub.util.FileHelper;
 
 import java.io.File;
@@ -25,15 +25,15 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
     private Path sourcePath;
 
     public LocalModelRepository(DataType type) {
-        this(type, new ModelFileReader<>(type), new ModelFileWriter<>(type));
+        this(type, new LocalFlatFileReader<>(type), new LocalFlatFileWriter<>(type));
     }
 
     public LocalModelRepository(DataType type, Path path) {
-        this(type, new ModelFileReader<>(type, path), new ModelFileWriter<>(type, path));
+        this(type, new LocalFlatFileReader<>(type, path), new LocalFlatFileWriter<>(type, path));
     }
 
     public LocalModelRepository(DataType type, File file) {
-        this(type, new ModelFileReader<>(type, file), new ModelFileWriter<>(type, file));
+        this(type, new LocalFlatFileReader<>(type, file), new LocalFlatFileWriter<>(type, file));
     }
 
     private LocalModelRepository(DataType dataType, ModelReader<T> reader, ModelWriter<T> writer) {
@@ -50,7 +50,7 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
      * @return matching entity or null if not present
      */
     @Override
-    public T read(String key) throws IOException {
+    public T find(String key) throws IOException {
         return reader.readByKey(key);
     }
 
@@ -73,7 +73,7 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
      * @return list of entities
      */
     @Override
-    public List<T> readAll() throws IOException {
+    public List<T> findAll() throws IOException {
         return reader.readAll();
     }
 
@@ -157,8 +157,8 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
 
     public void setSourcePath(Path sourcePath) {
         this.sourcePath = sourcePath;
-        this.writer = new ModelFileWriter<>(this.dataType, this.sourcePath);
-        this.reader = new ModelFileReader<>(this.dataType, this.sourcePath);
+        this.writer = new LocalFlatFileWriter<>(this.dataType, this.sourcePath);
+        this.reader = new LocalFlatFileReader<>(this.dataType, this.sourcePath);
     }
 
     public void prune() throws IOException {

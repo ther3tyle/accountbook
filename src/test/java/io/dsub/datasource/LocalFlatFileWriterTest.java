@@ -1,9 +1,9 @@
 package io.dsub.datasource;
 
-import io.dsub.datasource.ModelFileWriter;
-import io.dsub.datasource.ModelWriter;
+import io.dsub.datasource.writer.LocalFlatFileWriter;
+import io.dsub.datasource.writer.ModelWriter;
 import io.dsub.model.Transaction;
-import io.dsub.util.DataType;
+import io.dsub.constants.DataType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ModelFileWriterTest {
+class LocalFlatFileWriterTest {
 
     private static ModelWriter<Transaction> writer;
     private static File testFile;
@@ -23,7 +23,7 @@ class ModelFileWriterTest {
     @BeforeEach
     void prepTest() throws IOException {
         testFile = File.createTempFile("_test", "");
-        writer = new ModelFileWriter<>(DataType.TRANSACTION, testFile);
+        writer = new LocalFlatFileWriter<>(DataType.TRANSACTION, testFile);
     }
 
     @AfterEach

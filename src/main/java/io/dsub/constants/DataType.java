@@ -1,4 +1,4 @@
-package io.dsub.util;
+package io.dsub.constants;
 
 public enum DataType {
     TRANSACTION("trans_db"), VENDOR("vend_db"), CATEGORY("cat_db");

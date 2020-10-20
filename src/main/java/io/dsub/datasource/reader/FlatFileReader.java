@@ -1,4 +1,4 @@
-package io.dsub.datasource;
+package io.dsub.datasource.reader;
 
 import io.dsub.model.Model;
 
@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-public interface LocalModelReader<T extends Model> extends ModelReader<T> {
+public interface FlatFileReader<T extends Model> extends ModelReader<T> {
 
     @Override
     T read() throws IOException;

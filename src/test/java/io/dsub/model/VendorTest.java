@@ -1,6 +1,6 @@
 package io.dsub.model;
 
-import io.dsub.util.DataType;
+import io.dsub.constants.DataType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

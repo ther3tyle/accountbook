@@ -1,6 +1,7 @@
 package io.dsub.repository;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -18,14 +19,14 @@ public interface ModelRepository<T, K>  {
      * @param key key of entity
      * @return matching entity or null if not present
      */
-    T read(K key) throws IOException;
+    T find(K key) throws IOException, SQLException;
 
     /**
      * reads all entities from target source
      *
      * @return list of entities
      */
-    List<T> readAll() throws IOException;
+    List<T> findAll() throws IOException, SQLException;
 
     /**
      * writes single item to target source

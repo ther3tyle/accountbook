@@ -1,23 +1,23 @@
 -- drop everything that was previously stored
-DROP SCHEMA IF EXISTS accounts CASCADE;
+DROP SCHEMA IF EXISTS account CASCADE;
 
 -- create new schema and tables
-CREATE SCHEMA accounts;
+CREATE SCHEMA account;
 
-CREATE TABLE accounts.user
+CREATE TABLE account.user
 (
     id      INT AUTO_INCREMENT    NOT NULL PRIMARY KEY,
     balance INT         DEFAULT 0 NOT NULL,
     name    VARCHAR(45) DEFAULT 'NO NAME'
 );
 
-CREATE TABLE accounts.category
+CREATE TABLE account.category
 (
     id   INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     name VARCHAR(45)        NOT NULL UNIQUE
 );
 
-CREATE TABLE accounts.vendor
+CREATE TABLE account.vendor
 (
     id          INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     name        VARCHAR(45)        NOT NULL UNIQUE,
@@ -26,7 +26,7 @@ CREATE TABLE accounts.vendor
         FOREIGN KEY (category_id) REFERENCES category
 );
 
-CREATE TABLE accounts.transaction
+CREATE TABLE account.transaction
 (
     id        IDENTITY  NOT NULL PRIMARY KEY,
     amount    INT       NOT NULL,

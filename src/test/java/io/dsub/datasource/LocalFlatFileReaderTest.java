@@ -1,11 +1,11 @@
 package io.dsub.datasource;
 
-import io.dsub.datasource.ModelReader;
+import io.dsub.datasource.reader.LocalFlatFileReader;
+import io.dsub.datasource.reader.ModelReader;
+import io.dsub.datasource.writer.LocalFlatFileWriter;
+import io.dsub.datasource.writer.ModelWriter;
 import io.dsub.model.Transaction;
-import io.dsub.datasource.ModelFileReader;
-import io.dsub.datasource.ModelFileWriter;
-import io.dsub.datasource.ModelWriter;
-import io.dsub.util.DataType;
+import io.dsub.constants.DataType;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +23,7 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ModelFileReaderTest {
+class LocalFlatFileReaderTest {
 
     private static ModelReader<Transaction> reader;
     private static List<Transaction> randomTransactions;
@@ -61,7 +61,7 @@ class ModelFileReaderTest {
         testFile.createNewFile();
 
         testFile = getPopulatedFile(testFile);
-        reader = new ModelFileReader<>(DataType.TRANSACTION, testFile);
+        reader = new LocalFlatFileReader<>(DataType.TRANSACTION, testFile);
     }
 
     @AfterEach
@@ -103,7 +103,7 @@ class ModelFileReaderTest {
     void testPruneDuplicatedEntry() {
         assertDoesNotThrow(() -> {
             Transaction t = reader.read(); // reads first transaction
-            ModelWriter<Transaction> writer = new ModelFileWriter<>(DataType.TRANSACTION, testFile);
+            ModelWriter<Transaction> writer = new LocalFlatFileWriter<>(DataType.TRANSACTION, testFile);
             writer.reset();
 
             writer.write(t);

@@ -1,9 +1,9 @@
-package io.dsub.datasource;
+package io.dsub.datasource.writer;
 
 import io.dsub.model.Model;
-import io.dsub.util.DataType;
+import io.dsub.constants.DataType;
 import io.dsub.util.FileHelper;
-import io.dsub.util.ModelParserUtil;
+import io.dsub.util.ModelParser;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -17,21 +17,21 @@ import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class ModelFileWriter<T extends Model> implements LocalModelWriter<T> {
-    private static final Logger logger = Logger.getLogger(ModelFileWriter.class.getName());
+public class LocalFlatFileWriter<T extends Model> implements FlatFileWriter<T> {
+    private static final Logger logger = Logger.getLogger(LocalFlatFileWriter.class.getName());
     private final Function<String, Model> parser;
     private Path sourcePath;
 
-    public ModelFileWriter(DataType type) {
+    public LocalFlatFileWriter(DataType type) {
         this(type, FileHelper.getPath(type));
     }
 
-    public ModelFileWriter(DataType type, File file) {
+    public LocalFlatFileWriter(DataType type, File file) {
         this(type, file.toPath());
     }
 
-    public ModelFileWriter(DataType type, Path sourcePath) {
-        this.parser = ModelParserUtil.get(type);
+    public LocalFlatFileWriter(DataType type, Path sourcePath) {
+        this.parser = ModelParser.get(type);
         this.sourcePath = sourcePath;
     }
 
