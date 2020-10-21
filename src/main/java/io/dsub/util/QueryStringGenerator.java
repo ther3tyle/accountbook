@@ -135,9 +135,9 @@ public class QueryStringGenerator {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         String updateBlock = pair.entrySet().stream()
-                .filter(v -> v.getKey().equals("id"))
+                .filter(v -> !v.getKey().equals("id"))
                 .map(v -> v.getKey() + " = " + String.format("'%s'", v.getValue()))
-                .reduce((acc, curr) -> curr + acc)
+                .reduce((acc, curr) -> curr + ", " + acc)
                 .orElse("");
 
         String columns = pair.keySet().stream()

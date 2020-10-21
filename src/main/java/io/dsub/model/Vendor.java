@@ -15,6 +15,9 @@ public class Vendor extends Model implements Serializable {
     private final Integer catId;
     private static final long serialVersionUID = 1L;
 
+    public Vendor(Integer id, String name) {
+        this(id, name, null);
+    }
     public Vendor(String name) {
         this(null, name, null);
     }

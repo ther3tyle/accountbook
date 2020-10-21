@@ -163,7 +163,13 @@ class VendorRepositoryTest {
     void save() {
         Vendor vendor = new Vendor("hello");
         assertDoesNotThrow(() -> repository.save(vendor));
-        assertThrows(SQLException.class, () -> repository.save(new Vendor("hello")));
+        Vendor other = new Vendor("isUpdated");
+        assertDoesNotThrow(() -> repository.save(other));
+        assertDoesNotThrow(() -> assertEquals("isUpdated", repository.findById("2").getName()));
+        Vendor duplicated = new Vendor(1, "duplicated");
+        assertDoesNotThrow(() -> repository.save(duplicated));
+        assertDoesNotThrow(() -> assertEquals("duplicated", repository.findById("1").getName()));
+
         assertThrows(SQLException.class, () -> repository.save(new Vendor("Other", 3)));
 
         try {

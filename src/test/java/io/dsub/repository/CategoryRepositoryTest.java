@@ -94,8 +94,16 @@ class CategoryRepositoryTest {
             assertEquals(1, rs.getInt("id"));
         });
 
-        // duplicated will throw
-        assertThrows(SQLException.class, () -> repository.save(new Category("New World Order")));
+        // duplicated then create new item
+        assertDoesNotThrow(() -> repository.save(new Category("New World Order")));
+
+        try {
+            Category toUpsert = new Category(1, "NEW NAME");
+            repository.save(toUpsert);
+            assertEquals("NEW NAME", repository.findById("1").getName());
+        } catch (SQLException e) {
+            fail(e.getMessage());
+        }
     }
 
     @Test

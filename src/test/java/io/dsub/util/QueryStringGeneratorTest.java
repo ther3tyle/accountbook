@@ -73,10 +73,10 @@ class QueryStringGeneratorTest {
     @Test
     void testGetInsertQuery() {
         String insertQuery = sqlGenerator.getInsertQuery(SCHEMA, TABLE, singleMap);
-        assertEquals("INSERT INTO schema.table (key) VALUES ('value')", insertQuery);
+        assertEquals("INSERT INTO schema.table (key) VALUES ('value') ON DUPLICATE KEY UPDATE key = 'value'", insertQuery);
 
         insertQuery = sqlGenerator.getInsertQuery(SCHEMA, TABLE, multiMap);
-        assertEquals("INSERT INTO schema.table (key_1, key_2, key_3) VALUES ('value_1', 'value_2', 'value_3')", insertQuery);
+        assertEquals("INSERT INTO schema.table (key_1, key_2, key_3) VALUES ('value_1', 'value_2', 'value_3') ON DUPLICATE KEY UPDATE key_1 = 'value_1', key_2 = 'value_2', key_3 = 'value_3'", insertQuery);
     }
 
     @Test
