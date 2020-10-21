@@ -134,6 +134,12 @@ public class QueryStringGenerator {
                 .filter(v -> !v.getValue().equals("null"))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
+        String updateBlock = pair.entrySet().stream()
+                .filter(v -> v.getKey().equals("id"))
+                .map(v -> v.getKey() + " = " + String.format("'%s'", v.getValue()))
+                .reduce((acc, curr) -> curr + acc)
+                .orElse("");
+
         String columns = pair.keySet().stream()
                 .reduce((acc, curr) -> curr + ", " + acc)
                 .map(s -> "(" + s + ")")
@@ -145,7 +151,14 @@ public class QueryStringGenerator {
                 .reduce((acc, curr) -> curr + ", " + acc)
                 .map(s -> "(" + s + ")")
                 .get();
-        return columns + " VALUES " + values;
+
+        String query = columns + " VALUES " + values;
+
+        if (updateBlock.length() > 0) {
+            query += " ON DUPLICATE KEY UPDATE " + updateBlock;
+        }
+
+        return query;
     }
 
 

@@ -40,7 +40,8 @@ public interface ModelRepository<T>  {
     Collection<T> findAll() throws IOException, SQLException;
 
     /**
-     * writes single item to target source
+     * writes single item to target source.
+     * if {@code T item} of key already exists, it will operate update.
      *
      * @param item item to be written
      * @return key of item in database
