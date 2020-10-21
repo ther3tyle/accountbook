@@ -1,11 +1,11 @@
 package io.dsub.datasource;
 
-import io.dsub.constants.Constants;
+import io.dsub.constants.StringConstants;
 import org.h2.jdbcx.JdbcDataSource;
 
 public class AccountDataSource extends JdbcDataSource {
     public AccountDataSource() {
-        this(Constants.CONN_STRING);
+        this(StringConstants.CONN_STRING);
     }
 
     public AccountDataSource(String url, String user, String password) {

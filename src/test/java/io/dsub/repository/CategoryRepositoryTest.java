@@ -10,16 +10,6 @@ import java.nio.file.Path;
 import java.sql.SQLException;
 
 class CategoryRepositoryTest {
-    @BeforeAll
-    static void init() throws SQLException {
-        Initializer.init("test_schema", "jdbc:h2:" + System.getProperty("user.dir") + File.separator + "test" + File.separator + "h2;MODE=MySQL");
-
-    }
-    @AfterAll
-    static void cleanUp() throws IOException {
-        Path path = Path.of(System.getProperty("user.dir") + File.separator + "test");
-        Files.deleteIfExists(path);
-    }
 
     @BeforeEach
     void setUp() {

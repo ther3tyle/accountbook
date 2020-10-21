@@ -1,6 +1,6 @@
 package io.dsub.repository;
 
-import io.dsub.constants.Constants;
+import io.dsub.constants.StringConstants;
 import io.dsub.model.Category;
 import io.dsub.util.QueryStringGenerator;
 
@@ -14,8 +14,8 @@ public class CategoryRepository extends JdbcModelRepository<Category, Integer> {
 
     private final Logger logger = Logger.getLogger(CategoryRepository.class.getName());
     private final QueryStringGenerator queryGen = QueryStringGenerator.getInstance();
-    private static final String SCHEMA = Constants.SCHEMA;
-    private static final String TABLE = Constants.CATEGORY;
+    private static final String SCHEMA = StringConstants.SCHEMA;
+    private static final String TABLE = StringConstants.CATEGORY;
 
     public CategoryRepository() throws SQLException {
         super();
@@ -56,7 +56,7 @@ public class CategoryRepository extends JdbcModelRepository<Category, Integer> {
     @Override
     public void save(Category item) throws SQLException {
         Map<String, String> pair = new HashMap<>();
-        pair.put("id", item.getId());
+        pair.put("id", String.valueOf(item.getId()));
         pair.put("name", item.getName());
 
         String query = queryGen.getInsertQuery(SCHEMA, TABLE, pair);
@@ -75,7 +75,7 @@ public class CategoryRepository extends JdbcModelRepository<Category, Integer> {
 
         for (Category item : items) {
             Map<String, String> pair = new HashMap<>();
-            pair.put("id", item.getId());
+            pair.put("id", String.valueOf(item.getId()));
             pair.put("name", item.getName());
 
             String query = queryGen.getInsertQuery(SCHEMA, TABLE, pair);
@@ -89,7 +89,7 @@ public class CategoryRepository extends JdbcModelRepository<Category, Integer> {
     @Override
     public void delete(Category item) throws SQLException {
         Map<String, String> conditions = new HashMap<>();
-        conditions.put("id", item.getId());
+        conditions.put("id", String.valueOf(item.getId()));
         conditions.put("name", item.getName());
         String sql = queryGen.getDeleteQuery(SCHEMA, TABLE, conditions);
         execute(sql);

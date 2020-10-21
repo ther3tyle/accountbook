@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class QueryStringGenerator {
-    private QueryStringGenerator(){};
+    private QueryStringGenerator(){}
 
     private static final QueryStringGenerator instance = new QueryStringGenerator();
 

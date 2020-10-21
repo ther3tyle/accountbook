@@ -1,6 +1,10 @@
 package io.dsub.model;
 
 import io.dsub.constants.DataType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.With;
 
 import java.io.Serializable;
 import java.security.InvalidParameterException;
@@ -10,37 +14,24 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
-
 /**
  * An immutable transaction model
  */
+
+@Builder
+@With
+@Getter
+@AllArgsConstructor
 public class Transaction extends Model implements Serializable {
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Fields
-    ///////////////////////////////////////////////////////////////////////////
     private final long amount;
     private final int vendorId;
     private final LocalDateTime time;
     private final UUID id;
     private static final long serialVersionUID = 1L;
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Constructors
-    ///////////////////////////////////////////////////////////////////////////
     public Transaction(long amount, int vendorId) {
-        this(amount, vendorId, LocalDateTime.now());
-    }
-
-    public Transaction(long amount, int vendorId, LocalDateTime time) {
-        this(amount, vendorId, time, UUID.randomUUID());
-    }
-
-    public Transaction(long amount, int vendorId, LocalDateTime time, UUID id) {
-        this.amount = amount;
-        this.vendorId = vendorId;
-        this.time = time;
-        this.id = id;
+        this(amount, vendorId, LocalDateTime.now(), UUID.randomUUID());
     }
 
     public static Function<String, Model> getParser() {
@@ -77,21 +68,6 @@ public class Transaction extends Model implements Serializable {
 
             return new Transaction(amount, vendorId, time, id);
         };
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Withers
-    ///////////////////////////////////////////////////////////////////////////
-    public Transaction withAmount(long amount) {
-        return new Transaction(amount, this.vendorId, LocalDateTime.parse(this.time.toString()), UUID.fromString(this.id.toString()));
-    }
-
-    public Transaction withVendorId(int vendorId) {
-        return new Transaction(this.amount, vendorId, LocalDateTime.parse(this.time.toString()), UUID.fromString(this.id.toString()));
-    }
-
-    public Transaction withTime(LocalDateTime time) {
-        return new Transaction(this.amount, this.vendorId, time, UUID.fromString(this.id.toString()));
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -141,3 +117,6 @@ public class Transaction extends Model implements Serializable {
         return this.id.equals(that.id);
     }
 }
+
+
+

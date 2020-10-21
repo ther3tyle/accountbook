@@ -1,7 +1,7 @@
 package io.dsub.repository;
 
 import io.dsub.AppState;
-import io.dsub.constants.Constants;
+import io.dsub.constants.StringConstants;
 import io.dsub.model.Model;
 
 import java.io.BufferedReader;
@@ -25,7 +25,7 @@ public abstract class JdbcModelRepository<V extends Model, K> implements ModelRe
             if (!initSchema()) {
                 throw new ExceptionInInitializerError("failed to initialize");
             }
-            conn.setSchema(Constants.SCHEMA);
+            conn.setSchema(StringConstants.SCHEMA);
             logger.info("initialized database");
         }
     }
@@ -59,7 +59,7 @@ public abstract class JdbcModelRepository<V extends Model, K> implements ModelRe
     private boolean isSchemaMissing() throws SQLException {
         ResultSet rs = conn.getMetaData().getSchemas();
         while (rs.next()) {
-            if (rs.getString(1).equalsIgnoreCase(Constants.SCHEMA)) {
+            if (rs.getString(1).equalsIgnoreCase(StringConstants.SCHEMA)) {
                 return false;
             }
         }

@@ -1,8 +1,10 @@
 package io.dsub;
 
-import io.dsub.constants.Constants;
+import io.dsub.constants.StringConstants;
 import io.dsub.util.Initializer;
 
+import javax.naming.InsufficientResourcesException;
+import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.logging.Logger;
 
@@ -16,7 +18,7 @@ public class Application {
 
     public static void main(String[] args) {
         try {
-            Initializer.init("reset_schema.sql", Constants.CONN_STRING);
+            Initializer.init("reset_schema.sql", StringConstants.CONN_STRING);
 
             // do operations below
             // ...
@@ -26,6 +28,10 @@ public class Application {
 
         } catch (SQLException e) {
             LOGGER.severe(e.getMessage());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (InsufficientResourcesException e) {
+            e.printStackTrace();
         } finally {
             closeConn();
         }
