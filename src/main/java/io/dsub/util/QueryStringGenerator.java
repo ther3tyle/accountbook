@@ -4,6 +4,7 @@ import io.dsub.constants.QueryOp;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class QueryStringGenerator {
@@ -16,54 +17,54 @@ public class QueryStringGenerator {
     }
 
     public String getSelectQuery(String schema, String table) {
-        return buildQuery(QueryOp.SELECT, schema, table, "", "");
+        return buildQuery(QueryOp.SELECT, schema, table, "");
     }
 
     public String getSelectQuery(String schema, String table, Map<String, String> conditions) {
-        return buildQuery(QueryOp.SELECT, schema, table, "", conditions);
+        return buildQuery(QueryOp.SELECT, schema, table, conditions);
     }
 
     public String getSelectQuery(String schema, String table, String conditionString) {
-        return buildQuery(QueryOp.SELECT, schema, table, "", conditionString);
+        return buildQuery(QueryOp.SELECT, schema, table, conditionString);
     }
 
     public String getUpdateQuery(String schema, String table, Map<String, String> entryPairs, Map<String, String> conditions) {
-        return buildQuery(QueryOp.UPDATE, schema, table, entryPairs, conditions);
+        return buildQuery(schema, table, entryPairs, conditions);
     }
 
     public String getInsertQuery(String schema, String table, Map<String, String> entryPairs) {
-        return buildQuery(QueryOp.INSERT, schema, table, entryPairs, "");
+        return buildQuery(schema, table, entryPairs);
     }
 
     public String getDeleteQuery(String schema, String table) {
-        return buildQuery(QueryOp.DELETE, schema, table,"", "");
+        return buildQuery(QueryOp.DELETE, schema, table, "");
     }
 
     public String getDeleteQuery(String schema, String table, Map<String, String> conditions) {
-        return buildQuery(QueryOp.DELETE, schema, table, "", conditions);
+        return buildQuery(QueryOp.DELETE, schema, table, conditions);
     }
 
     public String getDeleteQuery(String schema, String table, String conditionString) {
-        return buildQuery(QueryOp.DELETE, schema, table, "", conditionString);
+        return buildQuery(QueryOp.DELETE, schema, table, conditionString);
     }
 
-    private String buildQuery(QueryOp op, String schema, String table, Map<String, String> entryPairs, Map<String, String> conditions) {
-        String queryString = getBaseString(op, schema, table) + getIntermediates(op, entryPairs) + getConditionals(conditions);
+    private String buildQuery(String schema, String table, Map<String, String> entryPairs, Map<String, String> conditions) {
+        String queryString = getBaseString(QueryOp.UPDATE, schema, table) + getIntermediates(QueryOp.UPDATE, entryPairs) + getConditionals(conditions);
         return queryString.trim();
     }
 
-    private String buildQuery(QueryOp op, String schema, String table, Map<String, String> entryPairs, String conditionString) {
-        String queryString = getBaseString(op, schema, table) + getIntermediates(op, entryPairs) + conditionString;
+    private String buildQuery(String schema, String table, Map<String, String> entryPairs) {
+        String queryString = getBaseString(QueryOp.INSERT, schema, table) + getIntermediates(QueryOp.INSERT, entryPairs);
         return queryString.trim();
     }
 
-    private String buildQuery(QueryOp op, String schema, String table, String entryString, Map<String, String> conditions) {
-        String queryString = getBaseString(op, schema, table) + entryString + getConditionals(conditions);
+    private String buildQuery(QueryOp op, String schema, String table, Map<String, String> conditions) {
+        String queryString = getBaseString(op, schema, table) + getConditionals(conditions);
         return queryString.trim();
     }
 
-    private String buildQuery(QueryOp op, String schema, String table, String entryString, String conditionString) {
-        String queryString = getBaseString(op, schema, table) + entryString + conditionString;
+    private String buildQuery(QueryOp op, String schema, String table, String conditionString) {
+        String queryString = getBaseString(op, schema, table) + conditionString;
         return queryString.trim();
     }
 
@@ -73,17 +74,18 @@ public class QueryStringGenerator {
             return "";
         }
 
-        String conditionString = conditions.entrySet()
+        String condString = conditions.entrySet()
                 .stream()
-                .map(entry -> entry.getKey() + " = " + entry.getValue())
+                .filter(entry -> entry.getValue() != null && !entry.getValue().equals("null"))
+                .map(entry -> entry.getKey() + " = " + makeValueString(entry.getValue()))
                 .reduce((acc, curr) -> {
                     if (acc.length() == 0) {
                         return curr;
                     }
                     return curr + " AND " + acc; // reverse the order from end to start
                 })
-                .get();
-        return "WHERE " + conditionString;
+                .orElse("");
+        return condString.isBlank() ? "" : "WHERE " + condString;
     }
 
     private String getIntermediates(QueryOp op, Map<String, String> pair) {
@@ -103,7 +105,8 @@ public class QueryStringGenerator {
         }
 
         List<String> list = pair.entrySet().stream()
-                .map(entry -> entry.getKey() + " = " + entry.getValue())
+                .filter(entry -> !entry.getValue().equals("null"))
+                .map(entry -> entry.getKey() + " = " + makeValueString(entry.getValue()))
                 .collect(Collectors.toUnmodifiableList());
 
         StringBuilder sb = new StringBuilder();
@@ -118,10 +121,18 @@ public class QueryStringGenerator {
         return "SET "+ sb.toString() + " ";
     }
 
+    private String makeValueString(String s) {
+        return String.format("'%s'", s);
+    }
+
     private String buildInsertIntermediates(Map<String, String> pair) {
         if (pair == null || pair.size() == 0) {
             return "";
         }
+
+        pair = pair.entrySet().stream()
+                .filter(v -> !v.getValue().equals("null"))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         String columns = pair.keySet().stream()
                 .reduce((acc, curr) -> curr + ", " + acc)
@@ -151,5 +162,4 @@ public class QueryStringGenerator {
 
         return String.format("%s %s.%s ", base, schema, table);
     }
-
 }

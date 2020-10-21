@@ -61,4 +61,6 @@ public interface ModelRepository<T, K>  {
      * @param id to be removed
      */
     void deleteById(String id) throws SQLException;
+
+    long count() throws SQLException, IOException;
 }

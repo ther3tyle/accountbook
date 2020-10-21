@@ -67,9 +67,7 @@ public abstract class JdbcModelRepository<V extends Model, K> implements ModelRe
     }
 
     protected ResultSet executeWithResultSet(String query) throws SQLException {
-        try (Statement stmt = conn.createStatement()) {
-            return stmt.executeQuery(query);
-        }
+        return conn.createStatement().executeQuery(query);
     }
 
     protected boolean executeBatchQuery(Collection<String> batch) throws SQLException {

@@ -49,25 +49,25 @@ class QueryStringGeneratorTest {
         assertEquals("SELECT * FROM schema.table", selectQuery);
 
         selectQuery = sqlGenerator.getSelectQuery(SCHEMA, TABLE, singleMap);
-        assertEquals("SELECT * FROM schema.table WHERE key = value", selectQuery);
+        assertEquals("SELECT * FROM schema.table WHERE key = 'value'", selectQuery);
 
         selectQuery = sqlGenerator.getSelectQuery(SCHEMA, TABLE, multiMap);
-        assertEquals("SELECT * FROM schema.table WHERE key_1 = value_1 AND key_2 = value_2 AND key_3 = value_3", selectQuery);
+        assertEquals("SELECT * FROM schema.table WHERE key_1 = 'value_1' AND key_2 = 'value_2' AND key_3 = 'value_3'", selectQuery);
     }
 
     @Test
     void testGetUpdateQuery() {
         String updateQuery = sqlGenerator.getUpdateQuery(SCHEMA, TABLE, singleMap, singleMap);
-        assertEquals("UPDATE schema.table SET key = value WHERE key = value", updateQuery);
+        assertEquals("UPDATE schema.table SET key = 'value' WHERE key = 'value'", updateQuery);
 
         updateQuery = sqlGenerator.getUpdateQuery(SCHEMA, TABLE, multiMap, singleMap);
-        assertEquals("UPDATE schema.table SET key_1 = value_1, key_2 = value_2, key_3 = value_3 WHERE key = value", updateQuery);
+        assertEquals("UPDATE schema.table SET key_1 = 'value_1', key_2 = 'value_2', key_3 = 'value_3' WHERE key = 'value'", updateQuery);
 
         updateQuery = sqlGenerator.getUpdateQuery(SCHEMA, TABLE, singleMap, multiMap);
-        assertEquals("UPDATE schema.table SET key = value WHERE key_1 = value_1 AND key_2 = value_2 AND key_3 = value_3", updateQuery);
+        assertEquals("UPDATE schema.table SET key = 'value' WHERE key_1 = 'value_1' AND key_2 = 'value_2' AND key_3 = 'value_3'", updateQuery);
 
         updateQuery = sqlGenerator.getUpdateQuery(SCHEMA, TABLE, multiMap, multiMap);
-        assertEquals("UPDATE schema.table SET key_1 = value_1, key_2 = value_2, key_3 = value_3 WHERE key_1 = value_1 AND key_2 = value_2 AND key_3 = value_3", updateQuery);
+        assertEquals("UPDATE schema.table SET key_1 = 'value_1', key_2 = 'value_2', key_3 = 'value_3' WHERE key_1 = 'value_1' AND key_2 = 'value_2' AND key_3 = 'value_3'", updateQuery);
     }
 
     @Test
@@ -85,9 +85,9 @@ class QueryStringGeneratorTest {
         assertEquals("DELETE FROM schema.table", deleteQuery);
 
         deleteQuery = sqlGenerator.getDeleteQuery(SCHEMA, TABLE, singleMap);
-        assertEquals("DELETE FROM schema.table WHERE key = value", deleteQuery);
+        assertEquals("DELETE FROM schema.table WHERE key = 'value'", deleteQuery);
 
         deleteQuery = sqlGenerator.getDeleteQuery(SCHEMA, TABLE, multiMap);
-        assertEquals("DELETE FROM schema.table WHERE key_1 = value_1 AND key_2 = value_2 AND key_3 = value_3", deleteQuery);
+        assertEquals("DELETE FROM schema.table WHERE key_1 = 'value_1' AND key_2 = 'value_2' AND key_3 = 'value_3'", deleteQuery);
     }
 }

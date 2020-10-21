@@ -4,6 +4,7 @@ import io.dsub.constants.StringConstants;
 import io.dsub.model.Category;
 import io.dsub.util.QueryStringGenerator;
 
+import java.security.InvalidParameterException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,36 +28,31 @@ public class CategoryRepository extends JdbcModelRepository<Category, Integer> {
 
     @Override
     public Category find(Integer id) throws SQLException {
-        String query = queryGen.getSelectQuery(SCHEMA, TABLE, " WHERE id = " + id);
+        String query = queryGen.getSelectQuery(SCHEMA, TABLE, "WHERE id = " + id);
         ResultSet resultSet = super.executeWithResultSet(query);
         return parse(resultSet);
     }
 
     @Override
-    public Category findByName(String name) throws SQLException {
-        String query = queryGen.getSelectQuery(SCHEMA, TABLE, " WHERE name = " + name);
-        ResultSet resultSet = executeWithResultSet(query);
-        return parse(resultSet);
+    public Category findByName(String categoryName) throws SQLException {
+        String query = queryGen.getSelectQuery(SCHEMA, TABLE, "WHERE name = '" + categoryName + "'");
+        ResultSet rs = executeWithResultSet(query);
+        return parse(rs);
     }
 
     @Override
     public List<Category> findAll() throws SQLException {
-        List<Category> categories = new ArrayList<>();
-
         String query = queryGen.getSelectQuery(SCHEMA, TABLE) + " ORDER BY id";
         ResultSet rs = executeWithResultSet(query);
-
-        while (rs.next()) {
-            categories.add(parse(rs));
-        }
-
-        return categories;
+        return multiParse(rs);
     }
 
     @Override
     public void save(Category item) throws SQLException {
         Map<String, String> pair = new HashMap<>();
-        pair.put("id", String.valueOf(item.getId()));
+        if (item.getId() != null) {
+            pair.put("id", String.valueOf(item.getId()));
+        }
         pair.put("name", item.getName());
 
         String query = queryGen.getInsertQuery(SCHEMA, TABLE, pair);
@@ -89,7 +85,13 @@ public class CategoryRepository extends JdbcModelRepository<Category, Integer> {
     @Override
     public void delete(Category item) throws SQLException {
         Map<String, String> conditions = new HashMap<>();
-        conditions.put("id", String.valueOf(item.getId()));
+        String id = item.getId();
+        if (id != null && !id.equals("null")) {
+            conditions.put("id", String.valueOf(item.getId()));
+        }
+        if (id != null && item.getName() == null) {
+            throw new InvalidParameterException(String.format("incomplete model(id=%s name=%s)", item.getId(), item.getName()));
+        }
         conditions.put("name", item.getName());
         String sql = queryGen.getDeleteQuery(SCHEMA, TABLE, conditions);
         execute(sql);
@@ -103,18 +105,34 @@ public class CategoryRepository extends JdbcModelRepository<Category, Integer> {
 
     @Override
     public void deleteByName(String name) throws SQLException {
-        String sql = queryGen.getDeleteQuery(SCHEMA, TABLE, " WHERE name = " + name);
+        String sql = queryGen.getDeleteQuery(SCHEMA, TABLE, " WHERE name = " + String.format("'%s'", name));
         execute(sql);
     }
 
-    private Category parse(ResultSet rs) {
-        try {
+    @Override
+    public long count() throws SQLException {
+        ResultSet rs = conn.createStatement().executeQuery("SELECT COUNT('ID') AS \"COUNT\" FROM " + SCHEMA + "." + TABLE);
+        rs.next();
+        return rs.getLong("COUNT");
+    }
+
+
+    private Category parse(ResultSet rs) throws SQLException {
+        if (rs.next()) {
             int id = rs.getInt("id");
             String name = rs.getString("name");
             return new Category(id, name);
-        } catch (SQLException e) {
-            logger.severe(e.getMessage());
-            return null;
         }
+        return null;
+    }
+
+    private List<Category> multiParse(ResultSet rs) throws SQLException {
+        List<Category> items = new ArrayList<>();
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            items.add(new Category(id, name));
+        }
+        return items;
     }
 }

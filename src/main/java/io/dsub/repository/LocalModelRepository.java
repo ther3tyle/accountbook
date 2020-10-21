@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class LocalModelRepository<T extends Model> implements ModelRepository<T, String> {
-    private static final Logger logger = Logger.getLogger(LocalModelRepository.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(LocalModelRepository.class.getName());
 
     private ModelReader<T> reader;
     private ModelWriter<T> writer;
@@ -119,7 +119,7 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
             writer.reset();
             writer.writeAll(list);
         } catch (IOException e) {
-            logger.severe(e.getMessage());
+            LOGGER.severe(e.getMessage());
         }
     }
 
@@ -138,13 +138,18 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
             writer.reset();
             writer.writeAll(list);
         } catch (IOException e) {
-            logger.severe(e.getMessage());
+            LOGGER.severe(e.getMessage());
         }
     }
 
     @Override
     public void deleteByName(String name) throws IOException, SQLException {
 
+    }
+
+    @Override
+    public long count() throws IOException {
+        return reader.readAll().size();
     }
 
     public ModelReader<T> getReader() {

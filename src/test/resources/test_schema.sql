@@ -1,7 +1,5 @@
--- drop everything that was previously stored
 DROP SCHEMA IF EXISTS account CASCADE;
 
--- create new schema and tables
 CREATE SCHEMA account;
 
 CREATE TABLE account.category
@@ -21,7 +19,7 @@ CREATE TABLE account.vendor
 
 CREATE TABLE account.transaction
 (
-    id        IDENTITY  NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id        IDENTITY  NOT NULL AUTO_INCREMENT,
     amount    INT       NOT NULL,
     time      TIMESTAMP NOT NULL DEFAULT NOW(),
     vendor_id INT       NOT NULL,

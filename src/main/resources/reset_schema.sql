@@ -1,7 +1,5 @@
--- drop everything that was previously stored
 DROP SCHEMA IF EXISTS account CASCADE;
 
--- create new schema and tables
 CREATE SCHEMA account;
 
 CREATE TABLE account.category
