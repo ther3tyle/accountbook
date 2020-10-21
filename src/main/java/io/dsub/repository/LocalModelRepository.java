@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class LocalModelRepository<T extends Model> implements ModelRepository<T, String> {
+public class LocalModelRepository<T extends Model> implements ModelRepository<T> {
     private static final Logger LOGGER = Logger.getLogger(LocalModelRepository.class.getName());
 
     private ModelReader<T> reader;
@@ -52,13 +52,8 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
      * @return matching entity or null if not present
      */
     @Override
-    public T find(String key) throws IOException {
+    public T findById(String key) throws IOException {
         return reader.readByKey(key);
-    }
-
-    @Override
-    public T findByName(String name) throws IOException, SQLException {
-        return null;
     }
 
     /**
@@ -88,10 +83,13 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
      * writes single item to target source
      *
      * @param item item to be written
+     * @return null as is not supported yet
      */
+
     @Override
-    public void save(T item) throws IOException {
+    public String save(T item) throws IOException {
         writer.write(item);
+        return null; // TODO: return row value
     }
 
     /**
@@ -140,11 +138,6 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
         }
-    }
-
-    @Override
-    public void deleteByName(String name) throws IOException, SQLException {
-
     }
 
     @Override

@@ -26,7 +26,7 @@ public class Vendor extends Model implements Serializable {
     public Vendor(Integer id, String name, Integer catId) {
         this.id = id;
         this.name = name;
-        this.catId = catId;
+        this.catId = (catId == null) || (catId == 0) ? null : catId;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class Vendor extends Model implements Serializable {
         return name;
     }
 
-    public int getCatId() {
+    public Integer getCatId() {
         return catId;
     }
 

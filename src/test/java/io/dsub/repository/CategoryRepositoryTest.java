@@ -3,6 +3,7 @@ package io.dsub.repository;
 import io.dsub.AppState;
 import io.dsub.constants.StringConstants;
 import io.dsub.model.Category;
+import io.dsub.util.FileHelper;
 import io.dsub.util.Initializer;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.function.ThrowingSupplier;
@@ -45,18 +46,7 @@ class CategoryRepositoryTest {
 
     @AfterEach
     void cleanUp() throws IOException {
-        prune(testPath.toFile());
-    }
-
-    private static void prune(File dir) throws IOException {
-        if (!dir.exists()) return;
-        File[] files = dir.listFiles();
-        if (files != null) {
-            for (File subFile : files) {
-                prune(subFile);
-            }
-        }
-        Files.delete(dir.toPath());
+        FileHelper.prune(testPath.toFile());
     }
 
     @Test
@@ -65,11 +55,11 @@ class CategoryRepositoryTest {
         Category item;
 
         for (int i = 1; i < 4; i++) {
-            item = repository.find(i);
+            item = repository.findById(String.valueOf(i));
             assertNotNull(item);
         }
 
-        item = repository.find(4);
+        item = repository.findById(String.valueOf(4));
         assertNull(item);
     }
 
@@ -132,7 +122,7 @@ class CategoryRepositoryTest {
     void delete() {
         assertDoesNotThrow(this::insertThreeDummies);
         assertDoesNotThrow(() -> {
-            Category item = repository.find(1);
+            Category item = repository.findById(String.valueOf(1));
             repository.delete(item);
             repository.delete(new Category("World"));
             assertThrows(InvalidParameterException.class, () -> repository.delete(new Category(3, null)));

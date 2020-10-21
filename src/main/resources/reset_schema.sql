@@ -12,16 +12,16 @@ CREATE TABLE account.vendor
 (
     id          INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     name        VARCHAR(45)        NOT NULL UNIQUE,
-    category_id INT                NOT NULL,
+    category_id INT,
     CONSTRAINT category_id
         FOREIGN KEY (category_id) REFERENCES category
 );
 
 CREATE TABLE account.transaction
 (
-    id        UUID  NOT NULL PRIMARY KEY,
-    amount    INT       NOT NULL,
-    time      TIMESTAMP NOT NULL DEFAULT NOW(),
+    id        UUID      NOT NULL PRIMARY KEY,
+    amount    LONG      NOT NULL,
+    time      timestamp NOT NULL DEFAULT NOW(),
     vendor_id INT       NOT NULL,
 
     CONSTRAINT vendor_id

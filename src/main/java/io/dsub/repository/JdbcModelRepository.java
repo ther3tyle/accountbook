@@ -2,25 +2,32 @@ package io.dsub.repository;
 
 import io.dsub.AppState;
 import io.dsub.constants.StringConstants;
+import io.dsub.model.Category;
 import io.dsub.model.Model;
+import io.dsub.util.QueryStringGenerator;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Logger;
 
-public abstract class JdbcModelRepository<V extends Model, K> implements ModelRepository<V, K> {
+public abstract class JdbcModelRepository<V extends Model> implements ModelRepository<V> {
     protected final Connection conn;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private final String schema;
+    private final String table;
 
-    public JdbcModelRepository() throws SQLException {
-        this(AppState.getInstance().getConn());
+    public JdbcModelRepository(String schema, String table) throws SQLException {
+        this(AppState.getInstance().getConn(), schema, table);
     }
 
-    public JdbcModelRepository(Connection conn) throws SQLException {
+    public JdbcModelRepository(Connection conn, String schema, String table) throws SQLException {
         this.conn = conn;
+        this.schema = schema;
+        this.table = table;
         if (isSchemaMissing()) {
             if (!initSchema()) {
                 throw new ExceptionInInitializerError("failed to initialize");
@@ -28,6 +35,33 @@ public abstract class JdbcModelRepository<V extends Model, K> implements ModelRe
             conn.setSchema(StringConstants.SCHEMA);
             logger.info("initialized database");
         }
+    }
+
+    @Override
+    public List<V> findAll() throws SQLException {
+        String query = QueryStringGenerator.getInstance().getSelectQuery(schema, table) + " ORDER BY id";
+        ResultSet rs = executeWithResultSet(query);
+        return multiParse(rs);
+    }
+
+    @Override
+    public V findById(String id) throws SQLException {
+        String query = QueryStringGenerator.getInstance().getSelectQuery(schema, table, "WHERE id = " + String.format("'%s'", id));
+        ResultSet resultSet = executeWithResultSet(query);
+        return parse(resultSet);
+    }
+
+    @Override
+    public void deleteById(String id) throws SQLException {
+        String sql = QueryStringGenerator.getInstance().getDeleteQuery(schema, table, " WHERE id = " + id);
+        conn.createStatement().execute(sql);
+    }
+
+    @Override
+    public long count() throws SQLException {
+        ResultSet rs = conn.createStatement().executeQuery("SELECT COUNT('ID') AS \"COUNT\" FROM " + schema + "." + table);
+        rs.next();
+        return rs.getLong("COUNT");
     }
 
     private boolean initSchema() throws SQLException {
@@ -45,15 +79,7 @@ public abstract class JdbcModelRepository<V extends Model, K> implements ModelRe
 
         if (sqlString.length() == 0) return false;
 
-        return execute(sqlString);
-    }
-
-    protected boolean execute(String sql) throws SQLException {
-        try (Statement stmt = conn.createStatement()) {
-            return stmt.execute(sql);
-        } catch (SQLException e) {
-            throw e;
-        }
+        return conn.createStatement().execute(sqlString);
     }
 
     private boolean isSchemaMissing() throws SQLException {
@@ -86,11 +112,10 @@ public abstract class JdbcModelRepository<V extends Model, K> implements ModelRe
         }
 
         int[] result = stmt.executeBatch();
-        String[] queries = batch.toArray(String[]::new);
 
-        boolean success = isBatchSuccess(result, queries);
+        boolean success = isBatchSuccess(result);
 
-        if (isBatchSuccess(result, queries)) {
+        if (isBatchSuccess(result)) {
             conn.commit();
         } else {
             rollbackBatch(savepoint);
@@ -100,14 +125,11 @@ public abstract class JdbcModelRepository<V extends Model, K> implements ModelRe
         return success;
     }
 
-    private boolean isBatchSuccess(int[] result, String[] queries) {
+    private boolean isBatchSuccess(int[] result) {
         boolean success = true;
 
-        for (int i = 0; i < result.length; i++) {
-            int code = result[i];
-            String executedQuery = queries[i];
+        for (int code : result) {
             if (code == Statement.EXECUTE_FAILED) {
-                logger.severe("execution failed: [" + executedQuery + "]");
                 success = false;
                 break;
             }
@@ -148,4 +170,7 @@ public abstract class JdbcModelRepository<V extends Model, K> implements ModelRe
             logger.severe(e.getMessage());
         }
     }
+
+    protected abstract V parse(ResultSet resultSet) throws SQLException;
+    protected abstract List<V> multiParse(ResultSet resultSet) throws SQLException;
 }

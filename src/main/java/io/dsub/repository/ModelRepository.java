@@ -9,20 +9,28 @@ import java.util.List;
  * Base repository abstraction for models
  *
  * @param <T> type of entity
- * @param <K> key of model
  * @since Oct 15, 2020
  * @author ther3tyle
  */
-public interface ModelRepository<T, K>  {
+public interface ModelRepository<T>  {
     /**
-     * read single item by Key
+     * read single item by key
      *
      * @param key key of entity
      * @return matching entity or null if not present
      */
-    T find(K key) throws IOException, SQLException;
+    T findById(String key) throws IOException, SQLException;
 
-    T findByName(String name) throws IOException, SQLException;
+    /**
+     * read single item by name
+     *
+     * @param name name of entity
+     * @return matching entity or null if not present
+     * @throws UnsupportedOperationException if table does not have a column 'name'
+     */
+    default T findByName(String name) throws SQLException, UnsupportedOperationException {
+        throw new UnsupportedOperationException(getClass().getName() + " does not implemented this operation");
+    };
 
     /**
      * reads all entities from target source
@@ -35,8 +43,9 @@ public interface ModelRepository<T, K>  {
      * writes single item to target source
      *
      * @param item item to be written
+     * @return key of item in database
      */
-    void save(T item) throws IOException, SQLException;
+    String save(T item) throws IOException, SQLException;
 
     /**
      * writes all items to the target
@@ -53,7 +62,9 @@ public interface ModelRepository<T, K>  {
     void delete(T item) throws IOException, SQLException;
 
 
-    void deleteByName(String name) throws IOException, SQLException;
+    default void deleteByName(String name) throws SQLException, UnsupportedOperationException {
+        throw new UnsupportedOperationException(getClass().getName() + " does not implemented this operation");
+    }
 
     /**
      * removes item with given key or id

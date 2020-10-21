@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LocalModelRepositoryTest {
-    ModelRepository<Transaction, String> repository;
+    ModelRepository<Transaction> repository;
     static File testFile;
 
     @BeforeEach
@@ -47,12 +47,12 @@ class LocalModelRepositoryTest {
     void read() {
         Transaction t = new Transaction(33, 33);
         assertDoesNotThrow(() -> repository.save(t));
-        assertDoesNotThrow(() -> assertEquals(repository.find(t.getId()), t));
+        assertDoesNotThrow(() -> assertEquals(repository.findById(t.getId()), t));
 
         Transaction other = new Transaction(33, 3);
         assertDoesNotThrow(() -> repository.save(other));
-        assertDoesNotThrow(() -> assertEquals(repository.find(other.getId()), other));
-        assertDoesNotThrow(() -> assertNotEquals(repository.find(other.getId()), t));
+        assertDoesNotThrow(() -> assertEquals(repository.findById(other.getId()), other));
+        assertDoesNotThrow(() -> assertNotEquals(repository.findById(other.getId()), t));
     }
 
     @Test
