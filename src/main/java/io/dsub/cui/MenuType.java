@@ -5,8 +5,8 @@ public enum MenuType {
     INCOME("수입 입력"),
     EXPENSE("지출 입력"),
     CHECK("조회"),
-    CATEGORY("카테고리 출력"),
-    INITIALIZATION("초기화"),
+    CATEGORY("카테고리 추가"),
+    INITIALIZATION("가계부 초기화"),
     EXIT("가계부 종료");
 
     private final String title;
@@ -21,10 +21,4 @@ public enum MenuType {
         return title;
     }
 
-}
-
-class TestEnum {
-    public static void main(String[] args) {
-        System.out.println(MenuType.EXPENSE.toString());
-    }
 }
