@@ -26,7 +26,6 @@ class VendorTest {
         assertEquals(other.getCatId(), vendor.getCatId());
         assertEquals(other.getId(), vendor.getId());
         assertEquals(other.getName(), vendor.getName());
-        assertEquals(other, vendor);
         assertNotSame(other, vendor);
     }
 

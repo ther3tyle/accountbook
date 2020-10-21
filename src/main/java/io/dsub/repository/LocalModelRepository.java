@@ -11,6 +11,8 @@ import io.dsub.util.FileHelper;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.logging.Logger;
@@ -54,6 +56,11 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
         return reader.readByKey(key);
     }
 
+    @Override
+    public T findByName(String name) throws IOException, SQLException {
+        return null;
+    }
+
     /**
      * Reads first instance of target entity from the source
      *
@@ -83,7 +90,7 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
      * @param item item to be written
      */
     @Override
-    public void write(T item) throws IOException {
+    public void save(T item) throws IOException {
         writer.write(item);
     }
 
@@ -93,7 +100,7 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
      * @param items to be written
      */
     @Override
-    public void writeAll(T[] items) throws IOException {
+    public void saveAll(Collection<T> items) throws IOException {
         writer.writeAll(items);
     }
 
@@ -133,6 +140,11 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
         } catch (IOException e) {
             logger.severe(e.getMessage());
         }
+    }
+
+    @Override
+    public void deleteByName(String name) throws IOException, SQLException {
+
     }
 
     public ModelReader<T> getReader() {

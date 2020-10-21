@@ -10,10 +10,14 @@ import java.util.function.Function;
  */
 public class Category extends Model implements Serializable {
     private static final long serialVersionUID = 1L;
-    private final int id;
+    private final Integer id;
     private final String name;
 
-    public Category(int id, String name) {
+    public Category(String name) {
+        this(null, name);
+    }
+
+    public Category(Integer id, String name) {
         this.id = id;
         this.name = name;
     }

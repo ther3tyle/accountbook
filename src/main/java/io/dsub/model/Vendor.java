@@ -10,12 +10,20 @@ import java.util.logging.Logger;
  * An immutable vendor model
  */
 public class Vendor extends Model implements Serializable {
-    private final int id;
+    private final Integer id;
     private final String name;
-    private final int catId;
+    private final Integer catId;
     private static final long serialVersionUID = 1L;
 
-    public Vendor(int id, String name, int catId) {
+    public Vendor(String name) {
+        this(null, name, null);
+    }
+
+    public Vendor(String name, Integer catId) {
+        this(null, name, catId);
+    }
+
+    public Vendor(Integer id, String name, Integer catId) {
         this.id = id;
         this.name = name;
         this.catId = catId;

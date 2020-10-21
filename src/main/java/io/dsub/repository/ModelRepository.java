@@ -2,6 +2,7 @@ package io.dsub.repository;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -21,38 +22,43 @@ public interface ModelRepository<T, K>  {
      */
     T find(K key) throws IOException, SQLException;
 
+    T findByName(String name) throws IOException, SQLException;
+
     /**
      * reads all entities from target source
      *
      * @return list of entities
      */
-    List<T> findAll() throws IOException, SQLException;
+    Collection<T> findAll() throws IOException, SQLException;
 
     /**
      * writes single item to target source
      *
      * @param item item to be written
      */
-    void write(T item) throws IOException;
+    void save(T item) throws IOException, SQLException;
 
     /**
      * writes all items to the target
      *
      * @param items to be written
      */
-    void writeAll(T[] items) throws IOException;
+    void saveAll(Collection<T> items) throws IOException, SQLException;
 
     /**
      * removes given item from the repository
      *
      * @param item to be removed
      */
-    void delete(T item) throws IOException;
+    void delete(T item) throws IOException, SQLException;
+
+
+    void deleteByName(String name) throws IOException, SQLException;
 
     /**
      * removes item with given key or id
      *
      * @param id to be removed
      */
-    void deleteById(String id);
+    void deleteById(String id) throws SQLException;
 }

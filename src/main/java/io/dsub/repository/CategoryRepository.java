@@ -2,88 +2,109 @@ package io.dsub.repository;
 
 import io.dsub.constants.Constants;
 import io.dsub.model.Category;
+import io.dsub.util.QueryStringGenerator;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class CategoryRepository extends JdbcModelRepository<Category, Integer> {
+
     private final Logger logger = Logger.getLogger(CategoryRepository.class.getName());
+    private final QueryStringGenerator queryGen = QueryStringGenerator.getInstance();
+    private static final String SCHEMA = Constants.SCHEMA;
+    private static final String TABLE = Constants.CATEGORY;
 
     public CategoryRepository() throws SQLException {
         super();
     }
 
-    @Override
-    public Category find(Integer key) throws SQLException {
-        Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT * FROM " + Constants.CATEGORY + " WHERE id = " + key);
-        return parse(rs);
+    public CategoryRepository(Connection conn) throws SQLException {
+        super(conn);
     }
 
     @Override
-    public List<Category> findAll() {
-        List<Category> categories = new ArrayList<>();
-        try {
-            Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM account.category");
+    public Category find(Integer id) throws SQLException {
+        String query = queryGen.getSelectQuery(SCHEMA, TABLE, " WHERE id = " + id);
+        ResultSet resultSet = super.executeWithResultSet(query);
+        return parse(resultSet);
+    }
 
-            while (rs.next()) {
-                categories.add(parse(rs));
-            }
-        } catch (SQLException e) {
-            logger.severe(e.getMessage());
+    @Override
+    public Category findByName(String name) throws SQLException {
+        String query = queryGen.getSelectQuery(SCHEMA, TABLE, " WHERE name = " + name);
+        ResultSet resultSet = executeWithResultSet(query);
+        return parse(resultSet);
+    }
+
+    @Override
+    public List<Category> findAll() throws SQLException {
+        List<Category> categories = new ArrayList<>();
+
+        String query = queryGen.getSelectQuery(SCHEMA, TABLE) + " ORDER BY id";
+        ResultSet rs = executeWithResultSet(query);
+
+        while (rs.next()) {
+            categories.add(parse(rs));
         }
+
         return categories;
     }
 
     @Override
-    public void write(Category item) {
-        try {
-            Statement statement = conn.createStatement();
-            String insertQuery = getInsertQuery(item.getName());
-            statement.execute(insertQuery);
-        } catch (SQLException e) {
-            logger.severe(e.getMessage());
+    public void save(Category item) throws SQLException {
+        Map<String, String> pair = new HashMap<>();
+        pair.put("id", item.getId());
+        pair.put("name", item.getName());
+
+        String query = queryGen.getInsertQuery(SCHEMA, TABLE, pair);
+        execute(query);
+    }
+
+    /**
+     * writes all items to the target
+     *
+     * @param items to be written
+     */
+    @Override
+    public void saveAll(Collection<Category> items) throws SQLException {
+
+        Set<String> queries = new HashSet<>();
+
+        for (Category item : items) {
+            Map<String, String> pair = new HashMap<>();
+            pair.put("id", item.getId());
+            pair.put("name", item.getName());
+
+            String query = queryGen.getInsertQuery(SCHEMA, TABLE, pair);
+            queries.add(query);
         }
+
+        boolean result = executeBatchQuery(queries);
+        logger.info("batch process " + (result ? "success" : "fail"));
     }
 
     @Override
-    public void writeAll(Category[] items) {
-        try {
-            Statement statement = conn.createStatement();
-            for (Category item : items) {
-                statement.addBatch(getInsertQuery(item.getName()));
-            }
-            statement.executeBatch();
-        } catch (SQLException e) {
-            logger.severe(e.getMessage());
-        }
+    public void delete(Category item) throws SQLException {
+        Map<String, String> conditions = new HashMap<>();
+        conditions.put("id", item.getId());
+        conditions.put("name", item.getName());
+        String sql = queryGen.getDeleteQuery(SCHEMA, TABLE, conditions);
+        execute(sql);
     }
 
     @Override
-    public void delete(Category item) {
-        String sql = getDeleteQuery(item.getName());
-        try {
-            Statement stmt = conn.createStatement();
-            stmt.execute(sql);
-        } catch (SQLException e) {
-            logger.severe(e.getMessage());
-        }
+    public void deleteById(String id) throws SQLException {
+        String sql = queryGen.getDeleteQuery(SCHEMA, TABLE, " WHERE id = " + id);
+        execute(sql);
     }
 
     @Override
-    public void deleteById(String id) {
-        String sql = getDeleteQuery(id);
-        try {
-            Statement statement = conn.createStatement();
-            statement.execute(sql);
-        } catch (SQLException e) {
-            logger.severe(e.getMessage());
-        }
+    public void deleteByName(String name) throws SQLException {
+        String sql = queryGen.getDeleteQuery(SCHEMA, TABLE, " WHERE name = " + name);
+        execute(sql);
     }
 
     private Category parse(ResultSet rs) {
@@ -95,17 +116,5 @@ public class CategoryRepository extends JdbcModelRepository<Category, Integer> {
             logger.severe(e.getMessage());
             return null;
         }
-    }
-
-    private String getInsertQuery(String name) {
-        return "INSERT INTO account.category (name) VALUES ( '" + name + "' )";
-    }
-
-    private String getDeleteQuery(String name) {
-        return "DELETE FROM ACCOUNT.CATEGORY WHERE NAME = '" + name + "'";
-    }
-
-    private String getUpdateQuery(Category item) {
-        return "UPDATE account.category SET name = " + item.getName() + " WHERE id = " + item.getId();
     }
 }

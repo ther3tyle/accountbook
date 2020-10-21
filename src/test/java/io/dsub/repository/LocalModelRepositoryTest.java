@@ -46,11 +46,11 @@ class LocalModelRepositoryTest {
     @Test
     void read() {
         Transaction t = new Transaction(33, 33);
-        assertDoesNotThrow(() -> repository.write(t));
+        assertDoesNotThrow(() -> repository.save(t));
         assertDoesNotThrow(() -> assertEquals(repository.find(t.getId()), t));
 
         Transaction other = new Transaction(33, 3);
-        assertDoesNotThrow(() -> repository.write(other));
+        assertDoesNotThrow(() -> repository.save(other));
         assertDoesNotThrow(() -> assertEquals(repository.find(other.getId()), other));
         assertDoesNotThrow(() -> assertNotEquals(repository.find(other.getId()), t));
     }
@@ -63,7 +63,7 @@ class LocalModelRepositoryTest {
         for (int i = 0; i < randNum; i++) {
             list.add(new Transaction(random.nextInt(), random.nextInt()));
         }
-        assertDoesNotThrow(() -> repository.writeAll(list.toArray(Transaction[]::new)));
+        assertDoesNotThrow(() -> repository.saveAll(list));
         assertDoesNotThrow(() -> {
             int size = repository.findAll().size();
             assertEquals(size, list.size());
@@ -74,7 +74,7 @@ class LocalModelRepositoryTest {
     void write() {
         Random rand = new Random();
         Transaction transaction = new Transaction(rand.nextInt(100), rand.nextInt(100));
-        assertDoesNotThrow(() -> repository.write(transaction));
+        assertDoesNotThrow(() -> repository.save(transaction));
         assertDoesNotThrow(() -> assertEquals(1, repository.findAll().size()));
     }
 
