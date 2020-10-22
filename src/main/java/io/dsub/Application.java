@@ -49,9 +49,9 @@ public class Application {
                 }
                 e.printStackTrace();
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                System.out.println("초기화 sql 파일을 찾을 수 없습니다.");
             } catch (InsufficientResourcesException e) {
-                e.printStackTrace();
+                System.out.println("초기화 sql 파일이 비어있습니다.");
             } finally {
                 closeConn();
             }
