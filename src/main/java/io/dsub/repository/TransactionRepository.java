@@ -53,7 +53,9 @@ public class TransactionRepository extends JdbcModelRepository<Transaction> {
         String schemaTable = StringConstants.SCHEMA + "." + StringConstants.TRANSACTION;
 
         Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM " + schemaTable + " WHERE " + " DATE BETWEEN " + begin.toString() + " AND " + end.toString());
+        String beginStr = String.format("'%s'", begin.toString());
+        String endStr = String.format("'%s'", end.toString());
+        ResultSet rs = stmt.executeQuery("SELECT * FROM " + schemaTable + " WHERE " + " DATE BETWEEN " + beginStr + " AND " + endStr);
 
         return multiParse(rs);
     }

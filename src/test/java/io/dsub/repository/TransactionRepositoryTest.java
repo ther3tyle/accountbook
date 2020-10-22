@@ -185,8 +185,8 @@ class TransactionRepositoryTest {
             List<Transaction> result = transactionRepository.findBetween(start, end);
             for (Transaction item : result) {
                 LocalDate target = item.getDate();
-                assertTrue(target.isAfter(start));
-                assertTrue(target.isBefore(end));
+                assertTrue(target.isAfter(start) || target.isEqual(start));
+                assertTrue(target.isBefore(end) || target.isEqual(end));
             }
         } catch (SQLException e) {
             fail(e.getMessage());
