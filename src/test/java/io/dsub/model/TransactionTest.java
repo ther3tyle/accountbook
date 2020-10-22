@@ -3,6 +3,7 @@ package io.dsub.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.function.Function;
@@ -50,12 +51,12 @@ class TransactionTest {
 
     @Test
     void withTime() {
-        LocalDateTime time = LocalDateTime.now().minusWeeks(3L).minusDays(3);
+        LocalDate date = LocalDate.now().minusWeeks(3L).minusDays(3);
         Transaction old = transaction;
-        transaction = old.withTime(time);
+        transaction = old.withDate(date);
         assertNotEquals(old, transaction);
-        assertNotEquals(time, old.getTime());
-        assertEquals(time, transaction.getTime());
+        assertNotEquals(date, old.getDate());
+        assertEquals(date, transaction.getDate());
     }
 
     @Test
@@ -76,7 +77,7 @@ class TransactionTest {
         assertEquals(this.transaction, other);
 
         other = new Transaction(transaction.getAmount(), transaction.getVendorId());
-        other = other.withTime(transaction.getTime());
+        other = other.withDate(transaction.getDate());
         assertNotEquals(this.transaction, other);
     }
 }

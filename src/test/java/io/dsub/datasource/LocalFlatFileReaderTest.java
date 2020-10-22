@@ -11,9 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -59,8 +57,8 @@ class LocalFlatFileReaderTest {
         Path path = Files.createTempFile("_test", "");
         testFile = path.toFile();
         testFile.createNewFile();
-
         testFile = getPopulatedFile(testFile);
+        testFile.deleteOnExit();
         reader = new LocalFlatFileReader<>(DataType.TRANSACTION, testFile);
     }
 
@@ -89,32 +87,12 @@ class LocalFlatFileReaderTest {
                 }
         );
 
-        assertDoesNotThrow(() -> {
-            testFile.delete();
-            testFile.createNewFile();
-        });
 
         assertThrows(NoSuchElementException.class, () -> {
+            File tempFile = File.createTempFile("temp", "");
+            tempFile.deleteOnExit();
+            reader = new LocalFlatFileReader<>(DataType.TRANSACTION, tempFile);
             Transaction t = reader.read();
-        });
-    }
-
-    @Test
-    void testPruneDuplicatedEntry() {
-        assertDoesNotThrow(() -> {
-            Transaction t = reader.read(); // reads first transaction
-            ModelWriter<Transaction> writer = new LocalFlatFileWriter<>(DataType.TRANSACTION, testFile);
-            writer.reset();
-
-            writer.write(t);
-            writer.write(t);
-            assertDoesNotThrow(() -> assertNotNull(reader.readByKey(t.getId())));
-
-            int count = (int) reader.readAll()
-                    .stream()
-                    .filter(transaction -> transaction.getId().equals(t.getId()))
-                    .count();
-            assertEquals(1, count);
         });
     }
 }

@@ -21,7 +21,7 @@ CREATE TABLE account.transaction
 (
     id        UUID      NOT NULL AUTO_INCREMENT,
     amount    INT       NOT NULL,
-    time      TIMESTAMP NOT NULL DEFAULT NOW(),
+    date      DATE      NOT NULL DEFAULT NOW(),
     vendor_id INT       NOT NULL,
 
     CONSTRAINT vendor_id

@@ -1,5 +1,7 @@
 package io.dsub.datasource.writer;
 
+import io.dsub.datasource.reader.FlatFileReader;
+import io.dsub.datasource.reader.LocalFlatFileReader;
 import io.dsub.model.Model;
 import io.dsub.constants.DataType;
 import io.dsub.util.FileHelper;
@@ -9,10 +11,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -88,14 +87,18 @@ public class LocalFlatFileWriter<T extends Model> implements FlatFileWriter<T> {
             file.delete();
             file.createNewFile();
         }
-        try(FileWriter fileWriter = new FileWriter(file, isAppend)) {
+        try (FileWriter fileWriter = new FileWriter(file, isAppend)) {
             try {
-                List<String> list = items.stream()
+                Map<String, T> map = new HashMap<>();
+                items.forEach(item -> map.put(item.getId(), item));
+                List<String> list = map.values().stream()
                         .map(Objects::toString)
                         .collect(Collectors.toList());
+
                 for (String s : list) {
                     fileWriter.write(s);
                 }
+
                 fileWriter.flush();
             } catch (IOException e) {
                 logger.severe(e.getMessage());

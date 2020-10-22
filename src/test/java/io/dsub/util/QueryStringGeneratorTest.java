@@ -11,17 +11,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class QueryStringGeneratorTest {
 
-    private static QueryStringGenerator sqlGenerator;
+    private static final QueryStringGenerator sqlGenerator = QueryStringGenerator.getInstance();
 
     private final String SCHEMA = "schema";
     private final String TABLE = "table";
     private Map<String, String> multiMap;
     private Map<String, String> singleMap;
-
-    @BeforeAll
-    static void testGetInstance() {
-        sqlGenerator = QueryStringGenerator.getInstance();
-    }
 
     @BeforeEach
     void resetData() {

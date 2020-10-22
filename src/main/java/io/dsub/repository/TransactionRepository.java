@@ -6,7 +6,7 @@ import io.dsub.util.QueryStringGenerator;
 
 import java.io.IOException;
 import java.sql.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -53,10 +53,10 @@ public class TransactionRepository extends JdbcModelRepository<Transaction> {
     protected Transaction parse(ResultSet resultSet) throws SQLException {
         if (resultSet.next()) {
             UUID id = resultSet.getObject("ID", java.util.UUID.class);
-            LocalDateTime time = resultSet.getObject("TIME", LocalDateTime.class);
+            LocalDate date = resultSet.getObject("DATE", LocalDate.class);
             long amount = resultSet.getLong("AMOUNT");
             int vendorId = resultSet.getInt("VENDOR_ID");
-            return new Transaction(amount, vendorId, time, id);
+            return new Transaction(amount, vendorId, date, id);
         }
         return null;
     }
@@ -66,10 +66,10 @@ public class TransactionRepository extends JdbcModelRepository<Transaction> {
         List<Transaction> transactions = new ArrayList<>();
         while (resultSet.next()) {
             UUID id = resultSet.getObject("ID", java.util.UUID.class);
-            LocalDateTime time = resultSet.getObject("TIME", LocalDateTime.class);
+            LocalDate date = resultSet.getObject("DATE", LocalDate.class);
             long amount = resultSet.getLong("AMOUNT");
             int vendorId = resultSet.getInt("VENDOR_ID");
-            transactions.add(new Transaction(amount, vendorId, time, id));
+            transactions.add(new Transaction(amount, vendorId, date, id));
         }
         return transactions;
     }
@@ -79,7 +79,7 @@ public class TransactionRepository extends JdbcModelRepository<Transaction> {
 
         pairs.put("AMOUNT", String.valueOf(item.getAmount()));
         pairs.put("VENDOR_ID", String.valueOf(item.getVendorId()));
-        pairs.put("time", String.valueOf(Timestamp.valueOf(item.getTime())));
+        pairs.put("DATE", String.valueOf(item.getDate()));
         if (item.getId() != null && !item.getId().equals("null")) {
             pairs.put("id", item.getId());
         }

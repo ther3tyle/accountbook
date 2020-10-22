@@ -8,6 +8,6 @@ class MenuTypeTest {
 
     @Test
     void getTitle() {
-        MenuType.
+//        MenuType.
     }
 }

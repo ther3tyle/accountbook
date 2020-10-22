@@ -1,14 +1,11 @@
 package io.dsub.model;
 
 import io.dsub.constants.DataType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
 import lombok.With;
 
 import java.io.Serializable;
 import java.security.InvalidParameterException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.UUID;
 import java.util.function.Function;
@@ -18,24 +15,28 @@ import java.util.logging.Logger;
  * An immutable transaction model
  */
 
-@Builder
 @With
-@Getter
-@AllArgsConstructor
 public class Transaction extends Model implements Serializable {
 
     private final long amount;
     private final int vendorId;
-    private final LocalDateTime time;
+    private final LocalDate date;
     private final UUID id;
     private static final long serialVersionUID = 1L;
 
     public Transaction(long amount, int vendorId) {
-        this(amount, vendorId, LocalDateTime.now(), UUID.randomUUID());
+        this(amount, vendorId, LocalDate.now(), UUID.randomUUID());
     }
 
-    public Transaction(long amount,int vendorId, LocalDateTime time) {
-        this(amount,vendorId,time,UUID.randomUUID());
+    public Transaction(long amount, int vendorId, LocalDate date) {
+        this(amount,vendorId, date,UUID.randomUUID());
+    }
+
+    public Transaction(long amount, int vendorId, LocalDate date, UUID id) {
+        this.amount = amount;
+        this.vendorId = vendorId;
+        this.date = date;
+        this.id = id;
     }
 
     public static Function<String, Model> getParser() {
@@ -53,10 +54,10 @@ public class Transaction extends Model implements Serializable {
                 return null;
             }
 
-            LocalDateTime time;
+            LocalDate date;
 
             try {
-                time = LocalDateTime.parse(data[2]);
+                date = LocalDate.parse(data[2]);
             } catch (DateTimeParseException e) {
                 Logger.getLogger(Transaction.class.getName()).severe(e.getMessage());
                 return null;
@@ -70,13 +71,10 @@ public class Transaction extends Model implements Serializable {
                 return null;
             }
 
-            return new Transaction(amount, vendorId, time, id);
+            return new Transaction(amount, vendorId, date, id);
         };
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Getters
-    ///////////////////////////////////////////////////////////////////////////
     public long getAmount() {
         return amount;
     }
@@ -85,8 +83,8 @@ public class Transaction extends Model implements Serializable {
         return vendorId;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public LocalDate getDate() {
+        return date;
     }
 
     @Override
@@ -103,7 +101,7 @@ public class Transaction extends Model implements Serializable {
         return String.format("%s,%s,%s,%s\n",
                 this.getAmount(),
                 this.getVendorId(),
-                this.getTime(),
+                this.getDate(),
                 this.getId()
         );
     }
@@ -117,7 +115,7 @@ public class Transaction extends Model implements Serializable {
 
         if (this.amount != that.amount) return false;
         if (this.vendorId != that.vendorId) return false;
-        if (!this.time.equals(that.time)) return false;
+        if (!this.date.equals(that.date)) return false;
         return this.id.equals(that.id);
     }
 }

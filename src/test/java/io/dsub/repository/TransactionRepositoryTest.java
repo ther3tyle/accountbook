@@ -3,12 +3,15 @@ package io.dsub.repository;
 import io.dsub.AppState;
 import io.dsub.model.Transaction;
 import io.dsub.model.Vendor;
+import io.dsub.util.DatabaseUtil;
 import io.dsub.util.FileHelper;
 import io.dsub.util.Initializer;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.naming.InsufficientResourcesException;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,7 +33,7 @@ class TransactionRepositoryTest {
 
     @BeforeEach
     void init() throws SQLException, IOException {
-        testPath = Files.createTempDirectory("test");
+        testPath = Files.createTempDirectory(getClass().getName());
         assertDoesNotThrow(() -> Initializer.init("test_schema.sql", "jdbc:h2:" + testPath.toAbsolutePath() + File.separator + "h2;MODE=MySQL"));
         conn = AppState.getInstance().getConn();
         InputStream sqlStream = CategoryRepositoryTest.class.getClassLoader().getResourceAsStream("reset_schema.sql");
@@ -45,11 +48,6 @@ class TransactionRepositoryTest {
         transactionRepository = new TransactionRepository(conn);
         vendorRepository = new VendorRepository(conn);
         conn.createStatement().execute(initSql);
-    }
-
-    @AfterEach
-    void cleanUp() throws IOException {
-        FileHelper.prune(testPath.toFile());
     }
 
     @Test

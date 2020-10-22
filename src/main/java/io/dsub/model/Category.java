@@ -11,19 +11,19 @@ import java.util.function.Function;
 /**
  * An immutable category model
  */
-
-@AllArgsConstructor
-@Builder
 public class Category extends Model implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final Integer id;
-
-    @Getter
     private final String name;
 
     public Category(String name) {
         this(null, name);
+    }
+
+    public Category(Integer id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public Category(String[] strings) {
@@ -33,6 +33,10 @@ public class Category extends Model implements Serializable {
     @Override
     public String getId() {
         return String.valueOf(this.id);
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     @Override
@@ -57,3 +61,4 @@ public class Category extends Model implements Serializable {
         };
     }
 }
+

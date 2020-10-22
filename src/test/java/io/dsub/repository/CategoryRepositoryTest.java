@@ -3,11 +3,13 @@ package io.dsub.repository;
 import io.dsub.AppState;
 import io.dsub.constants.StringConstants;
 import io.dsub.model.Category;
+import io.dsub.util.DatabaseUtil;
 import io.dsub.util.FileHelper;
 import io.dsub.util.Initializer;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.function.ThrowingSupplier;
 
+import javax.naming.InsufficientResourcesException;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,10 +46,6 @@ class CategoryRepositoryTest {
         conn.createStatement().execute(initSql);
     }
 
-    @AfterEach
-    void cleanUp() throws IOException {
-        FileHelper.prune(testPath.toFile());
-    }
 
     @Test
     void find() throws SQLException {

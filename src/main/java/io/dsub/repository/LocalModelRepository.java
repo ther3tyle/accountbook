@@ -88,6 +88,7 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T>
 
     @Override
     public String save(T item) throws IOException {
+        deleteById(item.getId());
         writer.write(item);
         return null; // TODO: return row value
     }
@@ -99,6 +100,7 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T>
      */
     @Override
     public void saveAll(Collection<T> items) throws IOException {
+        items.forEach(item -> deleteById(item.getId()));
         writer.writeAll(items);
     }
 

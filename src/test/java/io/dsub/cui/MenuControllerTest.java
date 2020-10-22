@@ -7,9 +7,6 @@ class MenuControllerTest {
     MenuController menuController = MenuController.getInstance();
     @Test
     void selectMenu() {
-
-        menuController.selectMenu();
-
-
+//        menuController.selectMenu();
     }
 }

@@ -49,4 +49,15 @@ public class FileHelper {
         }
         Files.delete(dir.toPath());
     }
+
+    public static void pruneOnExit(File dir) throws IOException {
+        if (!dir.exists()) return;
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File subFile : files) {
+                prune(subFile);
+            }
+        }
+        dir.deleteOnExit();
+    }
 }

@@ -29,11 +29,7 @@ class LocalModelRepositoryTest {
 
     @AfterEach
     void cleanUp() {
-        boolean res = testFile.delete();
-        if (!res) {
-            Logger.getLogger(LocalModelRepositoryTest.class.getName())
-                    .warning("failed to delete testFile");
-        }
+        testFile.deleteOnExit();
     }
 
     @Test

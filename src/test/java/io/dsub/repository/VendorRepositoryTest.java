@@ -1,10 +1,12 @@
 package io.dsub.repository;
 
 import io.dsub.AppState;
+import io.dsub.constants.StringConstants;
 import io.dsub.model.Category;
 import io.dsub.model.Vendor;
 import io.dsub.util.FileHelper;
 import io.dsub.util.Initializer;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,15 +23,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class VendorRepositoryTest {
 
-    private static Connection conn = null;
+    private static Connection conn = AppState.getInstance().getConn();
     private static String initSql = null;
     private static Path testPath = null;
     private static VendorRepository repository;
 
+    @AfterAll
+    static void cleanUp() throws SQLException {
+        conn.close();
+    }
 
     @BeforeEach
     void init() throws SQLException, IOException {
-        testPath = Files.createTempDirectory("test");
+        testPath = Files.createTempDirectory(getClass().getName());
         assertDoesNotThrow(() -> Initializer.init("test_schema.sql", "jdbc:h2:" + testPath.toAbsolutePath() + File.separator + "h2;MODE=MySQL"));
         conn = AppState.getInstance().getConn();
         InputStream sqlStream = CategoryRepositoryTest.class.getClassLoader().getResourceAsStream("reset_schema.sql");
@@ -43,11 +49,6 @@ class VendorRepositoryTest {
 
         repository = new VendorRepository(conn);
         conn.createStatement().execute(initSql);
-    }
-
-    @AfterEach
-    void cleanUp() throws IOException {
-        FileHelper.prune(testPath.toFile());
     }
 
     @Test
