@@ -4,7 +4,7 @@ import io.dsub.datasource.writer.LocalFlatFileWriter;
 import io.dsub.datasource.writer.ModelWriter;
 import io.dsub.model.Model;
 import io.dsub.constants.DataType;
-import io.dsub.util.FileHelper;
+import io.dsub.util.FileUtil;
 import io.dsub.util.ModelParser;
 
 import java.io.*;
@@ -20,7 +20,7 @@ public class LocalFlatFileReader<T extends Model> implements FlatFileReader<T> {
     private Function<String, Model> parser;
 
     public LocalFlatFileReader(DataType type) {
-        this(type, FileHelper.getPath(type));
+        this(type, FileUtil.getPath(type));
     }
 
     public LocalFlatFileReader(DataType type, File file) {

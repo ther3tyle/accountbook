@@ -1,4 +1,4 @@
-package io.dsub.cui;
+package io.dsub.constants;
 
 public enum MenuType {
 

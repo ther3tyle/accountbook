@@ -1,7 +1,6 @@
 package io.dsub.util;
 
 import io.dsub.constants.DataType;
-import io.dsub.constants.StringConstants;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,12 +8,8 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Logger;
 
-public class FileHelper {
+public class FileUtil {
     public static Path getPath(DataType type) {
         return Path.of(System.getProperty("user.dir")
                 .concat(File.separator)

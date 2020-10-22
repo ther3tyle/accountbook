@@ -1,10 +1,10 @@
 package io.dsub.repository;
 
 import io.dsub.AppState;
-import io.dsub.constants.StringConstants;
-import io.dsub.model.Category;
+import io.dsub.Application;
+import io.dsub.constants.UIString;
 import io.dsub.model.Model;
-import io.dsub.util.QueryStringGenerator;
+import io.dsub.util.QueryStringBuilder;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -33,7 +33,7 @@ public abstract class JdbcModelRepository<V extends Model> implements ModelRepos
                 if (!initSchema()) {
                     throw new ExceptionInInitializerError("failed to initialize");
                 }
-                conn.setSchema(StringConstants.SCHEMA);
+                conn.setSchema(Application.SCHEMA_NAME);
                 logger.info("initialized database");
             }
         } catch (SQLException e) {
@@ -44,21 +44,21 @@ public abstract class JdbcModelRepository<V extends Model> implements ModelRepos
 
     @Override
     public List<V> findAll() throws SQLException {
-        String query = QueryStringGenerator.getInstance().getSelectQuery(schema, table) + " ORDER BY id";
+        String query = QueryStringBuilder.getInstance().getSelectQuery(schema, table) + " ORDER BY id";
         ResultSet rs = executeWithResultSet(query);
         return multiParse(rs);
     }
 
     @Override
     public V findById(String id) throws SQLException {
-        String query = QueryStringGenerator.getInstance().getSelectQuery(schema, table, "WHERE id = " + String.format("'%s'", id));
+        String query = QueryStringBuilder.getInstance().getSelectQuery(schema, table, "WHERE id = " + String.format("'%s'", id));
         ResultSet resultSet = executeWithResultSet(query);
         return parse(resultSet);
     }
 
     @Override
     public void deleteById(String id) throws SQLException {
-        String sql = QueryStringGenerator.getInstance().getDeleteQuery(schema, table, " WHERE id = " + id);
+        String sql = QueryStringBuilder.getInstance().getDeleteQuery(schema, table, " WHERE id = " + id);
         conn.createStatement().execute(sql);
     }
 
@@ -90,7 +90,7 @@ public abstract class JdbcModelRepository<V extends Model> implements ModelRepos
     private boolean isSchemaMissing() throws SQLException {
         ResultSet rs = conn.getMetaData().getSchemas();
         while (rs.next()) {
-            if (rs.getString(1).equalsIgnoreCase(StringConstants.SCHEMA)) {
+            if (rs.getString(1).equalsIgnoreCase(Application.SCHEMA_NAME)) {
                 return false;
             }
         }

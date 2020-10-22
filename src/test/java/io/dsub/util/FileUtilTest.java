@@ -12,12 +12,12 @@ import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileHelperTest {
+class FileUtilTest {
 
     @Test
     void getPath() {
-        assertThrows(NullPointerException.class, () -> FileHelper.getPath(null));
-        Path path = FileHelper.getPath(DataType.TRANSACTION);
+        assertThrows(NullPointerException.class, () -> FileUtil.getPath(null));
+        Path path = FileUtil.getPath(DataType.TRANSACTION);
         assertNotNull(path);
         assertTrue(path.toString().contains(System.getProperty("user.dir")));
     }
@@ -34,7 +34,7 @@ class FileHelperTest {
 
         file.delete();
 
-        FileHelper.makeFile(file.toPath());
+        FileUtil.makeFile(file.toPath());
         assertNotNull(ref.file);
         assertTrue(file.exists());
 
@@ -50,16 +50,16 @@ class FileHelperTest {
         assertDoesNotThrow(() -> ref.file = Files.createTempFile("_", "").toFile());
         File file = ref.file;
 
-        assertDoesNotThrow(() -> ref.file = FileHelper.readFile(file.toURI()));
+        assertDoesNotThrow(() -> ref.file = FileUtil.readFile(file.toURI()));
         File f2 = ref.file;
 
         assertEquals(file, f2);
         assertTrue(file.delete());
 
-        Logger logger = Logger.getLogger(FileHelper.class.getName());
+        Logger logger = Logger.getLogger(FileUtil.class.getName());
         Level logLev = logger.getLevel();
         logger.setLevel(Level.OFF);
-        assertThrows(NoSuchFileException.class, () -> FileHelper.readFile(file.toURI()));
+        assertThrows(NoSuchFileException.class, () -> FileUtil.readFile(file.toURI()));
         logger.setLevel(logLev);
     }
 }

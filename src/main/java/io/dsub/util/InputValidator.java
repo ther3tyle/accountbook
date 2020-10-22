@@ -2,12 +2,12 @@ package io.dsub.util;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
-public class Validator {
-    private static final Logger logger = Logger.getLogger(Validator.class.getName());
+public class InputValidator {
 
-    private Validator() {
+    private InputValidator() {
     }
 
     public static boolean isValidNumInput(String in) {
@@ -17,10 +17,16 @@ public class Validator {
     public static boolean isValidDateInput(String in) {
         if (in.equalsIgnoreCase("c")) {
             return true;
-        } else if (in.matches("^(19|20)\\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])$")) {
+        }
+
+        if (in.matches("^(19|20)\\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])$")) {
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate date = LocalDate.parse(in, formatter);
+
+            if (date.isAfter(LocalDate.now())) {
+                return false;
+            }
 
             return date.toString().equals(in);
         }
@@ -28,6 +34,13 @@ public class Validator {
     }
 
     public static boolean matches(String input, String... targets) {
+
+        if (targets.length == 1) {
+            targets = Arrays.stream(targets[0].split(" "))
+                    .map(String::trim)
+                    .toArray(String[]::new);
+        }
+
         for (String target : targets) {
             if (input.equalsIgnoreCase(target)) {
                 return true;

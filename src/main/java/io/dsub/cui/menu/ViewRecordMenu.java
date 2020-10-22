@@ -11,7 +11,7 @@ import io.dsub.service.ModelService;
 import java.util.Arrays;
 import java.util.List;
 
-public class CheckAccountMenu implements Menu {
+public class ViewRecordMenu implements Menu {
 
     private final List<String> checkMenuList = Arrays.asList("day", "month", "year", "");
     private final ModelService<Vendor> VENDOR_MODEL_SERVICE = new MockVendorService();
@@ -19,7 +19,7 @@ public class CheckAccountMenu implements Menu {
     private final ModelService<Category> CATEGORY_MODEL_SERVICE = new MockCategoryService();
 
     @Override
-    public int callMenu() {
+    public int call() {
         System.out.println("call check Account");
 
         return backToMainMenu();

@@ -1,15 +1,14 @@
 package io.dsub.repository;
 
 import io.dsub.AppState;
-import io.dsub.constants.StringConstants;
+import io.dsub.Application;
+import io.dsub.constants.DataType;
+import io.dsub.constants.UIString;
 import io.dsub.model.Category;
-import io.dsub.util.DatabaseUtil;
-import io.dsub.util.FileHelper;
 import io.dsub.util.Initializer;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.function.ThrowingSupplier;
 
-import javax.naming.InsufficientResourcesException;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -86,7 +85,7 @@ class CategoryRepositoryTest {
     void save() {
         assertDoesNotThrow(() -> repository.save(new Category("New World Order")));
         assertDoesNotThrow(() -> {
-            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM " + StringConstants.SCHEMA + "." + StringConstants.CATEGORY + " WHERE id = 1");
+            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM " + Application.SCHEMA_NAME + "." + DataType.CATEGORY.getTableName() + " WHERE id = 1");
             rs.next();
             assertEquals("New World Order", rs.getString("name"));
             assertEquals(1, rs.getInt("id"));
@@ -115,7 +114,7 @@ class CategoryRepositoryTest {
         assertDoesNotThrow((ThrowingSupplier<ArrayList<Category>>) ArrayList::new);
 
         assertDoesNotThrow(() -> {
-            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM " + StringConstants.SCHEMA + "." + StringConstants.CATEGORY);
+            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM " + Application.SCHEMA_NAME + "." + DataType.CATEGORY.getTableName());
             int count = 0;
             while(rs.next()) {
                 count++;
@@ -133,7 +132,7 @@ class CategoryRepositoryTest {
             repository.delete(new Category("World"));
             assertThrows(InvalidParameterException.class, () -> repository.delete(new Category(3, null)));
 
-            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM " + StringConstants.SCHEMA + "." + StringConstants.CATEGORY);
+            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM " + Application.SCHEMA_NAME + "." + DataType.CATEGORY.getTableName());
 
             int count = 0;
             while (rs.next()) {
@@ -176,8 +175,8 @@ class CategoryRepositoryTest {
     }
 
     void insertThreeDummies() throws SQLException {
-        conn.createStatement().execute("INSERT INTO " + StringConstants.SCHEMA + "." + StringConstants.CATEGORY + " (name) VALUES ('Hello')");
-        conn.createStatement().execute("INSERT INTO " + StringConstants.SCHEMA + "." + StringConstants.CATEGORY + " (name) VALUES ('World')");
-        conn.createStatement().execute("INSERT INTO " + StringConstants.SCHEMA + "." + StringConstants.CATEGORY + " (name) VALUES ('James')");
+        conn.createStatement().execute("INSERT INTO " + Application.SCHEMA_NAME + "." + DataType.CATEGORY.getTableName() + " (name) VALUES ('Hello')");
+        conn.createStatement().execute("INSERT INTO " + Application.SCHEMA_NAME + "." + DataType.CATEGORY.getTableName() + " (name) VALUES ('World')");
+        conn.createStatement().execute("INSERT INTO " + Application.SCHEMA_NAME + "." + DataType.CATEGORY.getTableName() + " (name) VALUES ('James')");
     }
 }

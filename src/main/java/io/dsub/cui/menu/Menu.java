@@ -1,12 +1,21 @@
 package io.dsub.cui.menu;
 
+import io.dsub.cui.InputHandler;
+
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+
 // TODO: consider refactoring all child classes to be singleton
 public interface Menu {
+    InputHandler inputHandler = InputHandler.getInstance();
+    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
+    int call();
 
-    int callMenu();
+    default void printHelp() {
+        System.out.println("PRINTING...");
+    }
 
     default int backToMainMenu() {
-        System.out.println("메인 메뉴로 돌아갑니다");
         return 0;
     }
 

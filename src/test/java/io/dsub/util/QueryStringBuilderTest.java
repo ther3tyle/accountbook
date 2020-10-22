@@ -1,6 +1,5 @@
 package io.dsub.util;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,9 +8,9 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class QueryStringGeneratorTest {
+class QueryStringBuilderTest {
 
-    private static final QueryStringGenerator sqlGenerator = QueryStringGenerator.getInstance();
+    private static final QueryStringBuilder sqlGenerator = QueryStringBuilder.getInstance();
 
     private final String SCHEMA = "schema";
     private final String TABLE = "table";

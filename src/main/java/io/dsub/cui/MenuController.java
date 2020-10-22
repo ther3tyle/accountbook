@@ -1,17 +1,17 @@
 package io.dsub.cui;
 
+import io.dsub.constants.MenuType;
 import io.dsub.cui.menu.*;
-
-import java.sql.SQLException;
 
 public class MenuController {
 
     private final Menu ADD_CATEGORY = new AddCategoryMenu();
-    private final Menu CHECK_ACCOUNT = new CheckAccountMenu();
+    private final Menu CHECK_ACCOUNT = new ViewRecordMenu();
     private final Menu INITIALIZATION = new InitializationMenu();
     private final Menu INPUT_INCOME = new InputTransactionMenu(MenuType.INCOME);
     private final Menu INPUT_EXPENSE = new InputTransactionMenu(MenuType.EXPENSE);
     private final Menu MAIN_MENU = new MainMenu();
+    private final Menu EXIT = new Exit();
 
     private MenuController() {}
 
@@ -26,8 +26,7 @@ public class MenuController {
         Menu menu = MAIN_MENU;
         int input = 0;
 
-        while (true) {
-
+        while (input >= 0) {
             switch (input) {
                 case 0 -> menu = MAIN_MENU;
                 case 1 -> menu = INPUT_INCOME;
@@ -35,16 +34,9 @@ public class MenuController {
                 case 3 -> menu = CHECK_ACCOUNT;
                 case 4 -> menu = ADD_CATEGORY;
                 case 5 -> menu = INITIALIZATION;
-                case 6 -> exit();
+                case 6 -> menu = EXIT;
             }
-            input = menu.callMenu();
+            input = menu.call();
         }
-
     }
-
-    private void exit() {
-        System.out.println("가계부를 종료합니다");
-        System.exit(0);
-    }
-
 }

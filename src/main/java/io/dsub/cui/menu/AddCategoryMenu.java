@@ -1,10 +1,12 @@
 package io.dsub.cui.menu;
 
-import io.dsub.constants.StringConstants;
+import io.dsub.Application;
+import io.dsub.constants.MenuType;
+import io.dsub.constants.UIString;
 import io.dsub.model.Category;
 import io.dsub.service.CategoryServiceImpl;
 import io.dsub.service.ModelService;
-import io.dsub.util.Validator;
+import io.dsub.util.InputValidator;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -12,37 +14,23 @@ import java.util.Scanner;
 
 public class AddCategoryMenu implements Menu {
 
-    private final ModelService<Category> CATEGORY_MODEL_SERVICE;
+    private final ModelService<Category> service;
     private List<Category> catList;
-    private static final String INVALID_INPUT = StringConstants.INVALID_INPUT;
-    private static final String RE_ENTER_PROMPT = StringConstants.RE_ENTER_PROMPT;
-    private static final String ASK_INPUT_CONFIRM = StringConstants.ASK_INPUT_CONFIRM;
-    private static final String CANNOT_RECOGNIZE = StringConstants.CANNOT_RECOGNIZE;
-
 
     public AddCategoryMenu() {
-        CATEGORY_MODEL_SERVICE = new CategoryServiceImpl();
+        service = new CategoryServiceImpl();
     }
 
     @Override
-    public int callMenu() {
-        catList = CATEGORY_MODEL_SERVICE.findAll();
-        System.out.println("카데고리 추가");
+    public int call() {
+        catList = service.findAll();
+        System.out.printf("*-*-* %s *-*-*\n", MenuType.CATEGORY.getTitle());
         printCategoryList();
-
-        try {
-            addCategory();
-        } catch (SQLException e) {
-            System.out.println("SQL ERROR");
-            System.exit(1);
-        }
-
+        addCategory();
         return backToMainMenu();
     }
 
     private void printCategoryList() {
-        System.out.println("카테고리 목록");
-
         String listStr;
 
         if (catList.isEmpty()) {
@@ -62,39 +50,50 @@ public class AddCategoryMenu implements Menu {
         System.out.println(listStr);
     }
 
-    private void addCategory() throws SQLException {
+    private void addCategory() {
         while (true) {
             String name = takeCategoryName();
+            if (name == null) return;
             if (confirm(name)) {
-
+                try {
+                    service.save(new Category(name));
+                    System.out.printf("등록되었습니다: [%s]\n\n", name);
+                    Application.wait(1.7);
+                } catch (SQLException e) {
+                    System.out.println("등록에 실패했습니다: " + e.getLocalizedMessage());
+                }
+                return;
             }
         }
     }
 
     private boolean confirm(String value) {
-        System.out.printf("[%s]", value);
-        System.out.println(ASK_INPUT_CONFIRM + "[y|yes] 예 [n|no] 아니오");
+        System.out.printf("입력받은 내용: \"%s\"\n%s%s\n", value, UIString.ASK_INPUT_CONFIRM, UIString.YES_OR_NO);
         while (true) {
-            String in = takeInput();
-            if (Validator.matches(in, "y", "yes", "예", "네")) return true;
-            if (Validator.matches(in, "n", "no", "아니오", "아니요")) return false;
-            System.out.println(CANNOT_RECOGNIZE + RE_ENTER_PROMPT);
+            String in = inputHandler.take();
+            if (InputValidator.matches(in, UIString.POSITIVES)) {
+                return true;
+            } else if (InputValidator.matches(in, UIString.NEGATIVES)) {
+                return false;
+            }
+            System.out.println(UIString.CANNOT_RECOGNIZE + UIString.RE_ENTER_PROMPT);
         }
     }
 
     private String takeCategoryName() {
-        System.out.println("추가하실 카테고리 명을 입력하세요.");
+        System.out.println("추가하실 카테고리 명을 입력하세요. [q|quit|exit] 돌아가기");
         while (true) {
-            String in = takeInput();
+            String in = inputHandler.take();
+
+            if (InputValidator.matches(in, UIString.EXITS)) {
+                return null;
+            }
+
             if (in.length() > 0) {
                 return in;
             }
-            System.out.println(INVALID_INPUT + RE_ENTER_PROMPT);
-        }
-    }
 
-    private String takeInput() {
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextLine();
+            System.out.println(UIString.INVALID_INPUT + UIString.RE_ENTER_PROMPT);
+        }
     }
 }

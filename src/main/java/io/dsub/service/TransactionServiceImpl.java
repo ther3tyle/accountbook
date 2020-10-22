@@ -78,7 +78,7 @@ public class TransactionServiceImpl implements TransactionService {
     public void delete(Transaction item) {
         try {
             this.repository.delete(item);
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -103,7 +103,7 @@ public class TransactionServiceImpl implements TransactionService {
             for (Transaction item : items) {
                 this.repository.delete(item);
             }
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

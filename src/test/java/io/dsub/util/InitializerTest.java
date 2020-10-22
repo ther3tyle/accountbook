@@ -1,6 +1,5 @@
 package io.dsub.util;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -16,7 +15,7 @@ class InitializerTest {
     @Test
     void init() throws IOException {
         testPath = Files.createTempDirectory(getClass().getName());
-        FileHelper.pruneOnExit(testPath.toFile());
+        FileUtil.pruneOnExit(testPath.toFile());
         assertDoesNotThrow(() -> Initializer.init("test_schema.sql", "jdbc:h2:" + testPath.toAbsolutePath() + File.separator + "h2;MODE=MySQL"));
         File file = testPath.toFile();
         assertTrue(file.exists());

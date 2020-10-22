@@ -6,12 +6,11 @@ import io.dsub.datasource.reader.ModelReader;
 import io.dsub.datasource.writer.ModelWriter;
 import io.dsub.model.Model;
 import io.dsub.constants.DataType;
-import io.dsub.util.FileHelper;
+import io.dsub.util.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -42,7 +41,7 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T>
         this.dataType = dataType;
         this.reader = reader;
         this.writer = writer;
-        this.sourcePath = FileHelper.getPath(dataType);
+        this.sourcePath = FileUtil.getPath(dataType);
     }
 
     /**

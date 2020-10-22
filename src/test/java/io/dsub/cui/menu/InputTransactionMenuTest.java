@@ -1,7 +1,6 @@
 package io.dsub.cui.menu;
 
-import io.dsub.cui.MenuType;
-import org.junit.jupiter.api.Test;
+import io.dsub.constants.MenuType;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,7 +9,7 @@ class InputTransactionMenuTest {
     void callMenu() {
         InputTransactionMenu inputTransactionMenu = new InputTransactionMenu(MenuType.INCOME);
 
-        int result = inputTransactionMenu.callMenu();
+        int result = inputTransactionMenu.call();
         assertEquals(0, result);
     }
 }

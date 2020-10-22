@@ -1,8 +1,10 @@
 package io.dsub.repository;
 
-import io.dsub.constants.StringConstants;
+import io.dsub.Application;
+import io.dsub.constants.DataType;
+import io.dsub.constants.UIString;
 import io.dsub.model.Transaction;
-import io.dsub.util.QueryStringGenerator;
+import io.dsub.util.QueryStringBuilder;
 
 import java.io.IOException;
 import java.sql.*;
@@ -11,20 +13,20 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TransactionRepository extends JdbcModelRepository<Transaction> {
-    private final QueryStringGenerator queryGen = QueryStringGenerator.getInstance();
+    private final QueryStringBuilder queryGen = QueryStringBuilder.getInstance();
 
     public TransactionRepository() {
-        super(StringConstants.SCHEMA, StringConstants.TRANSACTION);
+        super(Application.SCHEMA_NAME, DataType.TRANSACTION.getTableName());
     }
 
     public TransactionRepository(Connection conn) {
-        super(conn, StringConstants.SCHEMA, StringConstants.TRANSACTION);
+        super(conn, Application.SCHEMA_NAME, DataType.TRANSACTION.getTableName());
     }
 
     @Override
     public String save(Transaction item) throws SQLException {
         String query = queryGen.getInsertQuery(
-                StringConstants.SCHEMA, StringConstants.TRANSACTION, getEntries(item)
+                Application.SCHEMA_NAME, DataType.TRANSACTION.getTableName(), getEntries(item)
         );
 
         conn.createStatement().executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
@@ -36,26 +38,26 @@ public class TransactionRepository extends JdbcModelRepository<Transaction> {
     public void saveAll(Collection<Transaction> items) throws SQLException {
         List<String> queries = items.stream()
                 .map(item -> queryGen.getInsertQuery(
-                        StringConstants.SCHEMA, StringConstants.TRANSACTION, getEntries(item)))
+                        Application.SCHEMA_NAME, DataType.TRANSACTION.getTableName(), getEntries(item)))
                 .collect(Collectors.toList());
         executeBatchQuery(queries);
     }
 
     @Override
-    public void delete(Transaction item) throws IOException, SQLException {
+    public void delete(Transaction item) throws SQLException {
         Map<String, String> conditions = getEntries(item);
         String query = queryGen.getDeleteQuery(
-                StringConstants.SCHEMA, StringConstants.TRANSACTION, conditions);
+                Application.SCHEMA_NAME, DataType.TRANSACTION.getTableName(), conditions);
         conn.createStatement().execute(query);
     }
 
     public List<Transaction> findBetween(LocalDate begin, LocalDate end) throws SQLException {
-        String schemaTable = StringConstants.SCHEMA + "." + StringConstants.TRANSACTION;
+        String schemaTable = Application.SCHEMA_NAME + "." + DataType.TRANSACTION.getTableName();
 
         Statement stmt = conn.createStatement();
         String beginStr = String.format("'%s'", begin.toString());
         String endStr = String.format("'%s'", end.toString());
-        ResultSet rs = stmt.executeQuery("SELECT * FROM " + schemaTable + " WHERE " + " DATE BETWEEN " + beginStr + " AND " + endStr);
+        ResultSet rs = stmt.executeQuery("SELECT * FROM " + schemaTable + " WHERE DATE BETWEEN " + beginStr + " AND " + endStr);
 
         return multiParse(rs);
     }

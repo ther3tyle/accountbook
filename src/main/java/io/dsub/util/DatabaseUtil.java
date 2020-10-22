@@ -1,6 +1,8 @@
 package io.dsub.util;
 
-import io.dsub.constants.StringConstants;
+import io.dsub.Application;
+import io.dsub.constants.DataType;
+import io.dsub.constants.UIString;
 
 import javax.naming.InsufficientResourcesException;
 import java.io.BufferedReader;
@@ -24,7 +26,7 @@ public class DatabaseUtil {
             boolean exists = false;
             while(schemas.next() && !exists) {
                 String name = schemas.getString(1);
-                exists = name.equalsIgnoreCase(StringConstants.SCHEMA);
+                exists = name.equalsIgnoreCase(Application.SCHEMA_NAME);
             }
             return exists;
 
@@ -37,20 +39,20 @@ public class DatabaseUtil {
 
     public static boolean validateSchema(Connection conn) throws SQLException {
         if (!isSchemaExists(conn)) {
-            throw new SQLException("missing expected schema : " + StringConstants.SCHEMA);
+            throw new SQLException("missing expected schema : " + Application.SCHEMA_NAME);
         }
 
         Set<String> tables = new HashSet<>();
-        tables.add(StringConstants.CATEGORY);
-        tables.add(StringConstants.VENDOR);
-        tables.add(StringConstants.TRANSACTION);
+        tables.add(DataType.CATEGORY.getTableName());
+        tables.add(DataType.VENDOR.getTableName());
+        tables.add(DataType.TRANSACTION.getTableName());
 
         return validateTables(conn, tables);
     }
 
     public static boolean validateTables(Connection conn, Collection<String> expectedTableNames) throws SQLException {
         DatabaseMetaData metaData = conn.getMetaData();
-        ResultSet rs = metaData.getTables(null, StringConstants.SCHEMA, "%", null);
+        ResultSet rs = metaData.getTables(null, Application.SCHEMA_NAME, "%", null);
 
         while (rs.next()) {
             String tableName = rs.getString(3).toUpperCase();

@@ -1,8 +1,10 @@
 package io.dsub.repository;
 
-import io.dsub.constants.StringConstants;
+import io.dsub.Application;
+import io.dsub.constants.DataType;
+import io.dsub.constants.UIString;
 import io.dsub.model.Category;
-import io.dsub.util.QueryStringGenerator;
+import io.dsub.util.QueryStringBuilder;
 
 import java.security.InvalidParameterException;
 import java.sql.Connection;
@@ -15,9 +17,9 @@ import java.util.logging.Logger;
 public class CategoryRepository extends JdbcModelRepository<Category> {
 
     private final Logger logger = Logger.getLogger(CategoryRepository.class.getName());
-    private final QueryStringGenerator queryGen = QueryStringGenerator.getInstance();
-    private static final String SCHEMA = StringConstants.SCHEMA;
-    private static final String TABLE = StringConstants.CATEGORY;
+    private final QueryStringBuilder queryGen = QueryStringBuilder.getInstance();
+    private static final String SCHEMA = Application.SCHEMA_NAME;
+    private static final String TABLE = DataType.CATEGORY.getTableName();
 
     public CategoryRepository()  {
         super(SCHEMA, TABLE);

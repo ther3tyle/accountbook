@@ -8,7 +8,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ValidatorTest {
+class InputValidatorTest {
 
     @Test
     void isValidNumInput() {
@@ -17,7 +17,7 @@ class ValidatorTest {
         testTrue.add("2");
 
         for (String str: testTrue) {
-            boolean result = Validator.isValidNumInput(str);
+            boolean result = InputValidator.isValidNumInput(str);
             assertTrue(result);
         }
 
@@ -38,12 +38,12 @@ class ValidatorTest {
 
 
         for (String str: testTrue) {
-            boolean result = Validator.isValidDateInput(str);
+            boolean result = InputValidator.isValidDateInput(str);
             assertTrue(result);
         }
 
         for (String str: testFalse) {
-            boolean result = Validator.isValidDateInput(str);
+            boolean result = InputValidator.isValidDateInput(str);
             assertFalse(result);
         }
     }
@@ -58,5 +58,15 @@ class ValidatorTest {
 
     @Test
     void isValidCategoryInput() {
+    }
+
+    @Test
+    void testMatches() {
+        assertFalse(InputValidator.matches("hello", "a", "b", "c"));
+        assertTrue(InputValidator.matches("hello", "a", "hello", "c"));
+        assertTrue(InputValidator.matches("hello", "a", "HelLo", "c"));
+        assertFalse(InputValidator.matches("hello", "a HelLeo c"));
+        assertFalse(InputValidator.matches("hello", "a HelLo1 c"));
+        assertTrue(InputValidator.matches("hello", "a HelLo c"));
     }
 }

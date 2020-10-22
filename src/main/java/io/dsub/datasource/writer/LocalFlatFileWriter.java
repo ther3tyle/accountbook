@@ -1,10 +1,8 @@
 package io.dsub.datasource.writer;
 
-import io.dsub.datasource.reader.FlatFileReader;
-import io.dsub.datasource.reader.LocalFlatFileReader;
 import io.dsub.model.Model;
 import io.dsub.constants.DataType;
-import io.dsub.util.FileHelper;
+import io.dsub.util.FileUtil;
 import io.dsub.util.ModelParser;
 
 import java.io.File;
@@ -22,7 +20,7 @@ public class LocalFlatFileWriter<T extends Model> implements FlatFileWriter<T> {
     private Path sourcePath;
 
     public LocalFlatFileWriter(DataType type) {
-        this(type, FileHelper.getPath(type));
+        this(type, FileUtil.getPath(type));
     }
 
     public LocalFlatFileWriter(DataType type, File file) {
@@ -48,7 +46,7 @@ public class LocalFlatFileWriter<T extends Model> implements FlatFileWriter<T> {
     }
 
     @Override
-    public void writeAll(Collection<T> items) throws IOException {
+    public void writeAll(Collection<T> items) {
         this.writeTo(items);
     }
 
@@ -57,7 +55,6 @@ public class LocalFlatFileWriter<T extends Model> implements FlatFileWriter<T> {
         writeTo(file, true, Arrays.asList(items));
     }
 
-    @SafeVarargs
     @Override
     public final void overwrite(File file, T... items) throws IOException {
         writeTo(file, false, Arrays.asList(items));
@@ -118,8 +115,6 @@ public class LocalFlatFileWriter<T extends Model> implements FlatFileWriter<T> {
         }
     }
 
-
-    @SafeVarargs
     private void writeTo(T... items) {
         if (items == null || items.length == 0) return;
 

@@ -1,8 +1,10 @@
 package io.dsub.repository;
 
-import io.dsub.constants.StringConstants;
+import io.dsub.Application;
+import io.dsub.constants.DataType;
+import io.dsub.constants.UIString;
 import io.dsub.model.Vendor;
-import io.dsub.util.QueryStringGenerator;
+import io.dsub.util.QueryStringBuilder;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -12,14 +14,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class VendorRepository extends JdbcModelRepository<Vendor> {
-    private final QueryStringGenerator queryGen = QueryStringGenerator.getInstance();
+    private final QueryStringBuilder queryGen = QueryStringBuilder.getInstance();
 
     public VendorRepository() {
-        super(StringConstants.SCHEMA, StringConstants.VENDOR);
+        super(Application.SCHEMA_NAME, DataType.VENDOR.getTableName());
     }
 
     public VendorRepository(Connection conn) {
-        super(conn, StringConstants.SCHEMA, StringConstants.VENDOR);
+        super(conn, Application.SCHEMA_NAME, DataType.VENDOR.getTableName());
     }
 
     @Override
@@ -48,8 +50,8 @@ public class VendorRepository extends JdbcModelRepository<Vendor> {
     @Override
     public Vendor findByName(String name) throws SQLException {
         String query = queryGen.getSelectQuery(
-                StringConstants.SCHEMA,
-                StringConstants.VENDOR,
+                Application.SCHEMA_NAME,
+                DataType.VENDOR.getTableName(),
                 "WHERE name = " + String.format("'%s'", name));
         ResultSet rs = conn.createStatement().executeQuery(query);
         return parse(rs);
@@ -58,8 +60,8 @@ public class VendorRepository extends JdbcModelRepository<Vendor> {
     @Override
     public String save(Vendor item) throws SQLException {
         String query = queryGen.getInsertQuery(
-                StringConstants.SCHEMA,
-                StringConstants.VENDOR,
+                Application.SCHEMA_NAME,
+                DataType.VENDOR.getTableName(),
                 getEntries(item));
 
         int key = conn.createStatement().executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
@@ -70,8 +72,8 @@ public class VendorRepository extends JdbcModelRepository<Vendor> {
     public void saveAll(Collection<Vendor> items) throws SQLException {
         List<String> queries = items.stream()
                 .map(item -> queryGen.getInsertQuery(
-                        StringConstants.SCHEMA,
-                        StringConstants.VENDOR,
+                        Application.SCHEMA_NAME,
+                        DataType.VENDOR.getTableName(),
                         getEntries(item)))
                 .collect(Collectors.toList());
         executeBatchQuery(queries);
@@ -80,8 +82,8 @@ public class VendorRepository extends JdbcModelRepository<Vendor> {
     @Override
     public void delete(Vendor item) throws SQLException {
         String query = queryGen.getDeleteQuery(
-                StringConstants.SCHEMA,
-                StringConstants.VENDOR,
+                Application.SCHEMA_NAME,
+                DataType.VENDOR.getTableName(),
                 getEntries(item));
         conn.createStatement().execute(query);
     }
@@ -89,8 +91,8 @@ public class VendorRepository extends JdbcModelRepository<Vendor> {
     @Override
     public void deleteByName(String name) throws SQLException {
         String query = queryGen.getDeleteQuery(
-                StringConstants.SCHEMA,
-                StringConstants.VENDOR,
+                Application.SCHEMA_NAME,
+                DataType.VENDOR.getTableName(),
                 "WHERE name = " + String.format("'%s'", name));
         conn.createStatement().execute(query);
     }

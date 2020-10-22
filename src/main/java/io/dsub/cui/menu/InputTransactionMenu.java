@@ -1,14 +1,12 @@
 package io.dsub.cui.menu;
 
-import io.dsub.cui.MenuType;
+import io.dsub.constants.MenuType;
 import io.dsub.model.Category;
+import io.dsub.model.Model;
 import io.dsub.model.Transaction;
 import io.dsub.model.Vendor;
-import io.dsub.service.MockCategoryService;
-import io.dsub.service.MockTransactionService;
-import io.dsub.service.MockVendorService;
-import io.dsub.service.ModelService;
-import io.dsub.util.Validator;
+import io.dsub.service.*;
+import io.dsub.util.InputValidator;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -18,49 +16,50 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class InputTransactionMenu implements Menu {
 
     private List<String> inputParams;
     public MenuType menuType;
-    private final ModelService<Vendor> VENDOR_MODEL_SERVICE = new MockVendorService();
-    private final ModelService<Transaction> TRANSACTION_MODEL_SERVICE = new MockTransactionService();
-    private final ModelService<Category> CATEGORY_MODEL_SERVICE = new MockCategoryService();
-//    private final List<Category> catList = CATEGORY_MODEL_SERVICE.findAll;
+    private final ModelService<Vendor> vendorService = new VendorServiceImpl();
+    private final ModelService<Transaction> transactionService = new TransactionServiceImpl();
+    private final ModelService<Category> categoryService = new CategoryServiceImpl();
+
+    // should be called when we need to review
+    // private final List<Category> catList = CATEGORY_MODEL_SERVICE.findAll();
 
     public InputTransactionMenu(MenuType menuType) {
         this.menuType = menuType;
     }
 
     @Override
-    public int callMenu() {
-
+    public int call() {
         return operateTransaction(inputStatementMenu());
     }
 
     private int operateTransaction(List<String> inputList) {
-
         if (inputList != null) {
-                long amount = Long.parseLong(inputList.get(inputParams.indexOf("Amount")));
-                String vendorName = inputList.get(inputParams.indexOf("Vendor"));
-                String categoryName = inputList.get(inputParams.indexOf("Category"));
+            long amount = Long.parseLong(inputList.get(inputParams.indexOf("Amount")));
+            String vendorName = inputList.get(inputParams.indexOf("Vendor"));
+            String categoryName = inputList.get(inputParams.indexOf("Category"));
 
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                LocalDate localDate = LocalDate.parse(inputList.get(inputParams.indexOf("Date")), formatter);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate localDate = LocalDate.parse(inputList.get(inputParams.indexOf("Date")), formatter);
 
-                try {
-                    Category category = new Category(categoryName);
-                    int catId = Integer.parseInt(CATEGORY_MODEL_SERVICE.save(category));
+            try {
+                Category category = new Category(categoryName);
+                int catId = Integer.parseInt(categoryService.save(category));
 
-                    Vendor vendor = new Vendor(vendorName, catId);
-                    int vendorId = Integer.parseInt(VENDOR_MODEL_SERVICE.save(vendor));
+                Vendor vendor = new Vendor(vendorName, catId);
+                int vendorId = Integer.parseInt(vendorService.save(vendor));
 
-                    Transaction transaction = new Transaction(amount, vendorId);
-                    String result = TRANSACTION_MODEL_SERVICE.save(transaction);
-                    System.out.println(result);
-                } catch (SQLException e) {
-                    Logger.getLogger(getClass().getName()).severe(e.getMessage());
-                }
+                Transaction transaction = new Transaction(amount, vendorId);
+                String result = transactionService.save(transaction);
+                System.out.println(result);
+            } catch (SQLException e) {
+                Logger.getLogger(getClass().getName()).severe(e.getMessage());
+            }
 
         }
         return backToMainMenu();
@@ -80,11 +79,10 @@ public class InputTransactionMenu implements Menu {
         }
 
         boolean isInputFinished = false;
+
         while (!isInputFinished) {
-
-
             printStatementMenuInfo(list);
-            String input = scanner.nextLine();
+            String input = inputHandler.take();
 
             // 예외처리
             if (input.equals("p") || input.equals("P")) {
@@ -151,13 +149,13 @@ public class InputTransactionMenu implements Menu {
 
 
         if (list.size() == inputParams.indexOf("Date")) {
-            return Validator.isValidDateInput(input);
+            return InputValidator.isValidDateInput(input);
         } else if (list.size() == inputParams.indexOf("Amount")) {
-            return Validator.isValidAmountInput(input);
+            return InputValidator.isValidAmountInput(input);
         } else if (list.size() == inputParams.indexOf("Vendor")) {
-            return Validator.isValidVendorInput(input);
+            return InputValidator.isValidVendorInput(input);
         } else if (list.size() == inputParams.indexOf("Category")) {
-            return Validator.isValidCategoryInput(input);
+            return InputValidator.isValidCategoryInput(input);
 //            return Validator.isValidCategoryInput(input) && Integer.parseInt(input) <= catList.size();
         }
         return false;
@@ -165,27 +163,44 @@ public class InputTransactionMenu implements Menu {
 
 
     private void printStatementMenuInfo(List<String> list) {
-
-
         if (list.size() != 0) {
             System.out.println("입력값 확인");
             System.out.println(list.toString());
+            System.out.println();
         }
 
         if (list.size() == inputParams.indexOf("Date")) {
-            System.out.println("거래 날짜를 입력하세요 (현재날짜: C 메인메뉴: Q)");
+            // TODO: make better parser
+            System.out.println("거래 날짜를 입력하세요. 예) 2020-04-24 (현재날짜: C 메인메뉴: Q)");
         } else if (list.size() == inputParams.indexOf("Amount")) {
-            System.out.println("금액을 입력하세요(이전단계: P 메인메뉴: Q)");
+            System.out.println("금액을 입력하세요. 예) 3500 (이전단계: P 메인메뉴: Q)");
         } else if (list.size() == inputParams.indexOf("Vendor")) {
-            System.out.println("사용처를 입력하세요(이전단계: P 메인메뉴: Q)");
+            printItems(vendorService.findAll());
+            System.out.println("사용처를 입력하세요 (이전단계: P 메인메뉴: Q)");
         } else if (list.size() == inputParams.indexOf("Category")) {
-            System.out.println("카테고리 번호를 입력하세요(이전단계: P 메인메뉴: Q)");
-//            for (int i = 0; i < catList.size(); i++) {
-//                System.out.printf("%d. %s\n", (i + 1), catList.get(i).getTitle());
-//            }
+            printItems(categoryService.findAll());
+            System.out.println("카테고리 번호를 입력하세요 (이전단계: P 메인메뉴: Q)");
         }
     }
 
-
-
+    private void printItems(List<? extends Model> items) {
+        Model m = items.get(0);
+        List<String> names;
+        if (m instanceof Category) {
+            names = items.stream()
+                    .map(item -> (Category) item)
+                    .map(Category::getName)
+                    .collect(Collectors.toList());
+        } else if (m instanceof Vendor) {
+            names = items.stream()
+                    .map(item -> (Vendor) item)
+                    .map(Vendor::getName)
+                    .collect(Collectors.toList());
+        } else {
+            return;
+        }
+        for (int i = 0; i < names.size(); i++) {
+            System.out.printf("%d. %s\n", (i + 1), items.get(i));
+        }
+    }
 }

@@ -4,15 +4,14 @@ import io.dsub.constants.QueryOp;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class QueryStringGenerator {
-    private QueryStringGenerator(){}
+public class QueryStringBuilder {
+    private QueryStringBuilder(){}
 
-    private static final QueryStringGenerator instance = new QueryStringGenerator();
+    private static final QueryStringBuilder instance = new QueryStringBuilder();
 
-    public static QueryStringGenerator getInstance() {
+    public static QueryStringBuilder getInstance() {
         return instance;
     }
 

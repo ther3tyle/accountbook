@@ -1,7 +1,5 @@
 package io.dsub.cui.menu;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainMenuTest {
@@ -10,7 +8,7 @@ class MainMenuTest {
         MainMenu mainMenu = new MainMenu();
 
         int input =1;
-        int result = mainMenu.callMenu();
+        int result = mainMenu.call();
         assertEquals(input,result);
     }
 }
