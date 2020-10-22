@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 public class VendorRepository extends JdbcModelRepository<Vendor> {
     private final QueryStringGenerator queryGen = QueryStringGenerator.getInstance();
 
-    public VendorRepository() throws SQLException {
+    public VendorRepository() {
         super(StringConstants.SCHEMA, StringConstants.VENDOR);
     }
 
-    public VendorRepository(Connection conn) throws SQLException {
+    public VendorRepository(Connection conn) {
         super(conn, StringConstants.SCHEMA, StringConstants.VENDOR);
     }
 

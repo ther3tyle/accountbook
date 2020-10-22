@@ -41,8 +41,5 @@ public class MainMenu implements Menu {
             System.out.println("잘못된 입력입니다");
             return checkInputValidation(getKeyboardInput());
         }
-
     }
-
-
 }

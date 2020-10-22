@@ -4,7 +4,6 @@ import io.dsub.AppState;
 import io.dsub.model.Category;
 import io.dsub.repository.CategoryRepository;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,8 +17,8 @@ public class CategoryServiceImpl implements CategoryService {
         this.repository = repository;
     }
 
-    public CategoryServiceImpl() throws SQLException {
-        this(new CategoryRepository(AppState.getInstance().getConn()));
+    public CategoryServiceImpl() {
+            this(new CategoryRepository(AppState.getInstance().getConn()));
     }
 
     /**

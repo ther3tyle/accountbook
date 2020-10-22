@@ -6,22 +6,6 @@ import java.sql.SQLException;
 
 public class MenuController {
 
-    private MenuController() throws SQLException {}
-
-    private static final MenuController INSTANCE = null;
-
-    static {
-        try {
-            INSTANCE = new MenuController();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    public static MenuController getInstance() {
-        return INSTANCE;
-    }
-
     private final Menu ADD_CATEGORY = new AddCategoryMenu();
     private final Menu CHECK_ACCOUNT = new CheckAccountMenu();
     private final Menu INITIALIZATION = new InitializationMenu();
@@ -29,6 +13,13 @@ public class MenuController {
     private final Menu INPUT_EXPENSE = new InputTransactionMenu(MenuType.EXPENSE);
     private final Menu MAIN_MENU = new MainMenu();
 
+    private MenuController() {}
+
+    private static final MenuController INSTANCE = new MenuController();
+
+    public static MenuController getInstance() {
+        return INSTANCE;
+    }
 
     public void selectMenu() {
 

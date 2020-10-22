@@ -11,18 +11,25 @@ import java.util.Scanner;
 
 public class AddCategoryMenu implements Menu {
 
-    private final ModelService<Category> CATEGORY_MODEL_SERVICE = new CategoryServiceImpl();
+    private final ModelService<Category> CATEGORY_MODEL_SERVICE;
     private final List<Category> catList = null;
 
-    public AddCategoryMenu() throws SQLException {
+    public AddCategoryMenu() {
+        CATEGORY_MODEL_SERVICE = new CategoryServiceImpl();
     }
 
     @Override
-    public int callMenu() throws SQLException {
+    public int callMenu() {
 
         System.out.println("카데고리 추가");
         printCategoryList();
-        addCategory();
+
+        try {
+            addCategory();
+        } catch (SQLException e) {
+            System.out.println("SQL ERROR");
+            System.exit(1);
+        }
 
         return backToMainMenu();
     }

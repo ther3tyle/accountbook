@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 public class TransactionRepository extends JdbcModelRepository<Transaction> {
     private final QueryStringGenerator queryGen = QueryStringGenerator.getInstance();
 
-    public TransactionRepository() throws SQLException {
+    public TransactionRepository() {
         super(StringConstants.SCHEMA, StringConstants.TRANSACTION);
     }
 
-    public TransactionRepository(Connection conn) throws SQLException {
+    public TransactionRepository(Connection conn) {
         super(conn, StringConstants.SCHEMA, StringConstants.TRANSACTION);
     }
 

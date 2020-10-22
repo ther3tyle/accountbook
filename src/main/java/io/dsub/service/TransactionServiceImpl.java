@@ -14,7 +14,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     TransactionRepository repository;
 
-    public TransactionServiceImpl() throws SQLException {
+    public TransactionServiceImpl() {
         this(new TransactionRepository(AppState.getInstance().getConn()));
     }
 

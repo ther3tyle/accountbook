@@ -20,20 +20,25 @@ public abstract class JdbcModelRepository<V extends Model> implements ModelRepos
     private final String schema;
     private final String table;
 
-    public JdbcModelRepository(String schema, String table) throws SQLException {
+    public JdbcModelRepository(String schema, String table){
         this(AppState.getInstance().getConn(), schema, table);
     }
 
-    public JdbcModelRepository(Connection conn, String schema, String table) throws SQLException {
+    public JdbcModelRepository(Connection conn, String schema, String table)  {
         this.conn = conn;
         this.schema = schema;
         this.table = table;
-        if (isSchemaMissing()) {
-            if (!initSchema()) {
-                throw new ExceptionInInitializerError("failed to initialize");
+        try {
+            if (isSchemaMissing()) {
+                if (!initSchema()) {
+                    throw new ExceptionInInitializerError("failed to initialize");
+                }
+                conn.setSchema(StringConstants.SCHEMA);
+                logger.info("initialized database");
             }
-            conn.setSchema(StringConstants.SCHEMA);
-            logger.info("initialized database");
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+            System.exit(1);
         }
     }
 

@@ -19,11 +19,11 @@ public class CategoryRepository extends JdbcModelRepository<Category> {
     private static final String SCHEMA = StringConstants.SCHEMA;
     private static final String TABLE = StringConstants.CATEGORY;
 
-    public CategoryRepository() throws SQLException {
+    public CategoryRepository()  {
         super(SCHEMA, TABLE);
     }
 
-    public CategoryRepository(Connection conn) throws SQLException {
+    public CategoryRepository(Connection conn) {
         super(conn, SCHEMA, TABLE);
     }
 

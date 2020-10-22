@@ -13,7 +13,7 @@ public class VendorServiceImpl implements VendorService {
 
     VendorRepository repository;
 
-    public VendorServiceImpl() throws SQLException {
+    public VendorServiceImpl() {
         this(new VendorRepository(AppState.getInstance().getConn()));
     }
 
