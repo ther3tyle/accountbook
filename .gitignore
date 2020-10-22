@@ -324,5 +324,4 @@ $RECYCLE.BIN/
 
 # Ignore Gradle build output directory
 build
-
-db
+/db/
