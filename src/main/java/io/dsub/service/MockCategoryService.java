@@ -3,6 +3,7 @@ package io.dsub.service;
 import io.dsub.model.Category;
 
 import java.util.Collection;
+import java.util.List;
 
 public class MockCategoryService implements ModelService<Category> {
     @Override
@@ -51,6 +52,11 @@ public class MockCategoryService implements ModelService<Category> {
      */
     @Override
     public Category findById(String id) {
+        return null;
+    }
+
+    @Override
+    public List<Category> findAll() {
         return null;
     }
 

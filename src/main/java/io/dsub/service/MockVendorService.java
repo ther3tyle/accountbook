@@ -3,6 +3,7 @@ package io.dsub.service;
 import io.dsub.model.Vendor;
 
 import java.util.Collection;
+import java.util.List;
 
 public class MockVendorService implements ModelService<Vendor>{
 
@@ -51,6 +52,11 @@ public class MockVendorService implements ModelService<Vendor>{
      */
     @Override
     public Vendor findById(String id) {
+        return null;
+    }
+
+    @Override
+    public List<Vendor> findAll() {
         return null;
     }
 

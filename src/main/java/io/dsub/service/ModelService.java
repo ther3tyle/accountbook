@@ -2,7 +2,9 @@ package io.dsub.service;
 
 import io.dsub.model.Model;
 
+import java.sql.SQLException;
 import java.util.Collection;
+import java.util.List;
 
 public interface ModelService <T extends Model> {
     /**
@@ -11,7 +13,7 @@ public interface ModelService <T extends Model> {
      * @param item to be saved
      * @return key of item in String
      */
-    String save(T item);
+    String save(T item) throws SQLException;
 
     /**
      * Updates or inserts items
@@ -47,6 +49,13 @@ public interface ModelService <T extends Model> {
      * @return item or null if not found
      */
     T findById(String id);
+
+    /**
+     * fetch all items as list (limit : 1000);
+     *
+     * @return items of type T
+     */
+    List<T> findAll();
 
     /**
      * Delete given item if exists

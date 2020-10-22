@@ -3,6 +3,7 @@ package io.dsub.service;
 import io.dsub.model.Transaction;
 
 import java.util.Collection;
+import java.util.List;
 
 public class MockTransactionService implements ModelService<Transaction> {
     @Override
@@ -49,6 +50,11 @@ public class MockTransactionService implements ModelService<Transaction> {
      */
     @Override
     public Transaction findById(String id) {
+        return null;
+    }
+
+    @Override
+    public List<Transaction> findAll() {
         return null;
     }
 
