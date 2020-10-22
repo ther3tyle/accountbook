@@ -8,7 +8,7 @@ public class MockCategoryService implements ModelService<Category> {
     @Override
     public String save(Category item) {
         System.out.println("CategorySave");
-        return null;
+        return "0";
     }
 
     @Override

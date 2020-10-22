@@ -9,7 +9,7 @@ public class MockVendorService implements ModelService<Vendor>{
     @Override
     public String save(Vendor item) {
         System.out.println("Vendor Save");
-        return null;
+        return "0";
     }
 
     @Override

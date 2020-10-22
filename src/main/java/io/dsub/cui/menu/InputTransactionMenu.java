@@ -24,6 +24,7 @@ public class InputTransactionMenu implements Menu {
     private final ModelService<Vendor> VENDOR_MODEL_SERVICE = new MockVendorService();
     private final ModelService<Transaction> TRANSACTION_MODEL_SERVICE = new MockTransactionService();
     private final ModelService<Category> CATEGORY_MODEL_SERVICE = new MockCategoryService();
+//    private final List<Category> catList = CATEGORY_MODEL_SERVICE.findAll;
 
     public InputTransactionMenu(MenuType menuType) {
         this.menuType = menuType;
@@ -38,13 +39,22 @@ public class InputTransactionMenu implements Menu {
     private int operateTransaction(List<String> inputList) {
 
         if (inputList != null) {
-            Long amount = Long.parseLong(inputList.get(inputParams.indexOf("Amount")));
-            String vendor = inputList.get(inputParams.indexOf("Vendor"));
-            String category = inputList.get(inputParams.indexOf("Category"));
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate localDate = LocalDate.parse(inputList.get(inputParams.indexOf("Date")), formatter);
+                long amount = Long.parseLong(inputList.get(inputParams.indexOf("Amount")));
+                String vendorName = inputList.get(inputParams.indexOf("Vendor"));
+                String categoryName = inputList.get(inputParams.indexOf("Category"));
 
-            System.out.println(amount + "," + localDate + "," + vendor + "," + category);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate localDate = LocalDate.parse(inputList.get(inputParams.indexOf("Date")), formatter);
+
+                Category category = new Category(categoryName);
+                int catId = Integer.parseInt(CATEGORY_MODEL_SERVICE.save(category));
+
+                Vendor vendor = new Vendor(vendorName, catId);
+                int vendorId = Integer.parseInt(VENDOR_MODEL_SERVICE.save(vendor));
+
+                Transaction transaction = new Transaction(amount, vendorId);
+                String result =TRANSACTION_MODEL_SERVICE.save(transaction);
+                System.out.println(result);
 
         }
         return backToMainMenu();
@@ -142,6 +152,7 @@ public class InputTransactionMenu implements Menu {
             return Validator.isValidVendorInput(input);
         } else if (list.size() == inputParams.indexOf("Category")) {
             return Validator.isValidCategoryInput(input);
+//            return Validator.isValidCategoryInput(input) && Integer.parseInt(input) <= catList.size();
         }
         return false;
     }
@@ -162,7 +173,10 @@ public class InputTransactionMenu implements Menu {
         } else if (list.size() == inputParams.indexOf("Vendor")) {
             System.out.println("사용처를 입력하세요(이전단계: P 메인메뉴: Q)");
         } else if (list.size() == inputParams.indexOf("Category")) {
-            System.out.println("카테고리를 입력하세요(이전단계: P 메인메뉴: Q)");
+            System.out.println("카테고리 번호를 입력하세요(이전단계: P 메인메뉴: Q)");
+//            for (int i = 0; i < catList.size(); i++) {
+//                System.out.printf("%d. %s\n", (i + 1), catList.get(i).getTitle());
+//            }
         }
     }
 

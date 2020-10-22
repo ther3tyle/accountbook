@@ -5,11 +5,13 @@ import io.dsub.service.MockCategoryService;
 import io.dsub.service.ModelService;
 import io.dsub.util.Validator;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class AddCategoryMenu implements Menu {
 
     private final ModelService<Category> CATEGORY_MODEL_SERVICE = new MockCategoryService();
+    private final List<Category> catList = null;
 
     @Override
     public int callMenu() {
@@ -21,14 +23,34 @@ public class AddCategoryMenu implements Menu {
     }
 
     private void printCategoryList() {
-        System.out.println("CategoryList");
+        System.out.println("카테고리 목록");
+        for (int i = 0; i < catList.size(); i++) {
+            System.out.printf("%d. %s\n", (i + 1), catList.get(i));
+        }
     }
 
     private void addCategory() {
         System.out.println("추가하실 카테고리 명을 입력하세요");
-//        String input = checkValidation(getKeyboardInput())
-//        CATEGORY_MODEL_SERVICE.save(new Category(input));
-        printCategoryList();
+        String input = checkValidation(getKeyboardInput());
+
+        boolean isCategoryCorrect = false;
+        while (!isCategoryCorrect) {
+            System.out.println("입력하신 내용이 맞습니까? (Y,N)");
+            String input2 = getKeyboardInput();
+            if (input2.equalsIgnoreCase("y")) {
+                String result = CATEGORY_MODEL_SERVICE.save(new Category(input));
+                System.out.println(result);
+                printCategoryList();
+                isCategoryCorrect = true;
+            } else if (input2.equalsIgnoreCase("n")) {
+                addCategory();
+            } else {
+                System.out.println("잘못된 입력입니다");
+                isCategoryCorrect = false;
+            }
+        }
+
+
     }
 
     private String getKeyboardInput() {
@@ -38,7 +60,7 @@ public class AddCategoryMenu implements Menu {
     }
 
     private String checkValidation(String input) {
-        if(Validator.isValidCategoryInput(input)) {
+        if (Validator.isValidCategoryInput(input)) {
             return input;
         } else {
             System.out.println("잘못된 입력입니다");

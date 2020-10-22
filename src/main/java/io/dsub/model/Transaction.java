@@ -34,6 +34,10 @@ public class Transaction extends Model implements Serializable {
         this(amount, vendorId, LocalDateTime.now(), UUID.randomUUID());
     }
 
+    public Transaction(long amount,int vendorId, LocalDateTime time) {
+        this(amount,vendorId,time,UUID.randomUUID());
+    }
+
     public static Function<String, Model> getParser() {
         return (String s) -> {
             String[] data = s.split(",");

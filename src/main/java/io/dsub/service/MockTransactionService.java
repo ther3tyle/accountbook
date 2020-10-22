@@ -7,8 +7,7 @@ import java.util.Collection;
 public class MockTransactionService implements ModelService<Transaction> {
     @Override
     public String save(Transaction item) {
-        System.out.println("TransactionSave");
-        return null;
+        return "거래기록완료";
     }
 
     @Override
