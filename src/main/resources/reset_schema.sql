@@ -27,3 +27,13 @@ CREATE TABLE account.transaction
     CONSTRAINT vendor_id
         FOREIGN KEY (vendor_id) REFERENCES vendor
 );
+
+INSERT INTO account.category (NAME) VALUES ('식비');
+INSERT INTO account.category (NAME) VALUES ('주거');
+INSERT INTO account.category (NAME) VALUES ('통신');
+INSERT INTO account.category (NAME) VALUES ('교통');
+INSERT INTO account.category (NAME) VALUES ('외식');
+INSERT INTO account.category (NAME) VALUES ('취미');
+INSERT INTO account.category (NAME) VALUES ('쇼핑');
+INSERT INTO account.category (NAME) VALUES ('건강');
+INSERT INTO account.category (NAME) VALUES ('기타');

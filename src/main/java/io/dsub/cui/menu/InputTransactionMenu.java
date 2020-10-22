@@ -184,6 +184,7 @@ public class InputTransactionMenu implements Menu {
     }
 
     private void printItems(List<? extends Model> items) {
+        if (items == null || items.isEmpty()) return;
         Model m = items.get(0);
         List<String> names;
         if (m instanceof Category) {
@@ -199,8 +200,17 @@ public class InputTransactionMenu implements Menu {
         } else {
             return;
         }
+
         for (int i = 0; i < names.size(); i++) {
-            System.out.printf("%d. %s\n", (i + 1), items.get(i));
+            int idx = i + 1;
+            String val = names.get(i);
+            if (i > 0 && i % 3 == 0) {
+                writer.newLine();
+            }
+            writer.write(String.format("%d. %s\t\t", idx, val));
         }
+        writer.newLine();
+        writer.newLine();
+        writer.flush();
     }
 }
