@@ -49,6 +49,15 @@ public class TransactionRepository extends JdbcModelRepository<Transaction> {
         conn.createStatement().execute(query);
     }
 
+    public List<Transaction> findBetween(LocalDate begin, LocalDate end) throws SQLException {
+        String schemaTable = StringConstants.SCHEMA + "." + StringConstants.TRANSACTION;
+
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM " + schemaTable + " WHERE " + " DATE BETWEEN " + begin.toString() + " AND " + end.toString());
+
+        return multiParse(rs);
+    }
+
     @Override
     protected Transaction parse(ResultSet resultSet) throws SQLException {
         if (resultSet.next()) {

@@ -29,7 +29,7 @@ public class Transaction extends Model implements Serializable {
     }
 
     public Transaction(long amount, int vendorId, LocalDate date) {
-        this(amount,vendorId, date,UUID.randomUUID());
+        this(amount, vendorId, date, UUID.randomUUID());
     }
 
     public Transaction(long amount, int vendorId, LocalDate date, UUID id) {

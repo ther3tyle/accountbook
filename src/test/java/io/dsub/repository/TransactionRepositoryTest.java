@@ -17,10 +17,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,7 +34,7 @@ class TransactionRepositoryTest {
         testPath = Files.createTempDirectory(getClass().getName());
         assertDoesNotThrow(() -> Initializer.init("test_schema.sql", "jdbc:h2:" + testPath.toAbsolutePath() + File.separator + "h2;MODE=MySQL"));
         conn = AppState.getInstance().getConn();
-        InputStream sqlStream = CategoryRepositoryTest.class.getClassLoader().getResourceAsStream("reset_schema.sql");
+        InputStream sqlStream = CategoryRepositoryTest.class.getClassLoader().getResourceAsStream("test_schema.sql");
 
         assertNotNull(sqlStream);
         BufferedReader reader = new BufferedReader(new InputStreamReader(sqlStream));
@@ -172,4 +170,40 @@ class TransactionRepositoryTest {
             fail(e.getMessage());
         }
     }
+
+    @Test
+    void testRangedQuery() {
+        try {
+            vendorRepository.save(new Vendor("first"));
+            List<Transaction> transactions = makeTransactions(10000, 1);
+
+            transactionRepository.saveAll(transactions);
+            Random random = new Random();
+            LocalDate start = LocalDate.now().minusDays(random.nextInt(365));
+            LocalDate end = LocalDate.now();
+
+            List<Transaction> result = transactionRepository.findBetween(start, end);
+            for (Transaction item : result) {
+                LocalDate target = item.getDate();
+                assertTrue(target.isAfter(start));
+                assertTrue(target.isBefore(end));
+            }
+        } catch (SQLException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    private List<Transaction> makeTransactions(int count, int vendorId) {
+        List<Transaction> transactions = new ArrayList<>();
+        Random random = new Random();
+
+        for (int i = 0; i < count; i++) {
+            LocalDate date = LocalDate.now().minusDays(random.nextInt(450));
+            Transaction transaction = new Transaction(random.nextInt(30325), vendorId, date);
+            transactions.add(transaction);
+        }
+
+        return transactions;
+    }
+
 }

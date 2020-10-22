@@ -19,8 +19,8 @@ CREATE TABLE account.vendor
 
 CREATE TABLE account.transaction
 (
-    id        UUID      NOT NULL AUTO_INCREMENT,
-    amount    INT       NOT NULL,
+    id        UUID      NOT NULL PRIMARY KEY,
+    amount    LONG      NOT NULL,
     date      DATE      NOT NULL DEFAULT NOW(),
     vendor_id INT       NOT NULL,
 

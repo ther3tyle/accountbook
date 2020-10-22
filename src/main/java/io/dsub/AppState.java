@@ -1,5 +1,8 @@
 package io.dsub;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.sql.Connection;
 
 /**
@@ -15,13 +18,7 @@ public class AppState {
         return instance;
     }
 
+    @Getter
+    @Setter
     private Connection conn;
-
-    public Connection getConn() {
-        return conn;
-    }
-
-    public void setConn(Connection conn) {
-        this.conn = conn;
-    }
 }

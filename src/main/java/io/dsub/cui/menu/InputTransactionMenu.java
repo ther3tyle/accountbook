@@ -10,12 +10,14 @@ import io.dsub.service.MockVendorService;
 import io.dsub.service.ModelService;
 import io.dsub.util.Validator;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class InputTransactionMenu implements Menu {
 
@@ -46,15 +48,19 @@ public class InputTransactionMenu implements Menu {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 LocalDate localDate = LocalDate.parse(inputList.get(inputParams.indexOf("Date")), formatter);
 
-                Category category = new Category(categoryName);
-                int catId = Integer.parseInt(CATEGORY_MODEL_SERVICE.save(category));
+                try {
+                    Category category = new Category(categoryName);
+                    int catId = Integer.parseInt(CATEGORY_MODEL_SERVICE.save(category));
 
-                Vendor vendor = new Vendor(vendorName, catId);
-                int vendorId = Integer.parseInt(VENDOR_MODEL_SERVICE.save(vendor));
+                    Vendor vendor = new Vendor(vendorName, catId);
+                    int vendorId = Integer.parseInt(VENDOR_MODEL_SERVICE.save(vendor));
 
-                Transaction transaction = new Transaction(amount, vendorId);
-                String result =TRANSACTION_MODEL_SERVICE.save(transaction);
-                System.out.println(result);
+                    Transaction transaction = new Transaction(amount, vendorId);
+                    String result = TRANSACTION_MODEL_SERVICE.save(transaction);
+                    System.out.println(result);
+                } catch (SQLException e) {
+                    Logger.getLogger(getClass().getName()).severe(e.getMessage());
+                }
 
         }
         return backToMainMenu();

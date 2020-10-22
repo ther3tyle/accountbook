@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MainMenuTest {
 
-    @Test
     void callMenu() {
         MainMenu mainMenu = new MainMenu();
 

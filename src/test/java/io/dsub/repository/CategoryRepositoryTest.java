@@ -30,10 +30,10 @@ class CategoryRepositoryTest {
 
     @BeforeEach
     void init() throws SQLException, IOException {
-        testPath = Files.createTempDirectory("test");
+        testPath = Files.createTempDirectory("");
         assertDoesNotThrow(() -> Initializer.init("test_schema.sql", "jdbc:h2:" + testPath.toAbsolutePath() + File.separator + "h2;MODE=MySQL"));
         conn = AppState.getInstance().getConn();
-        InputStream sqlStream = CategoryRepositoryTest.class.getClassLoader().getResourceAsStream("reset_schema.sql");
+        InputStream sqlStream = CategoryRepositoryTest.class.getClassLoader().getResourceAsStream("test_schema.sql");
 
         assertNotNull(sqlStream);
         BufferedReader reader = new BufferedReader(new InputStreamReader(sqlStream));

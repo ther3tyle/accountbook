@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InputTransactionMenuTest {
 
-    @Test
     void callMenu() {
         InputTransactionMenu inputTransactionMenu = new InputTransactionMenu(MenuType.INCOME);
 
