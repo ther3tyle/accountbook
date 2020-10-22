@@ -102,7 +102,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void deleteByName(String name) throws UnsupportedOperationException {
+    public void deleteByName(String name) {
         try {
             repository.deleteByName(name);
         } catch (SQLException e) {

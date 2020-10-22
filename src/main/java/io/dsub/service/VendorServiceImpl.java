@@ -41,12 +41,12 @@ public class VendorServiceImpl implements VendorService {
     }
 
     @Override
-    public Vendor find(String name) throws UnsupportedOperationException {
+    public Vendor find(String name) {
         return this.findByName(name);
     }
 
     @Override
-    public Vendor findByName(String name) throws UnsupportedOperationException {
+    public Vendor findByName(String name) {
         try {
             return this.repository.findByName(name);
         } catch (SQLException e) {
@@ -96,7 +96,7 @@ public class VendorServiceImpl implements VendorService {
     }
 
     @Override
-    public void deleteByName(String name) throws UnsupportedOperationException {
+    public void deleteByName(String name) {
         try {
             repository.deleteByName(name);
         } catch (SQLException e) {
