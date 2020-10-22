@@ -5,12 +5,17 @@ import io.dsub.cui.MenuController;
 /**
  * Application entry point
  *
- * todo: impl menu interfacing
+ * TODO: impl menu interfacing
  */
 public class Application {
     public static void main(String[] args) {
+        MenuController menuController = MenuController.getInstance();
 
-        MenuController menuController = new MenuController();
+        // do everything you need to do before start cui.
+
+        // ... initializers
+
+        // begin cui
         menuController.selectMenu();
     }
 }

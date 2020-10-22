@@ -11,7 +11,6 @@ public class MainMenu implements Menu {
 
     private final List<MenuType> menuList = Arrays.asList(MenuType.values());
 
-
     @Override
     public int callMenu() {
 

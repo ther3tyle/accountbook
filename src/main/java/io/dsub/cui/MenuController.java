@@ -4,6 +4,14 @@ import io.dsub.cui.menu.*;
 
 public class MenuController {
 
+    private MenuController(){}
+
+    private static final MenuController INSTANCE = new MenuController();
+
+    public static MenuController getInstance() {
+        return INSTANCE;
+    }
+
     private final Menu ADD_CATEGORY = new AddCategoryMenu();
     private final Menu CHECK_ACCOUNT = new CheckAccountMenu();
     private final Menu INITIALIZATION = new InitializationMenu();
