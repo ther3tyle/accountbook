@@ -1,6 +1,6 @@
 package io.dsub.model;
 
-import io.dsub.util.DataType;
+import io.dsub.constants.DataType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +26,6 @@ class VendorTest {
         assertEquals(other.getCatId(), vendor.getCatId());
         assertEquals(other.getId(), vendor.getId());
         assertEquals(other.getName(), vendor.getName());
-        assertEquals(other, vendor);
         assertNotSame(other, vendor);
     }
 

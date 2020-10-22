@@ -1,11 +1,11 @@
 package io.dsub.repository;
 
-import io.dsub.datasource.ModelFileReader;
-import io.dsub.datasource.ModelFileWriter;
-import io.dsub.datasource.ModelReader;
-import io.dsub.datasource.ModelWriter;
+import io.dsub.datasource.reader.LocalFlatFileReader;
+import io.dsub.datasource.writer.LocalFlatFileWriter;
+import io.dsub.datasource.reader.ModelReader;
+import io.dsub.datasource.writer.ModelWriter;
 import io.dsub.model.Transaction;
-import io.dsub.util.DataType;
+import io.dsub.constants.DataType;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LocalModelRepositoryTest {
-    ModelRepository<Transaction, String> repository;
+    ModelRepository<Transaction> repository;
     static File testFile;
 
     @BeforeEach
@@ -46,13 +46,13 @@ class LocalModelRepositoryTest {
     @Test
     void read() {
         Transaction t = new Transaction(33, 33);
-        assertDoesNotThrow(() -> repository.write(t));
-        assertDoesNotThrow(() -> assertEquals(repository.read(t.getId()), t));
+        assertDoesNotThrow(() -> repository.save(t));
+        assertDoesNotThrow(() -> assertEquals(repository.findById(t.getId()), t));
 
         Transaction other = new Transaction(33, 3);
-        assertDoesNotThrow(() -> repository.write(other));
-        assertDoesNotThrow(() -> assertEquals(repository.read(other.getId()), other));
-        assertDoesNotThrow(() -> assertNotEquals(repository.read(other.getId()), t));
+        assertDoesNotThrow(() -> repository.save(other));
+        assertDoesNotThrow(() -> assertEquals(repository.findById(other.getId()), other));
+        assertDoesNotThrow(() -> assertNotEquals(repository.findById(other.getId()), t));
     }
 
     @Test
@@ -63,9 +63,9 @@ class LocalModelRepositoryTest {
         for (int i = 0; i < randNum; i++) {
             list.add(new Transaction(random.nextInt(), random.nextInt()));
         }
-        assertDoesNotThrow(() -> repository.writeAll(list.toArray(Transaction[]::new)));
+        assertDoesNotThrow(() -> repository.saveAll(list));
         assertDoesNotThrow(() -> {
-            int size = repository.readAll().size();
+            int size = repository.findAll().size();
             assertEquals(size, list.size());
         });
     }
@@ -74,14 +74,14 @@ class LocalModelRepositoryTest {
     void write() {
         Random rand = new Random();
         Transaction transaction = new Transaction(rand.nextInt(100), rand.nextInt(100));
-        assertDoesNotThrow(() -> repository.write(transaction));
-        assertDoesNotThrow(() -> assertEquals(1, repository.readAll().size()));
+        assertDoesNotThrow(() -> repository.save(transaction));
+        assertDoesNotThrow(() -> assertEquals(1, repository.findAll().size()));
     }
 
     @Test
     void setReader() {
         LocalModelRepository<Transaction> repo = (LocalModelRepository<Transaction>) repository;
-        ModelReader<Transaction> reader = new ModelFileReader<>(DataType.TRANSACTION);
+        ModelReader<Transaction> reader = new LocalFlatFileReader<>(DataType.TRANSACTION);
         ModelReader<Transaction> old = repo.getReader();
 
         repo.setReader(reader);
@@ -91,7 +91,7 @@ class LocalModelRepositoryTest {
     @Test
     void setWriter() {
         LocalModelRepository<Transaction> repo = (LocalModelRepository<Transaction>) repository;
-        ModelFileWriter<Transaction> writer = new ModelFileWriter<>(DataType.TRANSACTION);
+        LocalFlatFileWriter<Transaction> writer = new LocalFlatFileWriter<>(DataType.TRANSACTION);
         ModelWriter<Transaction> old = repo.getWriter();
 
         repo.setWriter(writer);
@@ -112,8 +112,8 @@ class LocalModelRepositoryTest {
             repo.setSourcePath(otherPath);
 
             assertTrue(otherPath.toFile().exists());
-            assertEquals(((ModelFileReader<Transaction>)repo.getReader()).getSourcePath(),
-                    ((ModelFileWriter<Transaction>)repo.getWriter()).getSourcePath()
+            assertEquals(((LocalFlatFileReader<Transaction>)repo.getReader()).getSourcePath(),
+                    ((LocalFlatFileWriter<Transaction>)repo.getWriter()).getSourcePath()
                     );
             assertEquals(otherPath, repo.getSourcePath());
 
@@ -125,6 +125,6 @@ class LocalModelRepositoryTest {
     void prune() {
         LocalModelRepository<Transaction> repo = (LocalModelRepository<Transaction>) repository;
         assertDoesNotThrow(repo::prune);
-        assertDoesNotThrow(() -> assertEquals(0, repo.readAll().size()));
+        assertDoesNotThrow(() -> assertEquals(0, repo.findAll().size()));
     }
 }

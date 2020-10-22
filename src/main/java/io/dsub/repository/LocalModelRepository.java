@@ -1,23 +1,25 @@
 package io.dsub.repository;
 
-import io.dsub.datasource.ModelFileReader;
-import io.dsub.datasource.ModelFileWriter;
-import io.dsub.datasource.ModelReader;
-import io.dsub.datasource.ModelWriter;
+import io.dsub.datasource.reader.LocalFlatFileReader;
+import io.dsub.datasource.writer.LocalFlatFileWriter;
+import io.dsub.datasource.reader.ModelReader;
+import io.dsub.datasource.writer.ModelWriter;
 import io.dsub.model.Model;
-import io.dsub.util.DataType;
+import io.dsub.constants.DataType;
 import io.dsub.util.FileHelper;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class LocalModelRepository<T extends Model> implements ModelRepository<T, String> {
-    private static final Logger logger = Logger.getLogger(LocalModelRepository.class.getName());
+public class LocalModelRepository<T extends Model> implements ModelRepository<T> {
+    private static final Logger LOGGER = Logger.getLogger(LocalModelRepository.class.getName());
 
     private ModelReader<T> reader;
     private ModelWriter<T> writer;
@@ -25,15 +27,15 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
     private Path sourcePath;
 
     public LocalModelRepository(DataType type) {
-        this(type, new ModelFileReader<>(type), new ModelFileWriter<>(type));
+        this(type, new LocalFlatFileReader<>(type), new LocalFlatFileWriter<>(type));
     }
 
     public LocalModelRepository(DataType type, Path path) {
-        this(type, new ModelFileReader<>(type, path), new ModelFileWriter<>(type, path));
+        this(type, new LocalFlatFileReader<>(type, path), new LocalFlatFileWriter<>(type, path));
     }
 
     public LocalModelRepository(DataType type, File file) {
-        this(type, new ModelFileReader<>(type, file), new ModelFileWriter<>(type, file));
+        this(type, new LocalFlatFileReader<>(type, file), new LocalFlatFileWriter<>(type, file));
     }
 
     private LocalModelRepository(DataType dataType, ModelReader<T> reader, ModelWriter<T> writer) {
@@ -50,7 +52,7 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
      * @return matching entity or null if not present
      */
     @Override
-    public T read(String key) throws IOException {
+    public T findById(String key) throws IOException {
         return reader.readByKey(key);
     }
 
@@ -73,7 +75,7 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
      * @return list of entities
      */
     @Override
-    public List<T> readAll() throws IOException {
+    public List<T> findAll() throws IOException {
         return reader.readAll();
     }
 
@@ -81,10 +83,13 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
      * writes single item to target source
      *
      * @param item item to be written
+     * @return null as is not supported yet
      */
+
     @Override
-    public void write(T item) throws IOException {
+    public String save(T item) throws IOException {
         writer.write(item);
+        return null; // TODO: return row value
     }
 
     /**
@@ -93,7 +98,7 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
      * @param items to be written
      */
     @Override
-    public void writeAll(T[] items) throws IOException {
+    public void saveAll(Collection<T> items) throws IOException {
         writer.writeAll(items);
     }
 
@@ -112,7 +117,7 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
             writer.reset();
             writer.writeAll(list);
         } catch (IOException e) {
-            logger.severe(e.getMessage());
+            LOGGER.severe(e.getMessage());
         }
     }
 
@@ -131,8 +136,13 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
             writer.reset();
             writer.writeAll(list);
         } catch (IOException e) {
-            logger.severe(e.getMessage());
+            LOGGER.severe(e.getMessage());
         }
+    }
+
+    @Override
+    public long count() throws IOException {
+        return reader.readAll().size();
     }
 
     public ModelReader<T> getReader() {
@@ -157,8 +167,8 @@ public class LocalModelRepository<T extends Model> implements ModelRepository<T,
 
     public void setSourcePath(Path sourcePath) {
         this.sourcePath = sourcePath;
-        this.writer = new ModelFileWriter<>(this.dataType, this.sourcePath);
-        this.reader = new ModelFileReader<>(this.dataType, this.sourcePath);
+        this.writer = new LocalFlatFileWriter<>(this.dataType, this.sourcePath);
+        this.reader = new LocalFlatFileReader<>(this.dataType, this.sourcePath);
     }
 
     public void prune() throws IOException {

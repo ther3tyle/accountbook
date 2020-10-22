@@ -1,9 +1,11 @@
-package io.dsub.datasource;
+package io.dsub.datasource.reader;
 
+import io.dsub.datasource.writer.LocalFlatFileWriter;
+import io.dsub.datasource.writer.ModelWriter;
 import io.dsub.model.Model;
-import io.dsub.util.DataType;
+import io.dsub.constants.DataType;
 import io.dsub.util.FileHelper;
-import io.dsub.util.ModelParserUtil;
+import io.dsub.util.ModelParser;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -12,22 +14,22 @@ import java.util.NoSuchElementException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class ModelFileReader<T extends Model> implements LocalModelReader<T> {
+public class LocalFlatFileReader<T extends Model> implements FlatFileReader<T> {
 
     private Path sourcePath;
     private Function<String, Model> parser;
 
-    public ModelFileReader(DataType type) {
+    public LocalFlatFileReader(DataType type) {
         this(type, FileHelper.getPath(type));
     }
 
-    public ModelFileReader(DataType type, File file) {
+    public LocalFlatFileReader(DataType type, File file) {
         this(type, file.toPath());
     }
 
-    public ModelFileReader(DataType type, Path sourcePath) {
+    public LocalFlatFileReader(DataType type, Path sourcePath) {
         this.sourcePath = sourcePath;
-        this.parser = ModelParserUtil.get(type);
+        this.parser = ModelParser.get(type);
     }
 
     @Override
@@ -41,7 +43,7 @@ public class ModelFileReader<T extends Model> implements LocalModelReader<T> {
 
         itemsList.add(item);
 
-        ModelWriter<T> writer = new ModelFileWriter<>(DataType.TRANSACTION, sourcePath);
+        ModelWriter<T> writer = new LocalFlatFileWriter<>(DataType.TRANSACTION, sourcePath);
 
         if (itemsList.size() > 0) {
             writer.reset();

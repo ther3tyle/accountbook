@@ -1,4 +1,4 @@
-package io.dsub.datasource;
+package io.dsub.datasource.writer;
 
 import io.dsub.model.Model;
 

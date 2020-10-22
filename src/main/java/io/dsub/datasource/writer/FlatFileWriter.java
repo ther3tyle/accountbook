@@ -1,4 +1,4 @@
-package io.dsub.datasource;
+package io.dsub.datasource.writer;
 
 import io.dsub.model.Model;
 
@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public interface LocalModelWriter<T extends Model> extends ModelWriter<T> {
+public interface FlatFileWriter<T extends Model> extends ModelWriter<T> {
     void write(T item) throws IOException;
 
     void reset() throws IOException;
