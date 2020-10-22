@@ -27,6 +27,15 @@ public class Validator {
         return false;
     }
 
+    public static boolean matches(String input, String... targets) {
+        for (String target : targets) {
+            if (input.equalsIgnoreCase(target)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean isValidAmountInput(String in) {
         return in.matches("^\\d{1,18}$"); //Long 범위가 19자리수, 18자리까지만 입력받기
     }

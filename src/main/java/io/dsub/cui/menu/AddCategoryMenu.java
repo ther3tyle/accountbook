@@ -1,5 +1,6 @@
 package io.dsub.cui.menu;
 
+import io.dsub.constants.StringConstants;
 import io.dsub.model.Category;
 import io.dsub.service.CategoryServiceImpl;
 import io.dsub.service.ModelService;
@@ -12,7 +13,12 @@ import java.util.Scanner;
 public class AddCategoryMenu implements Menu {
 
     private final ModelService<Category> CATEGORY_MODEL_SERVICE;
-    private final List<Category> catList = null;
+    private List<Category> catList;
+    private static final String INVALID_INPUT = StringConstants.INVALID_INPUT;
+    private static final String RE_ENTER_PROMPT = StringConstants.RE_ENTER_PROMPT;
+    private static final String ASK_INPUT_CONFIRM = StringConstants.ASK_INPUT_CONFIRM;
+    private static final String CANNOT_RECOGNIZE = StringConstants.CANNOT_RECOGNIZE;
+
 
     public AddCategoryMenu() {
         CATEGORY_MODEL_SERVICE = new CategoryServiceImpl();
@@ -20,7 +26,7 @@ public class AddCategoryMenu implements Menu {
 
     @Override
     public int callMenu() {
-
+        catList = CATEGORY_MODEL_SERVICE.findAll();
         System.out.println("카데고리 추가");
         printCategoryList();
 
@@ -36,49 +42,59 @@ public class AddCategoryMenu implements Menu {
 
     private void printCategoryList() {
         System.out.println("카테고리 목록");
-        for (int i = 0; i < catList.size(); i++) {
-            System.out.printf("%d. %s\n", (i + 1), catList.get(i));
+
+        String listStr;
+
+        if (catList.isEmpty()) {
+            listStr = "없음";
+        } else {
+            StringBuilder sb = new StringBuilder();
+            sb.append("[");
+            for (int i = 0; i < catList.size(); i++) {
+                sb.append(catList.get(i).getName());
+                if (i < catList.size() - 1) {
+                    sb.append(", ");
+                }
+            }
+            sb.append("]");
+            listStr = sb.toString();
         }
+        System.out.println(listStr);
     }
 
     private void addCategory() throws SQLException {
-        System.out.println("추가하실 카테고리 명을 입력하세요");
-        String input = checkValidation(getKeyboardInput());
+        while (true) {
+            String name = takeCategoryName();
+            if (confirm(name)) {
 
-        boolean isCategoryCorrect = false;
-        while (!isCategoryCorrect) {
-            System.out.println("입력하신 내용이 맞습니까? (Y,N)");
-            String input2 = getKeyboardInput();
-            if (input2.equalsIgnoreCase("y")) {
-                String result = CATEGORY_MODEL_SERVICE.save(new Category(input));
-                System.out.println(result);
-                printCategoryList();
-                isCategoryCorrect = true;
-            } else if (input2.equalsIgnoreCase("n")) {
-                addCategory();
-            } else {
-                System.out.println("잘못된 입력입니다");
-                isCategoryCorrect = false;
             }
         }
-
-
     }
 
-    private String getKeyboardInput() {
-        Scanner scanner = new Scanner(System.in);
-
-        return scanner.nextLine();
-    }
-
-    private String checkValidation(String input) {
-        if (Validator.isValidCategoryInput(input)) {
-            return input;
-        } else {
-            System.out.println("잘못된 입력입니다");
-            return checkValidation(getKeyboardInput());
+    private boolean confirm(String value) {
+        System.out.printf("[%s]", value);
+        System.out.println(ASK_INPUT_CONFIRM + "[y|yes] 예 [n|no] 아니오");
+        while (true) {
+            String in = takeInput();
+            if (Validator.matches(in, "y", "yes", "예", "네")) return true;
+            if (Validator.matches(in, "n", "no", "아니오", "아니요")) return false;
+            System.out.println(CANNOT_RECOGNIZE + RE_ENTER_PROMPT);
         }
     }
 
+    private String takeCategoryName() {
+        System.out.println("추가하실 카테고리 명을 입력하세요.");
+        while (true) {
+            String in = takeInput();
+            if (in.length() > 0) {
+                return in;
+            }
+            System.out.println(INVALID_INPUT + RE_ENTER_PROMPT);
+        }
+    }
 
+    private String takeInput() {
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
+    }
 }
