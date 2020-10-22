@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class InputTransaction implements Menu {
+public class InputTransactionMenu implements Menu {
 
     private List<String> inputParams;
     public MenuType menuType;
@@ -25,7 +25,7 @@ public class InputTransaction implements Menu {
     private final ModelService<Transaction> TRANSACTION_MODEL_SERVICE = new MockTransactionService();
     private final ModelService<Category> CATEGORY_MODEL_SERVICE = new MockCategoryService();
 
-    public InputTransaction(MenuType menuType) {
+    public InputTransactionMenu(MenuType menuType) {
         this.menuType = menuType;
     }
 

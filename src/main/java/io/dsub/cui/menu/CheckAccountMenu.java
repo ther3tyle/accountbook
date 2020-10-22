@@ -8,7 +8,7 @@ import io.dsub.service.MockTransactionService;
 import io.dsub.service.MockVendorService;
 import io.dsub.service.ModelService;
 
-public class CheckAccount implements Menu {
+public class CheckAccountMenu implements Menu {
 
     private final ModelService<Vendor> VENDOR_MODEL_SERVICE = new MockVendorService();
     private final ModelService<Transaction> TRANSACTION_MODEL_SERVICE = new MockTransactionService();

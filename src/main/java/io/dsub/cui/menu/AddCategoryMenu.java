@@ -7,10 +7,9 @@ import io.dsub.util.Validator;
 
 import java.util.Scanner;
 
-public class AddCategory  implements Menu {
+public class AddCategoryMenu implements Menu {
 
     private final ModelService<Category> CATEGORY_MODEL_SERVICE = new MockCategoryService();
-
 
     @Override
     public int callMenu() {

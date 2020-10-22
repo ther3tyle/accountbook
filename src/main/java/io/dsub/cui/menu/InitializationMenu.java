@@ -10,12 +10,11 @@ import io.dsub.service.ModelService;
 
 import java.util.Scanner;
 
-public class Initialization implements Menu {
+public class InitializationMenu implements Menu {
 
     private final ModelService<Vendor> VENDOR_MODEL_SERVICE = new MockVendorService();
     private final ModelService<Transaction> TRANSACTION_MODEL_SERVICE = new MockTransactionService();
     private final ModelService<Category> CATEGORY_MODEL_SERVICE = new MockCategoryService();
-
 
     @Override
     public int callMenu() {

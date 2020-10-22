@@ -4,11 +4,11 @@ import io.dsub.cui.menu.*;
 
 public class MenuController {
 
-    private final Menu ADD_CATEGORY = new AddCategory();
-    private final Menu CHECK_ACCOUNT = new CheckAccount();
-    private final Menu INITIALIZATION = new Initialization();
-    private final Menu INPUT_INCOME = new InputTransaction(MenuType.INCOME);
-    private final Menu INPUT_EXPENSE = new InputTransaction(MenuType.EXPENSE);
+    private final Menu ADD_CATEGORY = new AddCategoryMenu();
+    private final Menu CHECK_ACCOUNT = new CheckAccountMenu();
+    private final Menu INITIALIZATION = new InitializationMenu();
+    private final Menu INPUT_INCOME = new InputTransactionMenu(MenuType.INCOME);
+    private final Menu INPUT_EXPENSE = new InputTransactionMenu(MenuType.EXPENSE);
     private final Menu MAIN_MENU = new MainMenu();
 
 
