@@ -2,11 +2,21 @@ package io.dsub.cui;
 
 import io.dsub.cui.menu.*;
 
+import java.sql.SQLException;
+
 public class MenuController {
 
-    private MenuController(){}
+    private MenuController() throws SQLException {}
 
-    private static final MenuController INSTANCE = new MenuController();
+    private static final MenuController INSTANCE = null;
+
+    static {
+        try {
+            INSTANCE = new MenuController();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
     public static MenuController getInstance() {
         return INSTANCE;

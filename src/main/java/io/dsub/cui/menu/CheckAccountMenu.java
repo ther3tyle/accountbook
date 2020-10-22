@@ -8,8 +8,12 @@ import io.dsub.service.MockTransactionService;
 import io.dsub.service.MockVendorService;
 import io.dsub.service.ModelService;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CheckAccountMenu implements Menu {
 
+    private final List<String> checkMenuList = Arrays.asList("day", "month", "year", "");
     private final ModelService<Vendor> VENDOR_MODEL_SERVICE = new MockVendorService();
     private final ModelService<Transaction> TRANSACTION_MODEL_SERVICE = new MockTransactionService();
     private final ModelService<Category> CATEGORY_MODEL_SERVICE = new MockCategoryService();
@@ -17,7 +21,21 @@ public class CheckAccountMenu implements Menu {
     @Override
     public int callMenu() {
         System.out.println("call check Account");
-        return 0;
+
+        return backToMainMenu();
+    }
+
+    private void printMenu() {
+
+    }
+
+    private String getKeyboardInput(){
+
+        return null;
+    }
+
+    private void calcStatics() {
+
     }
 
 

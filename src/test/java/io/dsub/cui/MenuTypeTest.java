@@ -8,6 +8,7 @@ class MenuTypeTest {
 
     @Test
     void getTitle() {
-//        MenuType.
+        String result = MenuType.INCOME.getTitle();
+        assertEquals("수입 입력",result);
     }
 }

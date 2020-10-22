@@ -1,20 +1,25 @@
 package io.dsub.cui.menu;
 
 import io.dsub.model.Category;
-import io.dsub.service.MockCategoryService;
+import io.dsub.service.CategoryServiceImpl;
 import io.dsub.service.ModelService;
 import io.dsub.util.Validator;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
 public class AddCategoryMenu implements Menu {
 
-    private final ModelService<Category> CATEGORY_MODEL_SERVICE = new MockCategoryService();
+    private final ModelService<Category> CATEGORY_MODEL_SERVICE = new CategoryServiceImpl();
     private final List<Category> catList = null;
 
+    public AddCategoryMenu() throws SQLException {
+    }
+
     @Override
-    public int callMenu() {
+    public int callMenu() throws SQLException {
+
         System.out.println("카데고리 추가");
         printCategoryList();
         addCategory();
@@ -29,7 +34,7 @@ public class AddCategoryMenu implements Menu {
         }
     }
 
-    private void addCategory() {
+    private void addCategory() throws SQLException {
         System.out.println("추가하실 카테고리 명을 입력하세요");
         String input = checkValidation(getKeyboardInput());
 
