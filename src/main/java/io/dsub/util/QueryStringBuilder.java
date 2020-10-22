@@ -1,6 +1,6 @@
 package io.dsub.util;
 
-import io.dsub.constants.QueryOp;
+import io.dsub.constants.QueryType;
 
 import java.util.List;
 import java.util.Map;
@@ -16,15 +16,15 @@ public class QueryStringBuilder {
     }
 
     public String getSelectQuery(String schema, String table) {
-        return buildQuery(QueryOp.SELECT, schema, table, "");
+        return buildQuery(QueryType.SELECT, schema, table, "");
     }
 
     public String getSelectQuery(String schema, String table, Map<String, String> conditions) {
-        return buildQuery(QueryOp.SELECT, schema, table, conditions);
+        return buildQuery(QueryType.SELECT, schema, table, conditions);
     }
 
     public String getSelectQuery(String schema, String table, String conditionString) {
-        return buildQuery(QueryOp.SELECT, schema, table, conditionString);
+        return buildQuery(QueryType.SELECT, schema, table, conditionString);
     }
 
     public String getUpdateQuery(String schema, String table, Map<String, String> entryPairs, Map<String, String> conditions) {
@@ -36,33 +36,33 @@ public class QueryStringBuilder {
     }
 
     public String getDeleteQuery(String schema, String table) {
-        return buildQuery(QueryOp.DELETE, schema, table, "");
+        return buildQuery(QueryType.DELETE, schema, table, "");
     }
 
     public String getDeleteQuery(String schema, String table, Map<String, String> conditions) {
-        return buildQuery(QueryOp.DELETE, schema, table, conditions);
+        return buildQuery(QueryType.DELETE, schema, table, conditions);
     }
 
     public String getDeleteQuery(String schema, String table, String conditionString) {
-        return buildQuery(QueryOp.DELETE, schema, table, conditionString);
+        return buildQuery(QueryType.DELETE, schema, table, conditionString);
     }
 
     private String buildQuery(String schema, String table, Map<String, String> entryPairs, Map<String, String> conditions) {
-        String queryString = getBaseString(QueryOp.UPDATE, schema, table) + getIntermediates(QueryOp.UPDATE, entryPairs) + getConditionals(conditions);
+        String queryString = getBaseString(QueryType.UPDATE, schema, table) + getIntermediates(QueryType.UPDATE, entryPairs) + getConditionals(conditions);
         return queryString.trim();
     }
 
     private String buildQuery(String schema, String table, Map<String, String> entryPairs) {
-        String queryString = getBaseString(QueryOp.INSERT, schema, table) + getIntermediates(QueryOp.INSERT, entryPairs);
+        String queryString = getBaseString(QueryType.INSERT, schema, table) + getIntermediates(QueryType.INSERT, entryPairs);
         return queryString.trim();
     }
 
-    private String buildQuery(QueryOp op, String schema, String table, Map<String, String> conditions) {
+    private String buildQuery(QueryType op, String schema, String table, Map<String, String> conditions) {
         String queryString = getBaseString(op, schema, table) + getConditionals(conditions);
         return queryString.trim();
     }
 
-    private String buildQuery(QueryOp op, String schema, String table, String conditionString) {
+    private String buildQuery(QueryType op, String schema, String table, String conditionString) {
         String queryString = getBaseString(op, schema, table) + conditionString;
         return queryString.trim();
     }
@@ -87,7 +87,7 @@ public class QueryStringBuilder {
         return condString.isBlank() ? "" : "WHERE " + condString;
     }
 
-    private String getIntermediates(QueryOp op, Map<String, String> pair) {
+    private String getIntermediates(QueryType op, Map<String, String> pair) {
         String s = "";
 
         switch(op) {
@@ -161,7 +161,7 @@ public class QueryStringBuilder {
     }
 
 
-    private String getBaseString(QueryOp op, String schema, String table) {
+    private String getBaseString(QueryType op, String schema, String table) {
         String base;
 
         switch (op) {

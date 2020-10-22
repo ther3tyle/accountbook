@@ -1,5 +1,5 @@
 package io.dsub.constants;
 
-public enum QueryOp {
+public enum QueryType {
     SELECT, DELETE, INSERT, UPDATE;
 }
