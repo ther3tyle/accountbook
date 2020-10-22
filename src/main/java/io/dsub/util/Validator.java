@@ -11,7 +11,7 @@ public class Validator {
     }
 
     public static boolean isValidNumInput(String in) {
-        return in.matches("^[0-9]+$");
+        return in.matches("^[1-9]+$");
     }
 
     public static boolean isValidDateInput(String in) {

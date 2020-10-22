@@ -4,9 +4,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MenuHandlerTest {
+class MenuControllerTest {
+
+    MenuController menuController = new MenuController();
 
     @Test
-    void callMainMenu() {
+    void selectMenu() {
+
     }
 }
