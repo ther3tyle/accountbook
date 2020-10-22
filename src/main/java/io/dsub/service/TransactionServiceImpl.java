@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class TransactionServiceImpl implements TransactionService {
 
@@ -48,11 +49,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction findByName(String name) {
-        try {
-            this.repository.findByName(name);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Logger.getLogger(this.getClass().getName()).info("unsupported operation. returning null...");
         return null;
     }
 
@@ -96,12 +93,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void deleteByName(String name) throws UnsupportedOperationException {
-        try {
-            this.repository.deleteByName(name);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void deleteByName(String name) {
+        Logger.getLogger(this.getClass().getName()).info("unsupported operation. ignoring...");
     }
 
     @Override
