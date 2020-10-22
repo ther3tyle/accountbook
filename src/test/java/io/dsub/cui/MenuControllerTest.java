@@ -6,8 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MenuControllerTest {
 
-    MenuController menuController = new MenuController();
-
+    MenuController menuController = MenuController.getInstance();
     @Test
     void selectMenu() {
 
