@@ -25,11 +25,6 @@ class VendorRepositoryTest {
     private static Path testPath = null;
     private static VendorRepository repository;
 
-    @AfterAll
-    static void cleanUp() throws SQLException {
-        conn.close();
-    }
-
     @BeforeEach
     void init() throws SQLException, IOException {
         testPath = Files.createTempDirectory(getClass().getName());

@@ -21,7 +21,7 @@ public class InitializationMenu implements Menu {
             stmt.addBatch("DROP TABLE " + Application.SCHEMA_NAME + DataType.TRANSACTION.getTableName());
             stmt.addBatch("DROP TABLE " + Application.SCHEMA_NAME + DataType.VENDOR.getTableName());
             stmt.addBatch("DROP TABLE " + Application.SCHEMA_NAME + DataType.CATEGORY.getTableName());
-            stmt.addBatch("DROP SCHEMA account");
+            stmt.addBatch("DROP SCHEMA " + Application.SCHEMA_NAME);
             stmt.executeBatch();
 
             AppState.getInstance().getConn().close();
