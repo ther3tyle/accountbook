@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
-public interface ModelService <T extends Model> {
+public interface ModelService<T extends Model> {
     /**
      * Updates or inserts item
      *
@@ -75,7 +75,7 @@ public interface ModelService <T extends Model> {
 
     /**
      * Deletes an item by name.
-     *
+     * <p>
      * If the given subclass did not implemented the method, it should throw
      * {@link UnsupportedOperationException}
      *

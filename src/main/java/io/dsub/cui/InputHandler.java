@@ -7,10 +7,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class InputHandler {
+    private static final InputHandler instance = new InputHandler();
+
     private InputHandler() {
     }
-
-    private static final InputHandler instance = new InputHandler();
 
     public static InputHandler getInstance() {
         return instance;

@@ -6,7 +6,10 @@ import io.dsub.model.Category;
 import io.dsub.model.Model;
 import io.dsub.model.Transaction;
 import io.dsub.model.Vendor;
-import io.dsub.service.*;
+import io.dsub.service.CategoryServiceImpl;
+import io.dsub.service.ModelService;
+import io.dsub.service.TransactionServiceImpl;
+import io.dsub.service.VendorServiceImpl;
 import io.dsub.util.InputValidator;
 
 import java.sql.SQLException;
@@ -21,8 +24,8 @@ import java.util.stream.Collectors;
 
 public class InputTransactionMenu implements Menu {
 
-    private List<String> inputParams;
     public MenuType menuType;
+    private List<String> inputParams;
     private ModelService<Vendor> vendorService;
     private ModelService<Transaction> transactionService;
     private ModelService<Category> categoryService;
@@ -96,14 +99,14 @@ public class InputTransactionMenu implements Menu {
             String input = inputHandler.take();
 
             // 예외처리
-            if (input.equals("p") || input.equals("P")) {
+            if (InputValidator.matches(input, "p")) {
                 if (list.size() != 0) {
                     list.remove(list.size() - 1);
                 }
                 System.out.println("이전 단게로");
                 continue;
 
-            } else if (input.equals("q") || input.equals("Q")) {
+            } else if (InputValidator.matches(input, "q")) {
                 return null;
             }
 

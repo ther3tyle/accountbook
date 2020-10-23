@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 public class PrintWriter extends BufferedWriter {
+
     public PrintWriter(Writer out) {
         super(out);
     }
@@ -36,12 +37,11 @@ public class PrintWriter extends BufferedWriter {
      * {@code BufferedWriter}s will not copy data unnecessarily.
      *
      * @param chBuf A character array
-     * @param off  Offset from which to start reading characters
-     * @param len  Number of characters to write
+     * @param off   Offset from which to start reading characters
+     * @param len   Number of characters to write
      * @throws IndexOutOfBoundsException If {@code off} is negative, or {@code len} is negative,
      *                                   or {@code off + len} is negative or greater than the length
      *                                   of the given array
-     * @throws IOException               If an I/O error occurs
      */
     @Override
     public void write(char[] chBuf, int off, int len) {
@@ -74,7 +74,6 @@ public class PrintWriter extends BufferedWriter {
      * Writes a line separator.  The line separator string is defined by the
      * system property {@code line.separator}, and is not necessarily a single
      * newline ('\n') character.
-     *
      */
     @Override
     public void newLine() {
@@ -122,7 +121,7 @@ public class PrintWriter extends BufferedWriter {
                 task.run();
                 return;
             } catch (Exception e) {
-                if (count >= 3) {
+                if (count >= 3) { // parameterize this if you want to set manually
                     break;
                 }
             }

@@ -1,11 +1,11 @@
 package io.dsub.repository;
 
+import io.dsub.constants.DataType;
 import io.dsub.datasource.reader.LocalFlatFileReader;
-import io.dsub.datasource.writer.LocalFlatFileWriter;
 import io.dsub.datasource.reader.ModelReader;
+import io.dsub.datasource.writer.LocalFlatFileWriter;
 import io.dsub.datasource.writer.ModelWriter;
 import io.dsub.model.Model;
-import io.dsub.constants.DataType;
 import io.dsub.util.FileUtil;
 
 import java.io.File;
@@ -19,10 +19,9 @@ import java.util.stream.Collectors;
 
 public class LocalModelRepository<T extends Model> implements ModelRepository<T> {
     private static final Logger LOGGER = Logger.getLogger(LocalModelRepository.class.getName());
-
+    private final DataType dataType;
     private ModelReader<T> reader;
     private ModelWriter<T> writer;
-    private final DataType dataType;
     private Path sourcePath;
 
     public LocalModelRepository(DataType type) {

@@ -1,9 +1,9 @@
 package io.dsub.datasource.reader;
 
+import io.dsub.constants.DataType;
 import io.dsub.datasource.writer.LocalFlatFileWriter;
 import io.dsub.datasource.writer.ModelWriter;
 import io.dsub.model.Model;
-import io.dsub.constants.DataType;
 import io.dsub.util.FileUtil;
 import io.dsub.util.ModelParser;
 
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class LocalFlatFileReader<T extends Model> implements FlatFileReader<T> {
 
     private Path sourcePath;
-    private Function<String, Model> parser;
+    private final Function<String, Model> parser;
 
     public LocalFlatFileReader(DataType type) {
         this(type, FileUtil.getPath(type));

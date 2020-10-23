@@ -10,6 +10,9 @@ import java.sql.Connection;
  */
 public class AppState {
     private static AppState instance;
+    @Getter
+    @Setter
+    private Connection conn;
 
     public static AppState getInstance() {
         if (instance == null) {
@@ -17,8 +20,4 @@ public class AppState {
         }
         return instance;
     }
-
-    @Getter
-    @Setter
-    private Connection conn;
 }

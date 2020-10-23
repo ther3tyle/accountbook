@@ -3,10 +3,10 @@ package io.dsub.repository;
 import io.dsub.AppState;
 import io.dsub.Application;
 import io.dsub.constants.DataType;
-import io.dsub.constants.UIString;
 import io.dsub.model.Category;
 import io.dsub.util.Initializer;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.ThrowingSupplier;
 
 import java.io.*;
@@ -116,7 +116,7 @@ class CategoryRepositoryTest {
         assertDoesNotThrow(() -> {
             ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM " + Application.SCHEMA_NAME + "." + DataType.CATEGORY.getTableName());
             int count = 0;
-            while(rs.next()) {
+            while (rs.next()) {
                 count++;
             }
             assertEquals(3, count);

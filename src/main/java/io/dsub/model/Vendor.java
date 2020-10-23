@@ -10,14 +10,15 @@ import java.util.logging.Logger;
  * An immutable vendor model
  */
 public class Vendor extends Model implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final Integer id;
     private final String name;
     private final Integer catId;
-    private static final long serialVersionUID = 1L;
 
     public Vendor(Integer id, String name) {
         this(id, name, null);
     }
+
     public Vendor(String name) {
         this(null, name, null);
     }
@@ -32,26 +33,8 @@ public class Vendor extends Model implements Serializable {
         this.catId = (catId == null) || (catId == 0) ? null : catId;
     }
 
-    @Override
-    public String getId() {
-        return String.valueOf(this.id);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Integer getCatId() {
-        return catId;
-    }
-
     public static DataType getDataType() {
         return DataType.VENDOR;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%s,%s,%s", id, name, catId);
     }
 
     public static Function<String, Model> getParser() {
@@ -71,6 +54,23 @@ public class Vendor extends Model implements Serializable {
         };
     }
 
+    @Override
+    public String getId() {
+        return String.valueOf(this.id);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Integer getCatId() {
+        return catId;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s,%s,%s", id, name, catId);
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -16,7 +16,7 @@ class InputValidatorTest {
         List<String> testTrue = new ArrayList<>();
         testTrue.add("2");
 
-        for (String str: testTrue) {
+        for (String str : testTrue) {
             boolean result = InputValidator.isValidNumInput(str);
             assertTrue(result);
         }
@@ -37,12 +37,12 @@ class InputValidatorTest {
         testFalse.add("2020-14-01"); // 월이 12를 초과
 
 
-        for (String str: testTrue) {
+        for (String str : testTrue) {
             boolean result = InputValidator.isValidDateInput(str);
             assertTrue(result);
         }
 
-        for (String str: testFalse) {
+        for (String str : testFalse) {
             boolean result = InputValidator.isValidDateInput(str);
             assertFalse(result);
         }

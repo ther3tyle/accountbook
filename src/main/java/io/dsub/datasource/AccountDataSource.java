@@ -1,7 +1,6 @@
 package io.dsub.datasource;
 
 import io.dsub.Application;
-import io.dsub.constants.UIString;
 import org.h2.jdbcx.JdbcDataSource;
 
 public class AccountDataSource extends JdbcDataSource {

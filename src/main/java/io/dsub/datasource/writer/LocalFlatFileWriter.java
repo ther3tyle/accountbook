@@ -1,7 +1,7 @@
 package io.dsub.datasource.writer;
 
-import io.dsub.model.Model;
 import io.dsub.constants.DataType;
+import io.dsub.model.Model;
 import io.dsub.util.FileUtil;
 import io.dsub.util.ModelParser;
 

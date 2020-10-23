@@ -5,6 +5,7 @@ import io.dsub.cui.menu.*;
 
 public class MenuController {
 
+    private static final MenuController INSTANCE = new MenuController();
     private final Menu ADD_CATEGORY = new AddCategoryMenu();
     private final Menu CHECK_ACCOUNT = new ViewRecordMenu();
     private final Menu INITIALIZATION = new InitializationMenu();
@@ -13,9 +14,8 @@ public class MenuController {
     private final Menu MAIN_MENU = new MainMenu();
     private final Menu EXIT = new Exit();
 
-    private MenuController() {}
-
-    private static final MenuController INSTANCE = new MenuController();
+    private MenuController() {
+    }
 
     public static MenuController getInstance() {
         return INSTANCE;

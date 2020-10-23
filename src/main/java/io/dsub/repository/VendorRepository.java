@@ -2,7 +2,6 @@ package io.dsub.repository;
 
 import io.dsub.Application;
 import io.dsub.constants.DataType;
-import io.dsub.constants.UIString;
 import io.dsub.model.Vendor;
 import io.dsub.util.QueryStringBuilder;
 

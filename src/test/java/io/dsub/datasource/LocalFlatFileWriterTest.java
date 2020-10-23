@@ -1,9 +1,9 @@
 package io.dsub.datasource;
 
+import io.dsub.constants.DataType;
 import io.dsub.datasource.writer.LocalFlatFileWriter;
 import io.dsub.datasource.writer.ModelWriter;
 import io.dsub.model.Transaction;
-import io.dsub.constants.DataType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,7 +58,7 @@ class LocalFlatFileWriterTest {
 
         assertEquals(50, ref.reader.lines().count());
 
-        assertDoesNotThrow(() -> writer.overwrite(testFile, new Transaction(1,1)));
+        assertDoesNotThrow(() -> writer.overwrite(testFile, new Transaction(1, 1)));
 
         assertDoesNotThrow(() -> ref.reader = new BufferedReader(new InputStreamReader(new FileInputStream(testFile))));
         assertEquals(1, ref.reader.lines().count());
@@ -102,7 +102,7 @@ class LocalFlatFileWriterTest {
     private void populateData(ModelWriter<Transaction> writer, int count) throws IOException {
         Random random = new Random();
         int i = 0;
-        while(i++ < count) {
+        while (i++ < count) {
             Transaction t = new Transaction(random.nextInt(100), random.nextInt(100));
             writer.write(t);
         }

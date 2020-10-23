@@ -1,9 +1,6 @@
 package io.dsub.model;
 
 import io.dsub.constants.DataType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
 
 import java.io.Serializable;
 import java.util.function.Function;
@@ -30,20 +27,6 @@ public class Category extends Model implements Serializable {
         this(Integer.parseInt(strings[0]), strings[1]);
     }
 
-    @Override
-    public String getId() {
-        return String.valueOf(this.id);
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
-    public String toString() {
-        return id + "," + name;
-    }
-
     public static DataType getDataType() {
         return DataType.CATEGORY;
     }
@@ -59,6 +42,20 @@ public class Category extends Model implements Serializable {
                 return null;
             }
         };
+    }
+
+    @Override
+    public String getId() {
+        return String.valueOf(this.id);
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public String toString() {
+        return id + "," + name;
     }
 }
 

@@ -2,7 +2,6 @@ package io.dsub.repository;
 
 import io.dsub.AppState;
 import io.dsub.Application;
-import io.dsub.constants.UIString;
 import io.dsub.model.Model;
 import io.dsub.util.QueryStringBuilder;
 
@@ -20,11 +19,11 @@ public abstract class JdbcModelRepository<V extends Model> implements ModelRepos
     private final String schema;
     private final String table;
 
-    public JdbcModelRepository(String schema, String table){
+    public JdbcModelRepository(String schema, String table) {
         this(AppState.getInstance().getConn(), schema, table);
     }
 
-    public JdbcModelRepository(Connection conn, String schema, String table)  {
+    public JdbcModelRepository(Connection conn, String schema, String table) {
         this.conn = conn;
         this.schema = schema;
         this.table = table;
@@ -177,5 +176,6 @@ public abstract class JdbcModelRepository<V extends Model> implements ModelRepos
     }
 
     protected abstract V parse(ResultSet resultSet) throws SQLException;
+
     protected abstract List<V> multiParse(ResultSet resultSet) throws SQLException;
 }

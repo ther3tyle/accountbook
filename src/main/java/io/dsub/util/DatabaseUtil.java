@@ -2,7 +2,6 @@ package io.dsub.util;
 
 import io.dsub.Application;
 import io.dsub.constants.DataType;
-import io.dsub.constants.UIString;
 
 import javax.naming.InsufficientResourcesException;
 import java.io.BufferedReader;
@@ -19,12 +18,14 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 public class DatabaseUtil {
-    private DatabaseUtil(){};
+    private DatabaseUtil() {
+    }
+
     public static boolean isSchemaExists(Connection conn) throws SQLException {
         try {
             ResultSet schemas = conn.getMetaData().getSchemas();
             boolean exists = false;
-            while(schemas.next() && !exists) {
+            while (schemas.next() && !exists) {
                 String name = schemas.getString(1);
                 exists = name.equalsIgnoreCase(Application.SCHEMA_NAME);
             }

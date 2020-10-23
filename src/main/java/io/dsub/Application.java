@@ -1,6 +1,5 @@
 package io.dsub;
 
-import io.dsub.constants.UIString;
 import io.dsub.cui.MenuController;
 import io.dsub.util.Initializer;
 import org.h2.jdbc.JdbcSQLNonTransientConnectionException;
@@ -8,8 +7,7 @@ import org.h2.jdbc.JdbcSQLNonTransientConnectionException;
 import javax.naming.InsufficientResourcesException;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.*;
-import java.util.concurrent.TimeUnit;
+import java.sql.SQLException;
 
 /**
  * Application entry point
@@ -41,7 +39,7 @@ public class Application {
                     } else if (retry < 6) {
                         System.out.println(retry);
                         wait(1);
-                    } else { ;
+                    } else {
                         System.out.println("데이터베이스 접속 실패");
                         break;
                     }

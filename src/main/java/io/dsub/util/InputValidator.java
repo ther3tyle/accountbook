@@ -3,7 +3,6 @@ package io.dsub.util;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 public class InputValidator {
 
@@ -11,7 +10,7 @@ public class InputValidator {
     }
 
     public static boolean isValidNumInput(String in) {
-        return in.matches("^[1-9]+$");
+        return in.matches("^\\d+$");
     }
 
     public static boolean isValidDateInput(String in) {
@@ -46,6 +45,7 @@ public class InputValidator {
                 return true;
             }
         }
+
         return false;
     }
 

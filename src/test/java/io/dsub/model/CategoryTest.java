@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CategoryTest {
     Category category;
@@ -40,7 +41,7 @@ class CategoryTest {
     void getParser() {
         Function<String, Model> parser = Category.getParser();
         assertDoesNotThrow(() -> {
-            Category tempCat = (Category)parser.apply("57346,갑분싸");
+            Category tempCat = (Category) parser.apply("57346,갑분싸");
             assertEquals(57346, Integer.parseInt(tempCat.getId()));
             assertEquals("갑분싸", tempCat.getName());
         });

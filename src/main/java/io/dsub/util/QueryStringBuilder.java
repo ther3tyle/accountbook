@@ -7,9 +7,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class QueryStringBuilder {
-    private QueryStringBuilder(){}
-
     private static final QueryStringBuilder instance = new QueryStringBuilder();
+
+    private QueryStringBuilder() {
+    }
 
     public static QueryStringBuilder getInstance() {
         return instance;
@@ -90,7 +91,7 @@ public class QueryStringBuilder {
     private String getIntermediates(QueryType op, Map<String, String> pair) {
         String s = "";
 
-        switch(op) {
+        switch (op) {
             case INSERT -> s = buildInsertIntermediates(pair);
             case UPDATE -> s = buildUpdateIntermediates(pair);
         }
@@ -117,7 +118,7 @@ public class QueryStringBuilder {
             sb.append(list.get(i));
         }
 
-        return "SET "+ sb.toString() + " ";
+        return "SET " + sb.toString() + " ";
     }
 
     private String makeValueString(String s) {

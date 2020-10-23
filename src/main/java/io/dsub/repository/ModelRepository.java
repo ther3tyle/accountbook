@@ -3,16 +3,15 @@ package io.dsub.repository;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Base repository abstraction for models
  *
  * @param <T> type of entity
- * @since Oct 15, 2020
  * @author ther3tyle
+ * @since Oct 15, 2020
  */
-public interface ModelRepository<T>  {
+public interface ModelRepository<T> {
     /**
      * read single item by key
      *
@@ -30,7 +29,7 @@ public interface ModelRepository<T>  {
      */
     default T findByName(String name) throws SQLException, UnsupportedOperationException {
         throw new UnsupportedOperationException(getClass().getName() + " does not implemented this operation");
-    };
+    }
 
     /**
      * reads all entities from target source

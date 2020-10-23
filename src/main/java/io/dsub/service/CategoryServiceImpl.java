@@ -18,7 +18,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public CategoryServiceImpl() {
-            this(new CategoryRepository(AppState.getInstance().getConn()));
+        this(new CategoryRepository(AppState.getInstance().getConn()));
     }
 
     /**

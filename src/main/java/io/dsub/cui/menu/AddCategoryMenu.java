@@ -10,7 +10,6 @@ import io.dsub.util.InputValidator;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Scanner;
 
 public class AddCategoryMenu implements Menu {
 

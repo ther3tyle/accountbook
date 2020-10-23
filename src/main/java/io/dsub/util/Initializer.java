@@ -6,16 +6,14 @@ import io.dsub.datasource.AccountDataSource;
 
 import javax.naming.InsufficientResourcesException;
 import javax.sql.DataSource;
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.sql.*;
-import java.util.logging.Logger;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class Initializer {
 
-    private Initializer(){}
+    private Initializer() {
+    }
 
     public static void init() throws FileNotFoundException, SQLException, InsufficientResourcesException {
         init(Application.RESET_SCHEMA_SQL, Application.PROD_CONN_STR);
@@ -36,4 +34,4 @@ public class Initializer {
             throw new SQLException("failed to validate schema");
         }
     }
- }
+}

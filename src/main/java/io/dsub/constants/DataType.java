@@ -5,13 +5,12 @@ public enum DataType {
     VENDOR("vend_db", "VENDOR"),
     CATEGORY("cat_db", "CATEGORY");
 
+    private final String fileName;
+    private final String tableName;
     DataType(String fileName, String tableName) {
         this.fileName = fileName;
         this.tableName = tableName;
     }
-
-    private final String fileName;
-    private final String tableName;
 
     public String getFileName() {
         return fileName;

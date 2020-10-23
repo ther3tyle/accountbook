@@ -6,7 +6,6 @@ import io.dsub.util.InputValidator;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class MainMenu implements Menu {
 

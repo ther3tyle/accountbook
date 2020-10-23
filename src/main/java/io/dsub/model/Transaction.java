@@ -18,11 +18,11 @@ import java.util.logging.Logger;
 @With
 public class Transaction extends Model implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private final long amount;
     private final int vendorId;
     private final LocalDate date;
     private final UUID id;
-    private static final long serialVersionUID = 1L;
 
     public Transaction(long amount, int vendorId) {
         this(amount, vendorId, LocalDate.now(), UUID.randomUUID());
@@ -75,6 +75,10 @@ public class Transaction extends Model implements Serializable {
         };
     }
 
+    public static DataType getDataType() {
+        return DataType.TRANSACTION;
+    }
+
     public long getAmount() {
         return amount;
     }
@@ -90,10 +94,6 @@ public class Transaction extends Model implements Serializable {
     @Override
     public String getId() {
         return id.toString();
-    }
-
-    public static DataType getDataType() {
-        return DataType.TRANSACTION;
     }
 
     @Override

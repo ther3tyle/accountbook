@@ -4,7 +4,6 @@ import io.dsub.AppState;
 import io.dsub.model.Transaction;
 import io.dsub.repository.TransactionRepository;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -87,7 +86,7 @@ public class TransactionServiceImpl implements TransactionService {
     public void deleteById(String id) {
         try {
             this.repository.deleteById(id);
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

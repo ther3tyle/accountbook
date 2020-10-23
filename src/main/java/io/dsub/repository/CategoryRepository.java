@@ -2,7 +2,6 @@ package io.dsub.repository;
 
 import io.dsub.Application;
 import io.dsub.constants.DataType;
-import io.dsub.constants.UIString;
 import io.dsub.model.Category;
 import io.dsub.util.QueryStringBuilder;
 
@@ -16,12 +15,12 @@ import java.util.logging.Logger;
 
 public class CategoryRepository extends JdbcModelRepository<Category> {
 
-    private final Logger logger = Logger.getLogger(CategoryRepository.class.getName());
-    private final QueryStringBuilder queryGen = QueryStringBuilder.getInstance();
     private static final String SCHEMA = Application.SCHEMA_NAME;
     private static final String TABLE = DataType.CATEGORY.getTableName();
+    private final Logger logger = Logger.getLogger(CategoryRepository.class.getName());
+    private final QueryStringBuilder queryGen = QueryStringBuilder.getInstance();
 
-    public CategoryRepository()  {
+    public CategoryRepository() {
         super(SCHEMA, TABLE);
     }
 

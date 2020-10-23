@@ -2,7 +2,7 @@ package io.dsub.cui.menu;
 
 import io.dsub.constants.MenuType;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InputTransactionMenuTest {
 

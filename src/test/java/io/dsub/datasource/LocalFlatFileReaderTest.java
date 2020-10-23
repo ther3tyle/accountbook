@@ -1,17 +1,16 @@
 package io.dsub.datasource;
 
+import io.dsub.constants.DataType;
 import io.dsub.datasource.reader.LocalFlatFileReader;
 import io.dsub.datasource.reader.ModelReader;
-import io.dsub.datasource.writer.LocalFlatFileWriter;
-import io.dsub.datasource.writer.ModelWriter;
 import io.dsub.model.Transaction;
-import io.dsub.constants.DataType;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;

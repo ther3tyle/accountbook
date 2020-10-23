@@ -1,25 +1,26 @@
 package io.dsub.repository;
 
+import io.dsub.constants.DataType;
 import io.dsub.datasource.reader.LocalFlatFileReader;
-import io.dsub.datasource.writer.LocalFlatFileWriter;
 import io.dsub.datasource.reader.ModelReader;
+import io.dsub.datasource.writer.LocalFlatFileWriter;
 import io.dsub.datasource.writer.ModelWriter;
 import io.dsub.model.Transaction;
-import io.dsub.constants.DataType;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class LocalModelRepositoryTest {
-    ModelRepository<Transaction> repository;
     static File testFile;
+    ModelRepository<Transaction> repository;
 
     @BeforeEach
     void setUp() {
@@ -108,9 +109,9 @@ class LocalModelRepositoryTest {
             repo.setSourcePath(otherPath);
 
             assertTrue(otherPath.toFile().exists());
-            assertEquals(((LocalFlatFileReader<Transaction>)repo.getReader()).getSourcePath(),
-                    ((LocalFlatFileWriter<Transaction>)repo.getWriter()).getSourcePath()
-                    );
+            assertEquals(((LocalFlatFileReader<Transaction>) repo.getReader()).getSourcePath(),
+                    ((LocalFlatFileWriter<Transaction>) repo.getWriter()).getSourcePath()
+            );
             assertEquals(otherPath, repo.getSourcePath());
 
             repo.setSourcePath(backupPath);

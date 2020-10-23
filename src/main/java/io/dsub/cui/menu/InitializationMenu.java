@@ -1,26 +1,15 @@
 package io.dsub.cui.menu;
 
 import io.dsub.AppState;
+import io.dsub.Application;
+import io.dsub.constants.DataType;
 import io.dsub.constants.UIString;
-import io.dsub.model.Category;
-import io.dsub.model.Transaction;
-import io.dsub.model.Vendor;
-import io.dsub.service.MockCategoryService;
-import io.dsub.service.MockTransactionService;
-import io.dsub.service.MockVendorService;
-import io.dsub.service.ModelService;
 import io.dsub.util.Initializer;
 
 import javax.naming.InsufficientResourcesException;
-import javax.swing.plaf.nimbus.State;
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Scanner;
 
 public class InitializationMenu implements Menu {
     @Override
@@ -29,9 +18,9 @@ public class InitializationMenu implements Menu {
             System.out.println(UIString.INIT_ATTEMPT);
 
             Statement stmt = AppState.getInstance().getConn().createStatement();
-            stmt.addBatch("DROP TABLE account.transaction");
-            stmt.addBatch("DROP TABLE account.vendor");
-            stmt.addBatch("DROP TABLE account.category");
+            stmt.addBatch("DROP TABLE " + Application.SCHEMA_NAME + DataType.TRANSACTION.getTableName());
+            stmt.addBatch("DROP TABLE " + Application.SCHEMA_NAME + DataType.VENDOR.getTableName());
+            stmt.addBatch("DROP TABLE " + Application.SCHEMA_NAME + DataType.CATEGORY.getTableName());
             stmt.addBatch("DROP SCHEMA account");
             stmt.executeBatch();
 
