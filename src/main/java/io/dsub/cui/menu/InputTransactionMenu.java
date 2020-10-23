@@ -1,5 +1,6 @@
 package io.dsub.cui.menu;
 
+import io.dsub.Application;
 import io.dsub.constants.MenuType;
 import io.dsub.model.Category;
 import io.dsub.model.Model;
@@ -22,9 +23,12 @@ public class InputTransactionMenu implements Menu {
 
     private List<String> inputParams;
     public MenuType menuType;
-    private final ModelService<Vendor> vendorService = new VendorServiceImpl();
-    private final ModelService<Transaction> transactionService = new TransactionServiceImpl();
-    private final ModelService<Category> categoryService = new CategoryServiceImpl();
+    private ModelService<Vendor> vendorService;
+    private ModelService<Transaction> transactionService;
+    private ModelService<Category> categoryService;
+
+    private List<Vendor> vendorList;
+    private List<Category> categoryList;
 
     // should be called when we need to review
     // private final List<Category> catList = CATEGORY_MODEL_SERVICE.findAll();
@@ -35,6 +39,9 @@ public class InputTransactionMenu implements Menu {
 
     @Override
     public int call() {
+        vendorService = new VendorServiceImpl();
+        transactionService = new TransactionServiceImpl();
+        categoryService = new CategoryServiceImpl();
         return operateTransaction(inputStatementMenu());
     }
 
@@ -55,8 +62,13 @@ public class InputTransactionMenu implements Menu {
                 int vendorId = Integer.parseInt(vendorService.save(vendor));
 
                 Transaction transaction = new Transaction(amount, vendorId);
-                String result = transactionService.save(transaction);
-                System.out.println(result);
+                transactionService.save(transaction);
+
+                System.out.println();
+                Application.wait(1.5);
+
+
+//                System.out.println(transaction.getId()); we don't need it for now
             } catch (SQLException e) {
                 Logger.getLogger(getClass().getName()).severe(e.getMessage());
             }
@@ -68,7 +80,6 @@ public class InputTransactionMenu implements Menu {
 
 
     private List<String> inputStatementMenu() {
-        Scanner scanner = new Scanner(System.in);
         List<String> list = new ArrayList<>();
         inputParams = Arrays.asList("Date", "Amount", "Vendor", "Category");
 
@@ -112,7 +123,6 @@ public class InputTransactionMenu implements Menu {
 
 
     private String inputHelper(List<String> list, String input) {
-
         if (list.size() == inputParams.indexOf("Date") && input.equalsIgnoreCase("c")) {
             LocalDate localDatetime = LocalDate.now();
             return localDatetime.toString();
@@ -146,8 +156,6 @@ public class InputTransactionMenu implements Menu {
     }
 
     private boolean isInputStatementValid(List<String> list, String input) {
-
-
         if (list.size() == inputParams.indexOf("Date")) {
             return InputValidator.isValidDateInput(input);
         } else if (list.size() == inputParams.indexOf("Amount")) {
@@ -155,8 +163,11 @@ public class InputTransactionMenu implements Menu {
         } else if (list.size() == inputParams.indexOf("Vendor")) {
             return InputValidator.isValidVendorInput(input);
         } else if (list.size() == inputParams.indexOf("Category")) {
-            return InputValidator.isValidCategoryInput(input);
-//            return Validator.isValidCategoryInput(input) && Integer.parseInt(input) <= catList.size();
+            if (input.matches("^[0-9]+$")) {
+                int val = Integer.parseInt(input);
+                return val > 0 && val < categoryList.size();
+            }
+            return false;
         }
         return false;
     }
@@ -175,10 +186,12 @@ public class InputTransactionMenu implements Menu {
         } else if (list.size() == inputParams.indexOf("Amount")) {
             System.out.println("금액을 입력하세요. 예) 3500 (이전단계: P 메인메뉴: Q)");
         } else if (list.size() == inputParams.indexOf("Vendor")) {
-            printItems(vendorService.findAll());
+            vendorList = vendorService.findAll();
+            printItems(vendorList);
             System.out.println("사용처를 입력하세요 (이전단계: P 메인메뉴: Q)");
         } else if (list.size() == inputParams.indexOf("Category")) {
-            printItems(categoryService.findAll());
+            categoryList = categoryService.findAll();
+            printItems(categoryList);
             System.out.println("카테고리 번호를 입력하세요 (이전단계: P 메인메뉴: Q)");
         }
     }

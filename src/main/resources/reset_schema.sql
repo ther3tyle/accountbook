@@ -1,5 +1,3 @@
-DROP SCHEMA IF EXISTS account CASCADE;
-
 CREATE SCHEMA account;
 
 CREATE TABLE account.category

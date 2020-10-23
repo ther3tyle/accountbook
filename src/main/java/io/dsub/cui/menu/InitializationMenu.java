@@ -12,12 +12,14 @@ import io.dsub.service.ModelService;
 import io.dsub.util.Initializer;
 
 import javax.naming.InsufficientResourcesException;
+import javax.swing.plaf.nimbus.State;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
 public class InitializationMenu implements Menu {
@@ -25,8 +27,17 @@ public class InitializationMenu implements Menu {
     public int call() {
         try {
             System.out.println(UIString.INIT_ATTEMPT);
+
+            Statement stmt = AppState.getInstance().getConn().createStatement();
+            stmt.addBatch("DROP TABLE account.transaction");
+            stmt.addBatch("DROP TABLE account.vendor");
+            stmt.addBatch("DROP TABLE account.category");
+            stmt.addBatch("DROP SCHEMA account");
+            stmt.executeBatch();
+
             AppState.getInstance().getConn().close();
             Initializer.init();
+
             System.out.println(UIString.INIT_COMPLETE + "\n");
         } catch (FileNotFoundException | SQLException | InsufficientResourcesException e) {
             System.out.println("초기화 오류 발생: " + e.getMessage());
